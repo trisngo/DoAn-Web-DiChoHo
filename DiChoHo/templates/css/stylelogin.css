@@ -1,8 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Fira+Sans");
-html, body {
+html,
+body {
   position: relative;
   min-height: 100vh;
-  background-color: #E1E8EE;
+  background-color: #aef2b7;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,8 +15,10 @@ html, body {
 .form-structor {
   background-color: #222;
   border-radius: 15px;
-  height: 550px;
-  width: 350px;
+  /* height: 550px; */
+  /* width: 350px; */
+  height: 800px;
+  width: 600px;
   position: relative;
   overflow: hidden;
 }
@@ -27,10 +30,11 @@ html, body {
   right: 0;
   bottom: 0;
   left: 0;
-  background-repeat: no-repeat;
-  background-position: left bottom;
+  /*background-repeat: no-repeat;
+  /*background-position: left bottom;*/
   background-size: 500px;
-  background-image: url("https://images.unsplash.com/photo-1503602642458-232111445657?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bf884ad570b50659c5fa2dc2cfb20ecf&auto=format&fit=crop&w=1000&q=100");
+  background-image: url("https://cdn.pixabay.com/photo/2016/01/19/17/13/orange-trees-1149584_960_720.jpg");
+  background-size: cover;
 }
 .form-structor .signup {
   position: absolute;
@@ -46,13 +50,15 @@ html, body {
   -webkit-transform: translate(-50%, 0%);
   -webkit-transition: all 0.3s ease;
 }
-.form-structor .signup.slide-up .form-holder, .form-structor .signup.slide-up .submit-btn {
+.form-structor .signup.slide-up .form-holder,
+.form-structor .signup.slide-up .submit-btn {
   opacity: 0;
   visibility: hidden;
 }
 .form-structor .signup.slide-up .form-title {
   font-size: 1em;
   cursor: pointer;
+  margin-left: 50px;
 }
 .form-structor .signup.slide-up .form-title span {
   margin-right: 5px;
@@ -64,6 +70,7 @@ html, body {
   color: #fff;
   font-size: 1.7em;
   text-align: center;
+  margin-right: 50px; /*Đây là thuộc tính được QH thêm vô */
 }
 .form-structor .signup .form-title span {
   color: rgba(0, 0, 0, 0.4);
@@ -76,6 +83,7 @@ html, body {
   background-color: #fff;
   overflow: hidden;
   margin-top: 50px;
+  margin-bottom: 50px;
   opacity: 1;
   visibility: visible;
   -webkit-transition: all 0.3s ease;
@@ -99,7 +107,8 @@ html, body {
   color: rgba(0, 0, 0, 0.4);
 }
 .form-structor .signup .submit-btn {
-  background-color: rgba(0, 0, 0, 0.4);
+  /*background-color: rgba(0, 0, 0, 0.4);*/
+  background-color: rgba(174, 242, 183, 0.4);
   color: rgba(255, 255, 255, 0.7);
   border: 0;
   border-radius: 15px;
@@ -116,7 +125,8 @@ html, body {
 }
 .form-structor .signup .submit-btn:hover {
   transition: all 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.8);
+  /*background-color: rgba(0, 0, 0, 0.8);*/
+  background-color: rgba(174, 242, 183, 0.8);
 }
 .form-structor .login {
   position: absolute;
@@ -154,6 +164,7 @@ html, body {
   color: #000;
   font-size: 1.7em;
   text-align: center;
+  margin-right: 50px; /* Đây là thuộc tính do QH thêm vào */
 }
 .form-structor .login .center .form-title span {
   color: rgba(0, 0, 0, 0.4);
@@ -190,7 +201,7 @@ html, body {
   color: rgba(0, 0, 0, 0.4);
 }
 .form-structor .login .center .submit-btn {
-  background-color: #6B92A4;
+  background-color: #6b92a4;
   color: rgba(255, 255, 255, 0.7);
   border: 0;
   border-radius: 15px;
@@ -218,7 +229,8 @@ html, body {
   -webkit-transform: translate(-50%, 0%);
   -webkit-transition: all 0.3s ease;
 }
-.form-structor .login.slide-up .form-holder, .form-structor .login.slide-up .submit-btn {
+.form-structor .login.slide-up .form-holder,
+.form-structor .login.slide-up .submit-btn {
   opacity: 0;
   visibility: hidden;
   -webkit-transition: all 0.3s ease;
