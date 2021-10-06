@@ -248,3 +248,14 @@ body {
   visibility: visible;
   -webkit-transition: all 0.3s ease;
 }
+
+.forgot-passwd a {
+  text-decoration: none;
+  color: blue;
+  font-size: 0.9em;
+}
+
+.forgot-passwd {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
