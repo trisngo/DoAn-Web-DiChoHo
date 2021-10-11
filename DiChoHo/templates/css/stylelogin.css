@@ -15,8 +15,6 @@ body {
 .form-structor {
   background-color: #222;
   border-radius: 15px;
-  /* height: 550px; */
-  /* width: 350px; */
   height: 800px;
   width: 600px;
   position: relative;
@@ -30,10 +28,8 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  /*background-repeat: no-repeat;
-  /*background-position: left bottom;*/
   background-size: 500px;
-  background-image: url("https://cdn.pixabay.com/photo/2016/01/19/17/13/orange-trees-1149584_960_720.jpg");
+  background-image: url("../images/signup.jpg");
   background-size: cover;
 }
 .form-structor .signup {
@@ -73,7 +69,7 @@ body {
   margin-right: 50px; /*Đây là thuộc tính được QH thêm vô */
 }
 .form-structor .signup .form-title span {
-  color: rgba(0, 0, 0, 0.4);
+  color: #fff;
   opacity: 0;
   visibility: hidden;
   -webkit-transition: all 0.3s ease;
@@ -107,7 +103,6 @@ body {
   color: rgba(0, 0, 0, 0.4);
 }
 .form-structor .signup .submit-btn {
-  /*background-color: rgba(0, 0, 0, 0.4);*/
   background-color: rgba(174, 242, 183, 0.4);
   color: rgba(255, 255, 255, 0.7);
   border: 0;
