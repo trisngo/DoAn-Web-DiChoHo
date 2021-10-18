@@ -1,6 +1,8 @@
 console.clear();
 
 const loginBtn = document.getElementById('login');
+const login = document.getElementsByClassName('login_btn');
+const register = document.getElementsByClassName('register_btn');
 const signupBtn = document.getElementById('signup');
 
 loginBtn.addEventListener('click', (e) => {
@@ -14,6 +16,8 @@ loginBtn.addEventListener('click', (e) => {
 		}
 	});
 });
+
+
 
 signupBtn.addEventListener('click', (e) => {
 	let parent = e.target.parentNode;
