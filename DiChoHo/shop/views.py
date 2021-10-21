@@ -3,14 +3,13 @@ from django.http import HttpResponse
 
 # get index page
 def index_view(request):
-    return render( #gui them tham so vao template
+    return render(
         request,
-        'index.html', #response 1 trang html, co the truyen cho tham so gi do
+        'index.html', 
         {
             
         }
     )
-
 # get product page
 def product_view(request):
     return render(
@@ -27,10 +26,13 @@ def shop_view(request):
 
 # get login page
 def login_view(request):
-    return render(
-        request,
-        'login.html',
-    )
+    if request.method == 'POST':
+        if 'sdt' not in request.POST:
+            return HttpResponse('<h1>No</h1>')
+        else:
+            return HttpResponse('<h1>Yes</h1>')
+    else:
+        return render(request, 'login.html')
 
 # get contact page
 def contact_view(request):

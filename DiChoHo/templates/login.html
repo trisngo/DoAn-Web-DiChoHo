@@ -1,40 +1,55 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
     <title>DICHOHO | Đăng nhập</title>
     <link rel="stylesheet" href="{% static 'css/stylelogin.css' %}" type="text/css" />
+
   </head>
   <body>
-    
     <!-- partial:index.partial.html -->
-    
+
     <div class="form-structor">
       <div class="signup">
         <h2 class="form-title" id="signup"><span>hoặc</span>Đăng ký</h2>
-        <div class="form-holder">
-          <input type="text" class="input" placeholder="Họ và tên" />
-          <input type="number" class="input" placeholder="Số điện thoại" />
-          <input type="email" class="input" placeholder="Email" />
-          <input type="password" class="input" placeholder="Mật khẩu" />
-          <input
-            type="password"
-            class="input"
-            placeholder="Nhập lại mật khẩu"
-          />
-        </div>
-        
-        <button class="submit-btn register_btn">Đăng ký</button>
+        <form action="test" method="POST">
+          <div class="form-holder">
+            <input type="text" class="input" placeholder="Họ và tên" />
+            <input type="number" class="input" placeholder="Số điện thoại" />
+            <input type="email" class="input" placeholder="Email" />
+            <input type="password" class="input" placeholder="Mật khẩu" />
+            <input
+              type="password"
+              class="input"
+              placeholder="Nhập lại mật khẩu"
+            />
+          </div>
+          <button class="submit-btn register_btn">Đăng ký</button>
+        </form>
       </div>
       <div class="login slide-up">
         <div class="center">
           <h2 class="form-title" id="login"><span>hoặc</span>Đăng nhập</h2>
-          <div class="form-holder">
-            <input type="email" class="input" placeholder="Email" />
-            <input type="password" class="input" placeholder="Password" />
-          </div>
-          <button class="submit-btn login-btn">Đăng nhập</button>
+          <form action="test" method="POST">
+            <div class="form-holder">
+              {% csrf_token %}
+              <input
+                type="email"
+                class="input"
+                placeholder="Email"
+                name="email"
+              />
+              <input
+                type="password"
+                class="input"
+                placeholder="Password"
+                name="password"
+              />
+            </div>
+            <button class="submit-btn login-btn">Đăng nhập</button>
+          </form>
           <div class="forgot-passwd"><a href="#">Quên mật khẩu</a></div>
         </div>
       </div>

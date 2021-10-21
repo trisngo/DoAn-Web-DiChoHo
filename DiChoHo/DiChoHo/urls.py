@@ -20,5 +20,5 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('shop.urls')), #tao url cho cai app shop rieng, sau do import toan bo url trong file cua app shop vao file url project tong nay
+    path('', include('shop.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
