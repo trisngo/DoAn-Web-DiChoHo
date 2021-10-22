@@ -1,5 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
+from .models import Profile, User
+from django.contrib import messages
+from django.urls import reverse
 
 # get index page
 def index_view(request):
@@ -28,7 +32,25 @@ def shop_view(request):
 def login_view(request):
     if request.method == 'POST':
         if 'sdt' not in request.POST:
-            return HttpResponse('<h1>No</h1>')
+            username = request.POST["username"]
+            password = request.POST["password"]
+            print(username)
+            print(password)
+            
+            try: 
+                user = User.objects.get(username=username) #query của django
+                print(user)
+            except:
+                messages.error(request, 'User does not exist')
+                return redirect(reverse('login'))
+
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('/')
+            else:
+                messages.error(request, 'Username or Password is wrong')
+                return redirect(reverse('login'))
         else:
             return HttpResponse('<h1>Yes</h1>')
     else:

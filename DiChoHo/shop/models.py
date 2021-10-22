@@ -1,14 +1,20 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-# Create your models here.
-
-class user(models.Model):
-    username = models.CharField(max_length=100,null=False)
-    password = models.CharField(max_length=100,null=False)
-    email = models.EmailField(max_length=100,null=False)
-    name = models.CharField(max_length=100,null=False)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    birth_date = models.DateField(null=True, blank=True)
+    profile_pic = models.ImageField(default='defaultavatar.png', upload_to='profiles_pics')
     address = models.TextField(max_length=500,null=False)
     phone = models.CharField(max_length=100,null=False)
-    is_admin = models.BooleanField()
 
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
 
+@receiver(post_save, sender=User)
+def save_profile(sender, instance, **kwargs):
+    instance.profile.save()
