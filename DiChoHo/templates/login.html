@@ -11,17 +11,27 @@
 </head>
 
 <body>
+  {% if messages %}
+  <h2>
+      {% for message in messages %}
+      {{ message }}
+      {% endfor %}
+  </h2>
+  {% endif %}
   <!-- partial:index.partial.html -->
   <div class="form-structor">
     <div class="signup">
       <h2 class="form-title" id="signup"><span>hoặc</span>Đăng ký</h2>
       <form action="" method="POST">
+        {% csrf_token%}
         <div class="form-holder">
-          <input type="text" class="input" placeholder="Họ và tên" />
-          <input type="number" class="input" placeholder="Số điện thoại" />
-          <input type="email" class="input" placeholder="Email" />
-          <input type="password" class="input" placeholder="Mật khẩu" />
-          <input type="password" class="input" placeholder="Nhập lại mật khẩu" />
+          <input type="text" class="input" placeholder="Họ và tên" name="name"/>
+          <input type="text" class="input" placeholder="Username" name="username"/>
+          <input type="number" class="input" placeholder="Số điện thoại" name="phone"/>
+          <input type="text" class="input" placeholder="Địa chỉ" name="address"/>
+          <input type="email" class="input" placeholder="Email" name="email"/>
+          <input type="password" class="input" placeholder="Mật khẩu" name="password"/>
+          <input type="password" class="input" placeholder="Nhập lại mật khẩu" name="password2"/>
         </div>
         <button class="submit-btn register_btn">Đăng ký</button>
       </form>
