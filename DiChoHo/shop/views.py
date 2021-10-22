@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from .models import Profile, User
 from django.contrib import messages
@@ -31,7 +32,7 @@ def shop_view(request):
 # get login page
 def login_view(request):
     if request.method == 'POST':
-        if 'sdt' not in request.POST:
+        if 'phone' not in request.POST:
             username = request.POST["username"]
             password = request.POST["password"]
             print(username)
@@ -42,19 +43,46 @@ def login_view(request):
                 print(user)
             except:
                 messages.error(request, 'User does not exist')
-                return redirect(reverse('login'))
-
+                return redirect('login')
+                
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('/')
             else:
                 messages.error(request, 'Username or Password is wrong')
-                return redirect(reverse('login'))
+                return redirect('login')
         else:
-            return HttpResponse('<h1>Yes</h1>')
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            password2 = request.POST['password2']
+            name = request.POST['name']
+            phone = request.POST['phone']
+            address = request.POST['address']
+
+            if password == password2:
+                if User.objects.filter(email=email).exists():
+                    messages.error(request, 'Email Already Used')
+                    return redirect('login')
+                elif User.objects.filter(username=username).exists():
+                    messages.error(request, 'Username Already Used')
+                    return redirect('login')
+                else:
+                    user = User.objects.create_user(username=username, email=email, password=password)
+                    user.is_active = True
+                    user.first_name = name
+                    user.profile.address = address
+                    user.profile.phone = phone
+                    user.save()
+                    return redirect('home')
+            else:
+                messages.info(request, 'Password is not same')
+                return redirect('login')
     else:
         return render(request, 'login.html')
+
+
 
 # get contact page
 def contact_view(request):
