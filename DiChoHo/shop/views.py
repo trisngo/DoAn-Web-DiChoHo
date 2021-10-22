@@ -7,51 +7,52 @@ from django.contrib import messages
 from django.urls import reverse
 
 # get index page
+
+
 def index_view(request):
     return render(
         request,
-        'index.html', 
+        'index.html',
         {
-            
+
         }
     )
 # get product page
+
+
 def product_view(request):
     return render(
         request,
-        'product-single.html', 
+        'product-single.html',
     )
 
 # get shop page
+
+
 def shop_view(request):
     return render(
         request,
-        'shop.html', 
+        'shop.html',
     )
 
 # get login page
+
+
 def login_view(request):
     if request.method == 'POST':
         if 'phone' not in request.POST:
-            username = request.POST["username"]
-            password = request.POST["password"]
-            print(username)
-            print(password)
-            
-            try: 
-                user = User.objects.get(username=username) #query của django
-                print(user)
-            except:
-                messages.error(request, 'User does not exist')
-                return redirect('login')
-                
-            user = authenticate(username=username, password=password)
+            getUsername = request.POST["username"]
+            getPassword = request.POST["password"]
+            user = authenticate(username=getUsername,
+                                password=getPassword)
+            print(getUsername)
+            print(getPassword)
             if user is not None:
                 login(request, user)
                 return redirect('/')
             else:
-                messages.error(request, 'Username or Password is wrong')
-                return redirect('login')
+                messages.error(request, 'Sai tài khoản hoặc mật khẩu')
+                return redirect(reverse('login'))
         else:
             username = request.POST['username']
             email = request.POST['email']
@@ -69,7 +70,8 @@ def login_view(request):
                     messages.error(request, 'Username Already Used')
                     return redirect('login')
                 else:
-                    user = User.objects.create_user(username=username, email=email, password=password)
+                    user = User.objects.create_user(
+                        username=username, email=email, password=password)
                     user.is_active = True
                     user.first_name = name
                     user.profile.address = address
@@ -83,7 +85,6 @@ def login_view(request):
         return render(request, 'login.html')
 
 
-
 # get contact page
 def contact_view(request):
     return render(
@@ -92,6 +93,8 @@ def contact_view(request):
     )
 
 # get about page
+
+
 def about_view(request):
     return render(
         request,
@@ -99,6 +102,8 @@ def about_view(request):
     )
 
 # get cart page
+
+
 def cart_view(request):
     return render(
         request,
@@ -106,6 +111,8 @@ def cart_view(request):
     )
 
 # get checkout page
+
+
 def checkout_view(request):
     return render(
         request,
@@ -113,6 +120,8 @@ def checkout_view(request):
     )
 
 # get wishlist page
+
+
 def wishlist_view(request):
     return render(
         request,

@@ -2,58 +2,99 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>DICHOHO | Đăng nhập</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'css/stylelogin.css' %}"
+      type="text/css"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <title>DICHOHO | Đăng nhập</title>
-  <link rel="stylesheet" href="{% static 'css/stylelogin.css' %}" type="text/css" />
-
-</head>
-
-<body>
-  {% if messages %}
-  <h2>
-      {% for message in messages %}
-      {{ message }}
-      {% endfor %}
-  </h2>
-  {% endif %}
-  <!-- partial:index.partial.html -->
-  <div class="form-structor">
-    <div class="signup">
-      <h2 class="form-title" id="signup"><span>hoặc</span>Đăng ký</h2>
-      <form action="" method="POST">
-        {% csrf_token%}
-        <div class="form-holder">
-          <input type="text" class="input" placeholder="Họ và tên" name="name"/>
-          <input type="text" class="input" placeholder="Username" name="username"/>
-          <input type="number" class="input" placeholder="Số điện thoại" name="phone"/>
-          <input type="text" class="input" placeholder="Địa chỉ" name="address"/>
-          <input type="email" class="input" placeholder="Email" name="email"/>
-          <input type="password" class="input" placeholder="Mật khẩu" name="password"/>
-          <input type="password" class="input" placeholder="Nhập lại mật khẩu" name="password2"/>
-        </div>
-        <button class="submit-btn register_btn">Đăng ký</button>
-      </form>
-    </div>
-    <div class="login slide-up">
-      <div class="center">
-        <h2 class="form-title" id="login"><span>hoặc</span>Đăng nhập</h2>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div class="form-structor">
+      <div class="signup">
+        <h2 class="form-title" id="signup"><span>hoặc</span>Đăng ký</h2>
         <form action="" method="POST">
+          {% csrf_token%}
           <div class="form-holder">
-            {% csrf_token %}
-            <input type="text" class="input" placeholder="Tên tài khoản" name="username" />
-            <input type="password" class="input" placeholder="Nhap Password" name="password" />
+            <input
+              type="text"
+              class="input"
+              placeholder="Họ và tên"
+              name="name"
+            />
+            <input
+              type="text"
+              class="input"
+              placeholder="Username"
+              name="username"
+            />
+            <input
+              type="number"
+              class="input"
+              placeholder="Số điện thoại"
+              name="phone"
+            />
+            <input
+              type="text"
+              class="input"
+              placeholder="Địa chỉ"
+              name="address"
+            />
+            <input
+              type="email"
+              class="input"
+              placeholder="Email"
+              name="email"
+            />
+            <input
+              type="password"
+              class="input"
+              placeholder="Mật khẩu"
+              name="password"
+            />
+            <input
+              type="password"
+              class="input"
+              placeholder="Nhập lại mật khẩu"
+              name="password2"
+            />
           </div>
-          <button class="submit-btn login-btn">Đăng nhập</button>
+          <button class="submit-btn register_btn">Đăng ký</button>
         </form>
-        <div class="forgot-passwd"><a href="#">Quên mật khẩu</a></div>
+      </div>
+      <div class="login slide-up">
+        <div class="center">
+          <h2 class="form-title" id="login"><span>hoặc</span>Đăng nhập</h2>
+          {% for message in messages %}
+          <h3>{{ message }}</h3>
+          {% endfor %}
+          <form action="" method="POST">
+            <div class="form-holder">
+              {% csrf_token %}
+              <input
+                type="text"
+                class="input"
+                placeholder="Tên tài khoản"
+                name="username"
+              />
+              <input
+                type="password"
+                class="input"
+                placeholder="Nhap Password"
+                name="password"
+              />
+            </div>
+            <button class="submit-btn login-btn">Đăng nhập</button>
+          </form>
+          <div class="forgot-passwd"><a href="#">Quên mật khẩu</a></div>
+        </div>
       </div>
     </div>
-
-  </div>
-  <!-- partial -->
-  <script src="{% static 'js/script.js' %}"></script>
-</body>
-
+    <!-- partial -->
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
 </html>
