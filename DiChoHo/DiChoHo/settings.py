@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'DiChoHo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': "profileuser",
+        'NAME': "shop_user",
         'USER': "root",
-        'PASSWORD': "fmiQ2XyA8k4",
+        'PASSWORD': "ducanh0608",
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '8888',
     }
 }
 
