@@ -31,7 +31,7 @@
 	<link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
-	<!-- {% block page_css %}{% endblock %} use for login load css(chua dung)https://stackoverflow.com/questions/60602684/what-is-the-right-way-to-load-different-js-file-for-each-template-in-django -->
+	{% block page_css %}{% endblock %} <!--use for login load css(chua dung)https://stackoverflow.com/questions/60602684/what-is-the-right-way-to-load-different-js-file-for-each-template-in-django -->
 </head> 
 
 <body class="goto-here">
@@ -169,7 +169,7 @@
 	</script>
 	<script src="{% static 'js/google-map.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
-
+	{% block page_script %}{% endblock %}
 </body>
 
 </html>
