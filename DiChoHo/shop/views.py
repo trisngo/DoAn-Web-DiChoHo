@@ -40,49 +40,48 @@ def shop_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        if 'phone' not in request.POST:
-            getUsername = request.POST["username"]
-            getPassword = request.POST["password"]
-            user = authenticate(username=getUsername,
-                                password=getPassword)
-            print(getUsername)
-            print(getPassword)
-            if user is not None:
-                login(request, user)
-                return redirect('/')
-            else:
-                messages.error(request, 'Sai tài khoản hoặc mật khẩu')
-                return redirect(reverse('login'))
+        getUsername = request.POST["username"]
+        getPassword = request.POST["password"]
+        user = authenticate(username=getUsername,
+                            password=getPassword)
+        print(getUsername)
+        print(getPassword)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
         else:
-            username = request.POST['username']
-            email = request.POST['email']
-            password = request.POST['password']
-            password2 = request.POST['password2']
-            name = request.POST['name']
-            phone = request.POST['phone']
-            address = request.POST['address']
+            messages.error(request, 'Sai tài khoản hoặc mật khẩu')
+            return redirect(reverse('login'))
+    #     else:
+    #         username = request.POST['username']
+    #         email = request.POST['email']
+    #         password = request.POST['password']
+    #         password2 = request.POST['password2']
+    #         name = request.POST['name']
+    #         phone = request.POST['phone']
+    #         address = request.POST['address']
 
-            if password == password2:
-                if User.objects.filter(email=email).exists():
-                    messages.error(request, 'Email Already Used')
-                    return redirect('login')
-                elif User.objects.filter(username=username).exists():
-                    messages.error(request, 'Username Already Used')
-                    return redirect('login')
-                else:
-                    user = User.objects.create_user(
-                        username=username, email=email, password=password)
-                    user.is_active = True
-                    user.first_name = name
-                    user.profile.address = address
-                    user.profile.phone = phone
-                    user.save()
-                    return redirect('home')
-            else:
-                messages.info(request, 'Password is not same')
-                return redirect('login')
-    else:
-        return render(request, 'login.html')
+    #         if password == password2:
+    #             if User.objects.filter(email=email).exists():
+    #                 messages.error(request, 'Email Already Used')
+    #                 return redirect('login')
+    #             elif User.objects.filter(username=username).exists():
+    #                 messages.error(request, 'Username Already Used')
+    #                 return redirect('login')
+    #             else:
+    #                 user = User.objects.create_user(
+    #                     username=username, email=email, password=password)
+    #                 user.is_active = True
+    #                 user.first_name = name
+    #                 user.profile.address = address
+    #                 user.profile.phone = phone
+    #                 user.save()
+    #                 return redirect('home')
+    #         else:
+    #             messages.info(request, 'Password is not same')
+    #             return redirect('login')
+    # else:
+    return render(request, 'login.html')
 
 
 # get contact page
