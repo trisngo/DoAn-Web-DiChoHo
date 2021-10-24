@@ -62,11 +62,15 @@
 					<li class="nav-item {% block menu_contact_class %}{% endblock %}"><a href="{% url 'contact' %}" class="nav-link">Liên hệ</a></li>
 					<li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span
 								class="icon-shopping_cart"></span>[0]</a></li>
+					<li class="nav-item"><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
+					
 					{%if user.is_authenticated %}
 					<li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Đăng Xuất</a></li>
 					{%else %}
 					<li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Đăng Nhập</a></li>
 					{%endif %}
+
+
 				</ul>
 			</div>
 		</div>
