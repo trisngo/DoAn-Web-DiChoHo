@@ -13,7 +13,7 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  background: #f3f2f2;
+  background: white;
 }
 
 h4 {
@@ -35,9 +35,10 @@ form {
   background: #fefefe;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   padding-bottom: 20px;
-  width: 300px;
+  width: 310px;
 }
 form h4 {
   margin-bottom: 20px;
@@ -80,9 +81,11 @@ button {
   text-align: center;
   padding: 15px 40px;
   margin-top: 5px;
-  background-color: #b08bf8;
+  background-color: #02be6e;
   color: #fff;
+  font-weight: bold;
   font-size: 14px;
+  margin-top: 15px;
   margin-left: auto;
   font-weight: 500;
   box-shadow: 0px 2px 6px -1px rgba(0, 0, 0, 0.13);
@@ -254,8 +257,9 @@ input:focus {
 .session {
   display: flex;
   flex-direction: row;
-  width: auto;
-  height: auto;
+  align-items: center;
+  width: 600px;
+  height: 500px;
   margin: auto auto;
   background: #ffffff;
   border-radius: 4px;
@@ -267,7 +271,8 @@ input:focus {
   height: auto;
   min-height: 100%;
   position: relative;
-  background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  background-image: url("../images/signin_img.jpg");
+  background-position: 30%;
   background-size: cover;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -276,4 +281,43 @@ input:focus {
   height: 40px;
   width: auto;
   margin: 20px;
+}
+
+.sign-up {
+  text-decoration: none;
+  color: #02be6e;
+  align-self: flex-start;
+  margin-left: 15px;
+  margin-top: 15px;
+}
+
+.login {
+  display: flex;
+  flex-direction: row;
+}
+
+.login a {
+  text-decoration: none;
+  color: blue;
+  margin-top: 30px;
+}
+
+.logo-class {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.msg {
+  color: red;
+  background-color: #f0cec9;
+  border: red;
+  height: 40px;
+  width: 310px;
+  line-height: 40px;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 30px;
+  border-radius: 15px;
 }
