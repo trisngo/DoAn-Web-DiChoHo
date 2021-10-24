@@ -5,6 +5,11 @@
   margin: 0;
 }
 
+h2{
+  font-size: 20px;
+  padding-top: 5px;
+}
+
 /* đổi body thành .body-login để không ghi đè lẫn nhau với body ở styles.css */
 html,
 .body-login {    
@@ -39,7 +44,7 @@ form {
   align-items: center;
   justify-content: center;
   padding-bottom: 20px;
-  width: 310px;
+  width: 400px;
 }
 form h4 {
   margin-bottom: 20px;
