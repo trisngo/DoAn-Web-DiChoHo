@@ -27,8 +27,20 @@
       </div>
       <form action="" class="log-in" autocomplete="off" method="POST">
         {% csrf_token %}
-        <h4>Chúng tôi là <span>DICHOHO</span></h4>
-        <p>Hãy ấn đăng kí ngay để tận hưởng mua sắm tại nhà mùa dịch bệnh:</p>
+        <div
+        class="logo-class"
+        style="background-color: #02be6e; border-radius: 10px"
+      >
+        <img
+          src="{% static './images/Logo.png' %}"
+          alt="logo"
+          style="width: 25px; height: 25px; margin-top: 7px;"
+        />
+        <h2 style="font-weight: bold">DICHOHO</h2>
+      </div>
+      {% for message in messages %}
+      <div class="msg">{{message}}</div>
+      {% endfor %}
         <div class="floating-label">
           <input placeholder="Nhập tài khoản" type="text" name="username" id="username" autocomplete="off" required/>
           <label for="username">Tài khoản</label>
@@ -52,7 +64,7 @@
         </div>
 
         <div class="floating-label">
-          <input placeholder="Nhập email" type="text" name="email" id="email" />
+          <input placeholder="Nhập email" type="email" name="email" id="email" />
           <label for="username">Email</label>
           <div class="icon">
             <?xml version="1.0" encoding="UTF-8"?>
