@@ -64,7 +64,10 @@
         method="POST"
       >
         {% csrf_token %}
-        <div class="logo-class" style="background-color: #02be6e">
+        <div
+          class="logo-class"
+          style="background-color: #02be6e; border-radius: 10px"
+        >
           <img
             src="{% static './images/Logo.png' %}"
             alt="logo"
