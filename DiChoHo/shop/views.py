@@ -77,7 +77,7 @@ def register_view(request):
                 return redirect('register')
             else:
                 user = User.objects.create_user(
-                username=username, email=email, password=password)
+                    username=username, email=email, password=password)
                 user.is_active = True
                 user.first_name = name
                 user.profile.address = address
@@ -133,6 +133,7 @@ def wishlist_view(request):
         request,
         'wishlist.html',
     )
+
 
 def logout_view(request):
     logout(request)
