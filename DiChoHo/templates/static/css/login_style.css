@@ -5,8 +5,9 @@
   margin: 0;
 }
 
+/* đổi body thành .body-login để không ghi đè lẫn nhau với body ở styles.css */
 html,
-body {
+.body-login {    
   height: 100vh;
   width: 100vw;
   margin: 0 0;

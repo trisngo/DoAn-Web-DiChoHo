@@ -1,17 +1,12 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}Profile{% endblock %}
 
-<head>
-  <meta charset="UTF-8" />
-  <title>DICHOHO | Đăng Ký</title>
-  <link rel="stylesheet" href="{% static './css/register_style.css' %}" />
-</head>
+{% block menu_home_class %}active{% endblock %}
+{% block page_css %}<link rel="stylesheet" href="{% static './css/register_style.css' %}" /> {% endblock %}
+{% block content %}
 
-<body>
-  <!-- partial:index.partial.html -->
-
-  <body>
+  <section class="body-register">
     <div class="session">
       <div class="left">
         <?xml version="1.0" encoding="UTF-8"?>
@@ -197,8 +192,5 @@
         <button type="submit">Đăng Ký</button>
       </form>
     </div>
-  </body>
-  <!-- partial -->
-</body>
-
-</html>
+  </section>
+{% endblock %}
