@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
-from .models import Profile, User
+from .models import Profile, User, Category, Product
 from django.contrib import messages
 from django.urls import reverse
 
@@ -144,3 +144,15 @@ def profile_view(request):
         request,
         'profile.html'
     )
+
+
+#view category và product mẫu.
+def category_list(request, category_slug=None):
+    category = get_object_or_404(Category, slug=category_slug)
+    products = Product.objects.filter(category=category)
+    return render(request, 'category.html', {'category': category, 'products': products})
+
+
+def product_detail(request, slug):
+    product = get_object_or_404(Product, slug=slug, in_stock=True)
+    return render(request, 'product-single.html', {'product': product})
