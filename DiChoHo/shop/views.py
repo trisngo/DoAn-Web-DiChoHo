@@ -31,10 +31,8 @@ def product_view(request):
 
 
 def shop_view(request):
-    return render(
-        request,
-        'shop.html',
-    )
+    items = Product.objects.all()
+    return render(request, 'shop.html', {'items': items})
 
 # get login page
 
@@ -139,6 +137,7 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+
 def profile_view(request):
     return render(
         request,
@@ -146,7 +145,7 @@ def profile_view(request):
     )
 
 
-#view category và product mẫu.
+# view category và product mẫu.
 def category_list(request, category_slug=None):
     category = get_object_or_404(Category, slug=category_slug)
     products = Product.objects.filter(category=category)
@@ -155,5 +154,4 @@ def category_list(request, category_slug=None):
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
-    print(product.image.url)
     return render(request, 'product-single.html', {'product': product})
