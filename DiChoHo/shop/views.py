@@ -155,4 +155,5 @@ def category_list(request, category_slug=None):
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
+    print(product.image.url)
     return render(request, 'product-single.html', {'product': product})

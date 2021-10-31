@@ -1,18 +1,39 @@
-{% extends 'base.html' %}
-
-{% block title %}Mua Hàng{% endblock %}
-
-{% block menu_shop_class %}active{% endblock %}
-
-{% block content %}
+{% extends "base.html" %}
 {% load static %}
+{% block title %}
+{% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+{% block content %}
 
 <!-- sử dụng biến truyền vào từ view -->
-{% block category %}
-{% endblock %}
-{% block products %}
-{% endblock %}
-
+<main>
+	<div class="">
+	  <div class="">
+		<!-- lấy tên loại sản phẩm -->
+		<div class="pb-3 h5">{{category.name|title}}</div>
+		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+		
+			<!-- lấy từng loại sản phẩm xuất ra -->
+		  {% for product in products %}
+		  <div class="col">
+			<div class="card shadow-sm">
+			<img  alt="Responsive image" src="{{ product.image.url | slice:"10:" }}">
+			  <div class="card-body">
+				<p class="card-text">
+				  <a class="text-dark text-decoration-none" href="{{ product.get_absolute_url }}">{{ product.title }}</a>
+				</p>
+			  </div>
+			</div>
+		  </div>
+		  {% endfor %}
+  
+		</div>
+	  </div>
+	</div>
+  
+  
+  </main>
+  
 {% endblock %}
 {% block arrow %}
 <div class="row">
