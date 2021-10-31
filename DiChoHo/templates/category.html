@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Mua Hàng{% endblock %}
+
+{% block menu_shop_class %}active{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<!-- sử dụng biến truyền vào từ view -->
+{% block category %}
+{% endblock %}
+{% block products %}
+{% endblock %}
+
+{% endblock %}
+{% block arrow %}
+<div class="row">
+	<div class="mouse">
+		<a href="#" class="mouse-icon">
+			<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+		</a>
+	</div>
+</div>
+{% endblock %}
