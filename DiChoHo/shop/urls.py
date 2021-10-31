@@ -1,6 +1,7 @@
 from django.urls import path
 from shop import views
 
+
 urlpatterns = [
     # khi goi duong dan home thi se render html minh lien ket ben views.py, name dung de goi duong dan cho nhanh
     path('', views.index_view, name='home'),

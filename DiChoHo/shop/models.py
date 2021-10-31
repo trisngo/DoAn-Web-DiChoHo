@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
@@ -33,7 +34,13 @@ class Category(models.Model):
         verbose_name_plural = 'categories'
 
     def get_absolute_url(self):
-        return reverse('store:category_list', args=[self.slug])
+        return reverse('category_list', args=[self.slug])
+    
+    def get_all_objects(self):
+        queryset = self._meta.model.objects.all()
+        # can use the below method also
+        # queryset = self.__class__.objects.all()   
+        return queryset
 
     def __str__(self):
         return self.name
@@ -62,4 +69,5 @@ class Product(models.Model):
         ordering = ('-created',)
 
     def get_absolute_url(self):
-        return reverse('store:product_detail', args=[self.slug])
+        return reverse('product_detail', args=[self.slug])
+
