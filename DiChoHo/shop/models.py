@@ -4,17 +4,22 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
-    profile_pic = models.ImageField(default='defaultavatar.png', upload_to='profiles_pics')
-    address = models.TextField(max_length=500,null=False)
-    phone = models.CharField(max_length=100,null=False)
+    profile_pic = models.ImageField(
+        default='defaultavatar.png', upload_to='profiles_pics')
+    address = models.TextField(max_length=500, null=False)
+    phone = models.CharField(max_length=100, null=False)
+
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
@@ -42,12 +47,15 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, related_name='product', on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='product_creator')
+    category = models.ForeignKey(
+        Category, related_name='product', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='product_creator')
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, default='admin')
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='templates/static/images', default='templates/static/images/Logo.png')
+    image = models.ImageField(
+        upload_to='templates/static/images', default='/templates/static/images/Logo.png')
     slug = models.SlugField(max_length=255)
     price = models.IntegerField()
     in_stock = models.BooleanField(default=True)
@@ -62,3 +70,4 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('product_detail', args=[self.slug])
+
