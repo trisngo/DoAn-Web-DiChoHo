@@ -31,8 +31,8 @@ def product_view(request):
 
 
 def shop_view(request):
-    items = Product.objects.all()
-    return render(request, 'shop.html', {'items': items})
+    products = Product.objects.all()
+    return render(request, 'shop.html', {'products': products})
 
 # get login page
 
@@ -154,4 +154,5 @@ def category_list(request, category_slug=None):
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
-    return render(request, 'product-single.html', {'product': product})
+    relative_products = Product.objects.filter(category=product.category)
+    return render(request, 'product-single.html', {'product': product,'relative_products':relative_products})
