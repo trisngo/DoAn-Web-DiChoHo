@@ -55,6 +55,11 @@ body{
 .shadow-none {
     box-shadow: none!important;
 }
-.inner{
-    
+
+.table_responsive li{
+    display: inline;
+    left: 0;
+    right: 0;
+    position:absolute;
+    padding-left:30px;
 }
