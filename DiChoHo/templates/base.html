@@ -51,8 +51,8 @@
 							class="nav-link">Trang Chủ</a></li>
 					<!-- đặc biến thêm class active cho môi trang nữa -->
 					<li class="nav-item dropdown {% block menu_shop_class %}{% endblock %}">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown04"
-							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mua Hàng</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">Mua Hàng</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
 							<a class="dropdown-item" href="{% url 'shop' %}">Sản Phẩm</a>
 							<a class="dropdown-item" href="{% url 'wishlist' %}">Danh sách yêu thích</a>
@@ -66,18 +66,18 @@
 								class="icon-shopping_cart"></span>[0]</a></li>
 
 					{%if user.is_authenticated %}
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="dropdownprofile"
-								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								{{user.username}}
-							</a>
-							<div class="dropdown-menu" aria-labelledby="dropdownprofile">
-								<a class="dropdown-item" href="{% url 'profile' %}">Thông tin cá nhân</a>
-								<a class="dropdown-item" href="{% url 'logout' %}">Đăng xuất</a>
-							</div>
-						</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="dropdownprofile" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">
+							{{user.username}}
+						</a>
+						<div class="dropdown-menu" aria-labelledby="dropdownprofile">
+							<a class="dropdown-item" href="{% url 'profile' %}">Thông tin cá nhân</a>
+							<a class="dropdown-item" href="{% url 'logout' %}">Đăng xuất</a>
+						</div>
+					</li>
 					{% else %}
-						<li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Đăng Nhập</a></li>
+					<li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Đăng Nhập</a></li>
 					{% endif %}
 				</ul>
 			</div>
