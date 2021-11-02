@@ -56,10 +56,18 @@ body{
     box-shadow: none!important;
 }
 
-.table_responsive li{
-    display: inline;
+.form_table{
+    position: absolute;
+    display: flex;
     left: 0;
     right: 0;
-    position:absolute;
-    padding-left:30px;
+    align-items: center;
+
+}
+.form_table *{
+    display: inline;
+}
+.form_table li {
+    display:grid;
+    text-align: center;
 }
