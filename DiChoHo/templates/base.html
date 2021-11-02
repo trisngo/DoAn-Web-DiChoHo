@@ -31,14 +31,15 @@
 	<link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
-	{% block page_css %}{% endblock %} <!--use for login load css(chua dung)https://stackoverflow.com/questions/60602684/what-is-the-right-way-to-load-different-js-file-for-each-template-in-django -->
-</head> 
+	{% block page_css %}{% endblock %}
+	<!--use for login load css(chua dung)https://stackoverflow.com/questions/60602684/what-is-the-right-way-to-load-different-js-file-for-each-template-in-django -->
+</head>
 
 <body class="goto-here">
 	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
 		<div class="container">
-			<a class="navbar-brand" href="{% url 'home' %}"><img id="brand-logo" src="{% static 'images/logo.png' %}" class="img-logo"
-					alt="...">DICHOHO</a>
+			<a class="navbar-brand" href="{% url 'home' %}"><img id="brand-logo" src="{% static 'images/logo.png' %}"
+					class="img-logo" alt="...">DICHOHO</a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
 				aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="oi oi-menu"></span> Menu
@@ -46,11 +47,12 @@
 
 			<div class="collapse navbar-collapse" id="ftco-nav">
 				<ul class="navbar-nav ml-auto">
-					<li class="nav-item {% block menu_home_class %}{% endblock %}"><a href="{% url 'home' %}" class="nav-link">Trang Chủ</a></li> 
+					<li class="nav-item {% block menu_home_class %}{% endblock %}"><a href="{% url 'home' %}"
+							class="nav-link">Trang Chủ</a></li>
 					<!-- đặc biến thêm class active cho môi trang nữa -->
 					<li class="nav-item dropdown {% block menu_shop_class %}{% endblock %}">
-						<a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false">Mua Hàng</a>
+						<a class="nav-link dropdown-toggle" href="#" id="dropdown04"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mua Hàng</a>
 						<div class="dropdown-menu" aria-labelledby="dropdown04">
 							<a class="dropdown-item" href="{% url 'shop' %}">Sản Phẩm</a>
 							<a class="dropdown-item" href="{% url 'wishlist' %}">Danh sách yêu thích</a>
@@ -58,20 +60,28 @@
 							<a class="dropdown-item" href="{% url 'checkout' %}">Thanh toán</a>
 						</div>
 					</li>
-					<li class="nav-item {% block menu_about_class %}{% endblock %}"><a href="{% url 'about' %}" class="nav-link">Về chúng tôi</a></li>
+					<li class="nav-item {% block menu_about_class %}{% endblock %}"><a href="{% url 'about' %}"
+							class="nav-link">Về chúng tôi</a></li>
 					<li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span
 								class="icon-shopping_cart"></span>[0]</a></li>
-					<li class="nav-item"><a href="{% url 'profile' %}" class="nav-link">Profile</a></li>
-					
+
 					{%if user.is_authenticated %}
-					<li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Đăng Xuất</a></li>
-					{%else %}
-					<li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Đăng Nhập</a></li>
-					{%endif %}
-
-
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="dropdownprofile"
+								data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								{{user.username}}
+							</a>
+							<div class="dropdown-menu" aria-labelledby="dropdownprofile">
+								<a class="dropdown-item" href="{% url 'profile' %}">Thông tin cá nhân</a>
+								<a class="dropdown-item" href="{% url 'logout' %}">Đăng xuất</a>
+							</div>
+						</li>
+					{% else %}
+						<li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Đăng Nhập</a></li>
+					{% endif %}
 				</ul>
 			</div>
+		</div>
 		</div>
 	</nav>
 	<!-- END nav -->
@@ -123,8 +133,10 @@
 						<h2 class="ftco-heading-2">Bạn có góp ý gì xin liên hệ tại</h2>
 						<div class="block-23 mb-3">
 							<ul>
-								<li><span class="icon icon-map-marker"></span><span class="text">45 Đỗ Thúc Tịnh, Phường 12, Gò Vấp, Thành phố Hồ Chí Minh 700000, Việt Nam</span></li>
-								<li><a href="#"><span class="icon icon-phone"></span><span class="text">+84 123 456 789</span></a></li>
+								<li><span class="icon icon-map-marker"></span><span class="text">45 Đỗ Thúc Tịnh, Phường
+										12, Gò Vấp, Thành phố Hồ Chí Minh 700000, Việt Nam</span></li>
+								<li><a href="#"><span class="icon icon-phone"></span><span class="text">+84 123 456
+											789</span></a></li>
 								<li><a href="#"><span class="icon icon-envelope"></span><span
 											class="text">cskh@dichoho.com</span></a></li>
 							</ul>
