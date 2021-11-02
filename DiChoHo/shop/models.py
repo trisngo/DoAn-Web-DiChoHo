@@ -48,14 +48,14 @@ class Category(models.Model):
 
 class Product(models.Model):
     category = models.ForeignKey(
-        Category, related_name='product', on_delete=models.CASCADE)
+    Category, related_name='product', on_delete=models.CASCADE)
     created_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='product_creator')
+    User, on_delete=models.CASCADE, related_name='product_creator')
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, default='admin')
     description = models.TextField(blank=True)
     image = models.ImageField(
-        upload_to='templates/static/images', default='/templates/static/images/Logo.png')
+    upload_to='templates/static/images', default='/templates/static/images/Logo.png')
     slug = models.SlugField(max_length=255)
     price = models.IntegerField()
     in_stock = models.BooleanField(default=True)
