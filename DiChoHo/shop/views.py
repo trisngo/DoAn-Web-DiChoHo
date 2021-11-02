@@ -11,13 +11,8 @@ from django.urls import reverse
 
 
 def index_view(request):
-    return render(
-        request,
-        'index.html',
-        {
-
-        }
-    )
+    products = Product.objects.all()
+    return render(request, 'index.html', {'products': products})
 # get product page
 
 
