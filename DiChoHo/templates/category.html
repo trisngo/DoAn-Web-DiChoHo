@@ -5,34 +5,173 @@
 {% endblock %}
 {% block content %}
 
-<!-- sử dụng biến truyền vào từ view -->
-<main>
-	<div class="">
-	  <div class="">
-		<!-- lấy tên loại sản phẩm -->
-		<div class="pb-3 h5">{{category.name|title}}</div>
-		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
-		
-			<!-- lấy từng loại sản phẩm xuất ra -->
-		  {% for product in products %}
-		  <div class="col">
-			<div class="card shadow-sm">
-			<img  alt="Responsive image" src="{{ product.image.url | slice:"10:" }}">
-			  <div class="card-body">
-				<p class="card-text">
-				  <a class="text-dark text-decoration-none" href="{{ product.get_absolute_url }}">{{ product.title }}</a>
-				</p>
-			  </div>
-			</div>
-		  </div>
-		  {% endfor %}
-  
-		</div>
-	  </div>
-	</div>
-  
-  
-  </main>
+  <div class="row">
+  <div class="col-lg-12 card-margin">
+    <div class="card search-form">
+      <div class="card-body p-0">
+        <form id="search-form">
+          <div class="row">
+            <div class="col-12">
+              <div class="row no-gutters">
+                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                  <select class="form-control" id="exampleFormControlSelect1">
+                    <option>Tất cả</option>
+                    <option>Công Nghệ</option>
+                    <option>Đồ Dùng</option>
+                    <option>Hóa Mỹ Phẩm</option>
+                    <option>May Mặc</option>
+                    <option>Tươi sống</option>
+                  </select>
+                </div>
+                <div class="col-lg-8 col-md-6 col-sm-12 p-0">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    class="form-control"
+                    id="search"
+                    name="search"
+                  />
+                </div>
+                <div class="col-lg-1 col-md-3 col-sm-12 p-0">
+                  <button type="submit" class="btn btn-base">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="feather feather-search"
+                    >
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="hero-wrap hero-bread"
+  style="background-image: url(/static/images/bg_1.jpg)"
+>
+  <div class="container">
+    <div
+      class="
+        row
+        no-gutters
+        slider-text
+        align-items-center
+        justify-content-center
+      "
+    >
+      <div class="col-md-9 ftco-animate text-center">
+        <h1 class="mb-0 bread">Sản phẩm</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="ftco-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10 mb-5 text-center">
+        <ul class="product-category">
+          <li><a href="/shop/" id="all">Tất Cả</a></li>
+          <li><a href="/shop/rau-cu/" id="raucu">Rau Củ</a></li>
+          <li><a href="/shop/trai-cay/" id="traicay">Trái Cây</a></li>
+          <li><a href="/shop/thit/" id="thit">Thịt</a></li>
+          <li><a href="/shop/ca/" id="ca">Cá</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="row" id="reload_data">
+      {% for product in products %}
+      <div class="col-md-2 col-lg- ftco-animate">
+        <div class="product" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
+          <a href="{{ product.get_absolute_url }}" class="img-prod"
+            ><img
+              class="img-fluid"
+              src="{{ product.image.url | slice:"10:" }}"
+              alt="Colorlib Template"
+            />
+            <div class="overlay"></div>
+          </a>
+          <div class="text py-3 pb-4 px-3 text-center">
+            <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+            <div class="d-flex">
+              <div class="pricing">
+                <p class="price">
+                  <span class="mr-2 price-dc" style="text-decoration: none;">{{ product.price }}</span>
+                </p>
+              </div>
+            </div>
+            <div class="bottom-area d-flex px-3">
+              <div class="m-auto d-flex">
+                <a
+                  href="{{ product.get_absolute_url }}"
+                  class="
+                    add-to-cart
+                    d-flex
+                    justify-content-center
+                    align-items-center
+                    text-center
+                  "
+                >
+                  <span><i class="ion-ios-menu"></i></span>
+                </a>
+                <a
+                  href="#"
+                  class="
+                    buy-now
+                    d-flex
+                    justify-content-center
+                    align-items-center
+                    mx-1
+                  "
+                >
+                  <span><i class="ion-ios-cart"></i></span>
+                </a>
+                <a
+                  href="#"
+                  class="heart d-flex justify-content-center align-items-center"
+                >
+                  <span><i class="ion-ios-heart"></i></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="row mt-5">
+      <div class="col text-center">
+        <div class="block-27">
+          <ul>
+            <li><a href="#">&lt;</a></li>
+            <li class="active"><span>1</span></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li><a href="#">&gt;</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
   
 {% endblock %}
 {% block arrow %}
@@ -43,4 +182,25 @@
 		</a>
 	</div>
 </div>
+
+<script>
+	var urlArray = window.location.href.split("/");
+	for (let i=0;i<urlArray.length;i++)
+	{
+		console.log(urlArray[i]);
+	}
+	if (urlArray[urlArray.length-2]=="rau-cu") {
+		document.getElementById("raucu").classList.add('active');
+	}
+	else if (urlArray[urlArray.length-2]=="trai-cay"){
+		document.getElementById("traicay").classList.add('active');
+	}
+	else if (urlArray[urlArray.length-2]=="thit"){
+		document.getElementById("thit").classList.add('active');
+	}
+	else {
+		document.getElementById("ca").classList.add('active');
+	}
+</script>
+
 {% endblock %}

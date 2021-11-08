@@ -1,0 +1,61 @@
+<!-- Hiện không dùng file này-->
+    {% for product in products %}
+     <!-- Neu code nam o day thi no hien ra     -->
+      <div class="col-md-2 col-lg- ftco-animate">
+        <!-- Nam o day thi khong -->
+        <div class="product" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
+          <a href="{{ product.get_absolute_url }}" class="img-prod"
+            ><img
+              class="img-fluid"
+              src="{{ product.image.url | slice:"10:" }}"
+              alt="Colorlib Template"
+            />
+            <div class="overlay"></div>
+          </a>
+          <div class="text py-3 pb-4 px-3 text-center">
+            <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+            <div class="d-flex">
+              <div class="pricing">
+                <p class="price">
+                  <span class="mr-2 price-dc" style="text-decoration: none;">{{ product.price }}</span>
+                </p>
+              </div>
+            </div>
+            <div class="bottom-area d-flex px-3">
+              <div class="m-auto d-flex">
+                <a
+                  href="{{ product.get_absolute_url }}"
+                  class="
+                    add-to-cart
+                    d-flex
+                    justify-content-center
+                    align-items-center
+                    text-center
+                  "
+                >
+                  <span><i class="ion-ios-menu"></i></span>
+                </a>
+                <a
+                  href="#"
+                  class="
+                    buy-now
+                    d-flex
+                    justify-content-center
+                    align-items-center
+                    mx-1
+                  "
+                >
+                  <span><i class="ion-ios-cart"></i></span>
+                </a>
+                <a
+                  href="#"
+                  class="heart d-flex justify-content-center align-items-center"
+                >
+                  <span><i class="ion-ios-heart"></i></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}

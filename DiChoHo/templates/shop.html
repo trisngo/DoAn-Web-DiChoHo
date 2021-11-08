@@ -87,11 +87,11 @@
     <div class="row justify-content-center">
       <div class="col-md-10 mb-5 text-center">
         <ul class="product-category">
-          <li><a href="#" class="active">Tất cả</a></li>
-          <li><a href="#">Rau củ</a></li>
-          <li><a href="#">Trái cây</a></li>
-          <li><a href="#">Thịt</a></li>
-          <li><a href="#">Cá</a></li>
+          <li><a href="/shop/" class="active">Tất Cả</a></li>
+          <li><a href="/shop/rau-cu/">Rau Củ</a></li>
+          <li><a href="/shop/trai-cay/">Trái Cây</a></li>
+          <li><a href="/shop/thit/">Thịt</a></li>
+          <li><a href="/shop/ca/">Cá</a></li>
         </ul>
       </div>
     </div>
@@ -173,28 +173,16 @@
   </div>
 </section>
 
-{% endblock %} {% block arrow %}
-<div class="row">
-  <div class="mouse">
-    <a href="#" class="mouse-icon">
-      <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-    </a>
-  </div>
-</div>
-<script>
-	$(document).ready(function(){
-		$(".product-category li a").on("click",function(){
-      var dataObject = {"category":$(this).text()}
-			$.ajax({
-      url:'/filter_product',
-      method:'post',
-      data: dataObject,
-      success:function(res){
-        console.log(res.text);
-      }
-      });
-		});
-	});
-	</script>
 {% endblock %}
+{% block arrow %}
+<div class="row">
+	<div class="mouse">
+		<a href="#" class="mouse-icon">
+			<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+		</a>
+	</div>
+</div>
+
+{% endblock %}
+
 

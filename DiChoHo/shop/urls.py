@@ -18,5 +18,6 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('product/<slug:slug>', views.product_detail, name='product_detail'),
     path('shop/<slug:category_slug>/', views.category_list, name='category_list'),
-    path('filter_product/', views.filter_product, name='filter_product'),
+    # Hiện cái path phía dưới không sử dụng
+    # path('filter_product/', views.filter_product, name='filter_product'),
 ]
