@@ -1,3 +1,4 @@
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -5,6 +6,7 @@ from django.http import HttpResponse
 from .models import Profile, User, Category, Product
 from django.contrib import messages
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 
 # get index page
@@ -154,5 +156,14 @@ def category_list(request, category_slug=None):
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
+    print(product.category)
     relative_products = Product.objects.filter(category=product.category)
-    return render(request, 'product-single.html', {'product': product,'relative_products':relative_products})
+    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products})
+
+
+@csrf_exempt
+def filter_product(request):
+    print(request.POST["category"])
+    products = Product.objects.filter(category=request.POST["category"])
+    return JsonResponse({"data": "hello"})
+    # return JsonResponse({'products': products})

@@ -25,11 +25,15 @@
 
 	<link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
 	<link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+	
 
 
 	<link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
 	<link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+       
 
 	{% block page_css %}{% endblock %} <!--use for login load css(chua dung)https://stackoverflow.com/questions/60602684/what-is-the-right-way-to-load-different-js-file-for-each-template-in-django -->
 </head> 
@@ -161,6 +165,8 @@
 	<script src="{% static 'js/google-map.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
 	{% block page_script %}{% endblock %}
+
+	
 </body>
 
 </html>

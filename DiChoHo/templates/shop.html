@@ -6,7 +6,6 @@
 
 {% block content %}
 {% load static %}
-
 <div class="row">
   <div class="col-lg-12 card-margin">
     <div class="card search-form">
@@ -91,7 +90,8 @@
           <li><a href="#" class="active">Tất cả</a></li>
           <li><a href="#">Rau củ</a></li>
           <li><a href="#">Trái cây</a></li>
-          <li><a href="#">Nước ép</a></li>
+          <li><a href="#">Thịt</a></li>
+          <li><a href="#">Cá</a></li>
         </ul>
       </div>
     </div>
@@ -181,4 +181,20 @@
     </a>
   </div>
 </div>
+<script>
+	$(document).ready(function(){
+		$(".product-category li a").on("click",function(){
+      var dataObject = {"category":$(this).text()}
+			$.ajax({
+      url:'/filter_product',
+      method:'post',
+      data: dataObject,
+      success:function(res){
+        console.log(res.text);
+      }
+      });
+		});
+	});
+	</script>
 {% endblock %}
+
