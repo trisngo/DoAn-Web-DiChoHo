@@ -1,3 +1,4 @@
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -5,6 +6,8 @@ from django.http import HttpResponse
 from .models import Profile, User, Category, Product
 from django.contrib import messages
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 
 
 # get index page
@@ -150,4 +153,16 @@ def category_list(request, category_slug=None):
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
     relative_products = Product.objects.filter(category=product.category)
-    return render(request, 'product-single.html', {'product': product,'relative_products':relative_products})
+    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products})
+
+
+# Hàm này dùng cho ajax, giờ như cc rồi nên bỏ
+# @csrf_exempt
+# def filter_product(request):
+#     category = Category.objects.get(name=request.POST["category"])
+#     products = list(Product.objects.filter(category=category).values())
+#     # neu muon return nhu la Json
+#     # return JsonResponse(products, safe=False)
+#     # return render(request, 'filter_product.html', {"products": products})
+#     # neu muon return nhu hien tai
+#     return render(request, 'filter_product.html', locals())

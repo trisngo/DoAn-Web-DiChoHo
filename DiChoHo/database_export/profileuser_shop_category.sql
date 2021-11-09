@@ -29,7 +29,7 @@ CREATE TABLE `shop_category` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`),
   KEY `shop_category_name_11b68823` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `shop_category` (
 
 LOCK TABLES `shop_category` WRITE;
 /*!40000 ALTER TABLE `shop_category` DISABLE KEYS */;
-INSERT INTO `shop_category` VALUES (1,'Cá','ca'),(2,'Thịt','tht'),(3,'Trái cây','trai-cay'),(4,'Rau Củ','rau-cu');
+INSERT INTO `shop_category` VALUES (1,'Cá','ca'),(2,'Thịt','thit'),(3,'Trái Cây','trai-cay'),(4,'Rau Củ','rau-cu'),(5,'Đồ Uống','do-uong');
 /*!40000 ALTER TABLE `shop_category` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-10-31 11:08:29
+-- Dump completed on 2021-11-09 17:48:22
