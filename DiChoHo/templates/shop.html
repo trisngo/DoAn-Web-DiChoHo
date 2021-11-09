@@ -25,28 +25,13 @@
                   </select>
                 </div>
                 <div class="col-lg-8 col-md-6 col-sm-12 p-0">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    class="form-control"
-                    id="search"
-                    name="search"
-                  />
+                  <input type="text" placeholder="Search..." class="form-control" id="search" name="search" />
                 </div>
                 <div class="col-lg-1 col-md-3 col-sm-12 p-0">
                   <button type="submit" class="btn btn-base">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="feather feather-search"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-search">
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
@@ -61,20 +46,15 @@
   </div>
 </div>
 
-<div
-  class="hero-wrap hero-bread"
-  style="background-image: url(/static/images/bg_1.jpg)"
->
+<div class="hero-wrap hero-bread" style="background-image: url(/static/images/bg_1.jpg)">
   <div class="container">
-    <div
-      class="
+    <div class="
         row
         no-gutters
         slider-text
         align-items-center
         justify-content-center
-      "
-    >
+      ">
       <div class="col-md-9 ftco-animate text-center">
         <h1 class="mb-0 bread">Sản phẩm</h1>
       </div>
@@ -97,17 +77,15 @@
       </div>
     </div>
     <div class="row">
+
       {% for product in products %}
       <div class="col-md-2 col-lg- ftco-animate">
         <div class="product" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
-          <a href="{{ product.get_absolute_url }}" class="img-prod"
-            ><img
-              class="img-fluid"
-              src="{{ product.image.url | slice:"10:" }}"
-              alt="Colorlib Template"
-            />
+          <a href="{{ product.get_absolute_url }}" class="img-prod">
+            <img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="Colorlib Template" />
             <div class="overlay"></div>
           </a>
+
           <div class="text py-3 pb-4 px-3 text-center">
             <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
             <div class="d-flex">
@@ -119,34 +97,25 @@
             </div>
             <div class="bottom-area d-flex px-3">
               <div class="m-auto d-flex">
-                <a
-                  href="{{ product.get_absolute_url }}"
-                  class="
+                <a href="{{ product.get_absolute_url }}" class="
                     add-to-cart
                     d-flex
                     justify-content-center
                     align-items-center
                     text-center
-                  "
-                >
+                  ">
                   <span><i class="ion-ios-menu"></i></span>
                 </a>
-                <a
-                  href="#"
-                  class="
+                <a href="#" class="
                     buy-now
                     d-flex
                     justify-content-center
                     align-items-center
                     mx-1
-                  "
-                >
+                  ">
                   <span><i class="ion-ios-cart"></i></span>
                 </a>
-                <a
-                  href="#"
-                  class="heart d-flex justify-content-center align-items-center"
-                >
+                <a href="#" class="heart d-flex justify-content-center align-items-center">
                   <span><i class="ion-ios-heart"></i></span>
                 </a>
               </div>
@@ -185,5 +154,4 @@
 </div>
 
 {% endblock %}
-
 

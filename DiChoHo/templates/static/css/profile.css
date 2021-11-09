@@ -1,5 +1,4 @@
 body{
-    margin-top:20px;
     color: #1a202c;
     text-align: left;
     background-color: #e2e8f0;    
@@ -55,6 +54,19 @@ body{
 .shadow-none {
     box-shadow: none!important;
 }
-.inner{
-    
+
+.form_table{
+    position: absolute;
+    display: flex;
+    left: 0;
+    right: 0;
+    align-items: center;
+
+}
+.form_table *{
+    display: inline;
+}
+.form_table li {
+    display:grid;
+    text-align: center;
 }
