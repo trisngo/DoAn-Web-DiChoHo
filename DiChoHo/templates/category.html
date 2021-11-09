@@ -91,6 +91,7 @@
           <li><a href="/shop/trai-cay/" id="traicay">Trái Cây</a></li>
           <li><a href="/shop/thit/" id="thit">Thịt</a></li>
           <li><a href="/shop/ca/" id="ca">Cá</a></li>
+          <li><a href="/shop/do-uong/" id="douong">Đồ Uống</a></li>
         </ul>
       </div>
     </div>
@@ -197,6 +198,9 @@
 	}
 	else if (urlArray[urlArray.length-2]=="thit"){
 		document.getElementById("thit").classList.add('active');
+	}
+  else if (urlArray[urlArray.length-2]=="do-uong"){
+		document.getElementById("douong").classList.add('active');
 	}
 	else {
 		document.getElementById("ca").classList.add('active');
