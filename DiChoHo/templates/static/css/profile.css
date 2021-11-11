@@ -70,3 +70,174 @@ body{
     display:grid;
     text-align: center;
 }
+/*! CSS Used from: https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg//assets/bundle.5261b0559ab69b84ef4d.css */
+.btn {
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    flex-direction: column;
+    font-size: 14px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.09);
+    border-radius: 2px;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: capitalize;
+    outline: 0;
+    cursor: pointer;
+  }
+  .btn--inline {
+    display: inline-flex;
+  }
+  .btn--m {
+    height: 40px;
+    padding: 0 20px;
+    min-width: 70px;
+    max-width: 220px;
+  }
+  .btn-light {
+    background: #fff;
+    color: #555;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.03);
+  }
+  .btn-light:active,
+  .btn-light:hover {
+    background: rgba(0, 0, 0, 0.02);
+  }
+  .btn-light:active {
+    box-shadow: inset 0 2px 1px 0 rgba(0, 0, 0, 0.05);
+  }
+  button,
+  input {
+    color: inherit;
+    font: inherit;
+    margin: 0;
+  }
+  button {
+    overflow: visible;
+  }
+  button {
+    text-transform: none;
+  }
+  button {
+    -webkit-appearance: button;
+    cursor: pointer;
+  }
+  button::-moz-focus-inner,
+  input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+  input {
+    line-height: normal;
+  }
+  /*! CSS Used from: https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg//assets/2825.7cbfed0a002cdbf53c96.css */
+  .image_right,
+  .image_right_bottom {
+    align-items: center;
+    display: flex;
+  }
+  .image_right_bottom {
+    flex-direction: column;
+  }
+  .choose_group {
+    justify-content: center;
+  }
+  .choose_group {
+    height: 6.25rem;
+    width: 6.25rem;
+    margin: 1.25rem 0;
+    position: relative;
+  }
+  .choose_file {
+    width: 100%;
+    height: 100%;
+    background-position: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+  .choose_file {
+    border-radius: 50%;
+  }
+  .image_file {
+    display: none;
+  }
+  
+  .image_right {
+    display: flex;
+  }
+  .image_right {
+    justify-content: center;
+  }
+  .image_right {
+    width: 17.5rem;
+    overflow: hidden;
+    border-left: 0.0625rem solid #efefef;
+  }
+  /*! CSS Used from: https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg//assets/3507.533f80261bb40d9c60e9.css */
+  input {
+    flex: 1;
+    padding: 0;
+    border: 0;
+    word-break: break-all;
+  }
+  input,
+  input:active,
+  input:focus {
+    outline: none;
+  }
+  input::-webkit-input-placeholder {
+    color: #bbb;
+  }
+  input::-moz-placeholder {
+    color: #bbb;
+  }
+  input:-ms-input-placeholder {
+    color: #bbb;
+  }
+  input::-ms-input-placeholder {
+    color: #bbb;
+  }
+  input::placeholder {
+    color: #bbb;
+  }
+  input:disabled {
+    background: transparent;
+  }
+  /*! CSS Used from: https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg//assets/3496.89a05d727daa7dbad470.css */
+  input {
+    flex: 1;
+    padding: 0;
+    border: 0;
+    word-break: break-all;
+  }
+  input,
+  input:active,
+  input:focus {
+    outline: none;
+  }
+  input::-webkit-input-placeholder {
+    color: #bbb;
+  }
+  input::-moz-placeholder {
+    color: #bbb;
+  }
+  input:-ms-input-placeholder {
+    color: #bbb;
+  }
+  input::-ms-input-placeholder {
+    color: #bbb;
+  }
+  input::placeholder {
+    color: #bbb;
+  }
+  input:disabled {
+    background: transparent;
+  }
+  
