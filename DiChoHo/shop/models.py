@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.aggregates import Min
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -57,13 +57,13 @@ class Product(models.Model):
     image = models.ImageField(
     upload_to='templates/static/images', default='/templates/static/images/Logo.png')
     slug = models.SlugField(max_length=255)
-    price = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
     in_stock = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     objects = models.Manager()
-
+    sold = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     class Meta:
         verbose_name_plural = 'Products'
         ordering = ('-created',)
@@ -71,3 +71,44 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product_detail', args=[self.slug])
 
+class Order(models.Model):
+    # django tự tạo khóa id của mỗi class
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='order_user')
+    full_name = models.CharField(max_length=50) #tên user, xử lí trong view tự động cạp nhật
+    address = models.CharField(max_length=250)
+    phone = models.CharField(max_length=100)
+    created = models.DateTimeField(auto_now_add=True) #ngay tạo order, còn hiểu là ngày thanh toán
+    updated = models.DateTimeField(auto_now=True) #nếu có update thay đổi do trục trặc hay khách thay đổi địa chỉ thì thêm ngày
+    total_paid = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
+    order_key = models.CharField(max_length=200) # mã order key, cung cấp cho khách hàng chứ không cung cấp id order cho khách(khách hàng tìm kiếm lại bằng mã này)
+    billing_status = models.BooleanField(default=False) #thanh toán hay chưa
+
+    class Meta:
+        ordering = ('-created',)
+    
+    def __str__(self):
+        return str(self.created)
+
+
+class OrderItem(models.Model):
+    # django tự tạo khóa id của mỗi class
+    order = models.ForeignKey(Order,
+                              related_name='items',
+                              on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,
+                                related_name='order_items',
+                                on_delete=models.CASCADE)
+    payment = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])#giá sản phẩn đó
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return str(self.id)
+
+
+
+# talbe comment:
+# id rating
+# id Product
+# id User
+# comment
+# rating(desau)
