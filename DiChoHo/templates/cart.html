@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Về Chúng Tôi{% endblock %}
+{% block title %}Cart Summary{% endblock %}
 
 {% block menu_shop_class %}active{% endblock %}
 
@@ -16,6 +16,47 @@
 		</div>
 	</div>
 </div>
+
+<!-- Thử nghiệm -->
+<section>
+	{% if cart|length == 0 %}
+    <div>Your cart is empty <a href="{% url 'shop' %}">Shop</a></div>
+    {% else %}
+
+
+	<div>Total to pay: 
+		<span>VND</span>
+		<span id="total">{{cart.get_total_price}}</span>
+	</div>
+
+	{% for item in cart %}
+      {% with product=item.product %}
+
+            {% for image in product.product_image.all %}
+            {% if image.is_feature%}
+            <img alt="Responsive image" src="{{ image.image.url }}">
+            {% endif %}
+            {% endfor %}
+
+              <a href="{{item.product.get_absolute_url}}">
+                <p >{{product.title}}</p>
+              </a>
+				<!-- chưa làm được cái cộng quantity nên để option chọn thôi, cần fix -->
+              <label for="select">Qty</label>
+              <select id="select{{product.id}}" style="width:50px;height:31px;">
+                <option value="" selected disabled hidden>{{item.qty}}</option>
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
+                <option value="">4</option>
+              </select>
+
+              <a class="btn btn-primary py-3 px-4" type="button" id="update-button" data-index="{{product.id}}">Update</a>
+              <a class="btn btn-primary py-3 px-4" type="button" id="delete-button" data-index="{{product.id}}">Delete</a>
+      {% endwith %}
+      {% endfor %}
+    {% endif %}
+</section>
 
 <section class="ftco-section ftco-cart">
 	<div class="container">
@@ -148,7 +189,7 @@
 	</div>
 </section>
 
-<script>
+<!-- <script>
 	$(document).ready(function () {
 
 		var quantitiy = 0;
@@ -183,6 +224,64 @@
 		});
 
 	});
-</script>
+</script> -->
+
+<!-- script người ta cho sẵn có thể tham khảo -->
+<script>
+	// Delete Item
+	$(document).on("click", "#delete-button", function (e) {
+	  e.preventDefault();
+	  var prodid = $(this).data("index");
+	  $.ajax({
+		type: "POST",
+		url: '{% url "cart_delete" %}',
+		data: {
+		  productid: $(this).data("index"),
+		  csrfmiddlewaretoken: "{{csrf_token}}",
+		  action: "post",
+		},
+		success: function (json) {
+		  $('.product-item[data-index="' + prodid + '"]').remove();
+  
+		  if (json.qty == 0) {
+			total = 0
+			subtotal = 0
+		  } else {
+			total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
+			subtotal = json.subtotal
+		  }
+  
+		  document.getElementById("subtotal").innerHTML = subtotal;
+		  document.getElementById("cart-qty").innerHTML = json.qty;
+		  document.getElementById("total").innerHTML = total;
+		},
+		error: function (xhr, errmsg, err) {},
+	  });
+	});
+  
+	// Update Item
+	$(document).on("click", "#update-button", function (e) {
+	  e.preventDefault();
+	  var prodid = $(this).data("index");
+	  $.ajax({
+		type: "POST",
+		url: '{% url "cart_update" %}',
+		data: {
+		  productid: $(this).data("index"),
+		  productqty: $("#select" + prodid + " option:selected").text(),
+		  csrfmiddlewaretoken: "{{csrf_token}}",
+		  action: "post",
+		},
+		success: function (json) {
+  
+		  total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
+		  document.getElementById("cart-qty").innerHTML = json.qty;
+		  document.getElementById("subtotal").innerHTML = json.subtotal;
+		  document.getElementById("total").innerHTML = total;
+		},
+		error: function (xhr, errmsg, err) {},
+	  });
+	});
+  </script>
 
 {% endblock %}

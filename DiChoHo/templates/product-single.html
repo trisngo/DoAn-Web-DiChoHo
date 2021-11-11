@@ -71,7 +71,9 @@
 					<div class="w-100"></div>
 				</div>
 				<p class="price" style="margin-left: 70px; color:#28a745;">{{product.price}}đ</p>
-				<p><a href="cart.html" class="btn btn-black py-3 px-5">Thêm vào giỏ</a></p>
+				<!-- ở đây sửa chút xíu chuyển từ <p><a> nhu trong template tải thành cái button vì 
+					jquery ở dưới không xử lí được nếu không phải button, cần fix.Khi dùng button thì ko có css -->
+				<button type="button" id="add-button" value="{{product.id}}" class="btn btn-black py-3 px-5">Thêm vào giỏ</button>
 			</div>
 		</div>
 	</div>
@@ -132,4 +134,30 @@
 		</a>
 	</div>
 </div>
+
+<!-- Scrip để tham khảo -->
+<script>
+    $(document).on('click', '#add-button', function (e) {
+      e.preventDefault();
+	  console.log($('#add-button').val());
+
+      $.ajax({
+        type: 'POST',
+        url: '{% url "cart_add" %}',
+        data: {
+          productid: $('#add-button').val(),
+		  productqty: 1,
+		// chưa làm được quantity nên mặc định là 1
+        //   productqty: $('#id').text(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (json) {
+          document.getElementById("cart-qty").innerHTML = json.qty
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+  </script>
+
 {% endblock %}
