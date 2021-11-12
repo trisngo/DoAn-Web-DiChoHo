@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Giỏ hàng{% endblock %}
+{% block title %}Cart Summary{% endblock %}
 
 {% block menu_shop_class %}active{% endblock %}
 
@@ -16,6 +16,47 @@
 		</div>
 	</div>
 </div>
+
+<!-- Thử nghiệm -->
+<section>
+	{% if cart|length == 0 %}
+    <div>Your cart is empty <a href="{% url 'shop' %}">Shop</a></div>
+    {% else %}
+
+
+	<div>Total to pay: 
+		<span>VND</span>
+		<span id="total">{{cart.get_total_price}}</span>
+	</div>
+
+	{% for item in cart %}
+      {% with product=item.product %}
+
+            {% for image in product.product_image.all %}
+            {% if image.is_feature%}
+            <img alt="Responsive image" src="{{ image.image.url }}">
+            {% endif %}
+            {% endfor %}
+
+              <a href="{{item.product.get_absolute_url}}">
+                <p >{{product.title}}</p>
+              </a>
+				<!-- chưa làm được cái cộng quantity nên để option chọn thôi, cần fix -->
+              <label for="select">Qty</label>
+              <select id="select{{product.id}}" style="width:50px;height:31px;">
+                <option value="" selected disabled hidden>{{item.qty}}</option>
+                <option value="">1</option>
+                <option value="">2</option>
+                <option value="">3</option>
+                <option value="">4</option>
+              </select>
+
+              <a class="btn btn-primary py-3 px-4" type="button" id="update-button" data-index="{{product.id}}">Update</a>
+              <a class="btn btn-primary py-3 px-4" type="button" id="delete-button" data-index="{{product.id}}">Delete</a>
+      {% endwith %}
+      {% endfor %}
+    {% endif %}
+</section>
 
 <section class="ftco-section ftco-cart">
 	<div class="container">
@@ -34,20 +75,19 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% if cart|length > 0 %}
-								{% for item in cart %}
-								{% with product=item.product %}
-								
 							<tr class="text-center">
 								<td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+
 								<td class="image-prod">
-									<div class="img" style="background-image:{{ product.image.url | slice:"10:" }};"></div>
-								</td>
-								<td class="product-name">
-									<h3>{{product.title}}</h3>
+									<div class="img" style="background-image:url(/static/images/product-3.jpg);"></div>
 								</td>
 
-								<td class="price">{{product.price}}đ</td>
+								<td class="product-name">
+									<h3>Bell Pepper</h3>
+									<p>Far far away, behind the word mountains, far from the countries</p>
+								</td>
+
+								<td class="price">$4.90</td>
 
 								<td class="quantity">
 									<div class="input-group mb-3">
@@ -56,12 +96,10 @@
 									</div>
 								</td>
 
-								<td class="total">{{product.price}}đ</td>
-							</tr>
-								{% endwith %}
-								{% endfor %}		
-							{% endif %}
-							<!-- <tr class="text-center">
+								<td class="total">$4.90</td>
+							</tr><!-- END TR-->
+
+							<tr class="text-center">
 								<td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
 
 								<td class="image-prod">
@@ -83,7 +121,7 @@
 								</td>
 
 								<td class="total">$15.70</td>
-							</tr>END TR -->
+							</tr><!-- END TR-->
 						</tbody>
 					</table>
 				</div>

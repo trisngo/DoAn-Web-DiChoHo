@@ -174,7 +174,6 @@ def cart_add(request):
         product_qty = int(request.POST.get("productqty"))
         product = get_object_or_404(Product, id=product_id)
         cart.add(product=product, qty=product_qty)
-
         cartqty = cart.__len__()
         response = JsonResponse({"qty": cartqty})
         return response
@@ -206,6 +205,7 @@ def cart_update(request):
 
 #  ----------------view xử lí đơn hàng------------------------
 
+
 def orders_add(request):
     cart = Cart(request)
     if request.POST.get("action") == "post":
@@ -224,7 +224,7 @@ def orders_add(request):
                 # các trường dưới đây chưa xử lí tự lấy thông tin từ table user, có trong đơn vì cần hiển thị thông tin này ra khi in hóa đơn
                 full_name="name",
                 address="add",
-                phone = "phone",
+                phone="phone",
                 total_paid=carttotal,
                 order_key=order_key,
             )
@@ -240,8 +240,10 @@ def orders_add(request):
         response = JsonResponse({"success": "Return something"})
         return response
 
+
 def payment_confirmation(data):
     Order.objects.filter(order_key=data).update(billing_status=True)
+
 
 def user_orders(request):
     user_id = request.user.id
