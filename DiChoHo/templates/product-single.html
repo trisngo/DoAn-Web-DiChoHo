@@ -29,7 +29,7 @@
 		<div class="row">
 			<div class="col-lg-6 mb-5 ftco-animate">
 				<a href="{% static 'images/product-1.jpg' %}" class="image-popup"><img
-						src="{{ product.image.url | slice:"10:" }}" class="img-fluid" alt="Colorlib Template"></a>
+						src="{{ product.image.url | slice:"10:" }}" class="img-fluid" alt="San-pham"></a>
 			</div>
 			<div class="col-lg-6 product-details pl-md-5 ftco-animate">
 				<h3>{{product.title}}</h3>
@@ -46,7 +46,7 @@
 						<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Đánh giá</span></a>
 					</p>
 					<p class="text-left">
-						<a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Đã bán</span></a>
+						<a href="#" class="mr-2" style="color: #000;">{{product.sold}} <span style="color: #bbb;">Đã bán</span></a>
 					</p>
 				</div>
 				<p class="price"><span></span></p>
@@ -71,9 +71,10 @@
 					<div class="w-100"></div>
 				</div>
 				<p class="price" style="margin-left: 70px; color:#28a745;">{{product.price}}đ</p>
+				<p><a href="cart.html" class="btn btn-black py-3 px-5" id="add_to_cart_btn" data-value="{{product.id}}">Thêm vào giỏ</a></p>
 				<!-- ở đây sửa chút xíu chuyển từ <p><a> nhu trong template tải thành cái button vì 
 					jquery ở dưới không xử lí được nếu không phải button, cần fix.Khi dùng button thì ko có css -->
-				<button type="button" id="add-button" value="{{product.id}}" class="btn btn-black py-3 px-5">Thêm vào giỏ</button>
+				<!-- <button type="button" id="add-button" value="{{product.id}}" class="btn btn-black py-3 px-5">Thêm vào giỏ</button> -->
 			</div>
 		</div>
 	</div>
@@ -136,7 +137,7 @@
 </div>
 
 <!-- Scrip để tham khảo -->
-<script>
+<!-- <script>
     $(document).on('click', '#add-button', function (e) {
       e.preventDefault();
 	  console.log($('#add-button').val());
@@ -158,6 +159,28 @@
         error: function (xhr, errmsg, err) {}
       });
     })
-  </script>
+  </script> -->
+
+<script>
+    $(document).on('click', '#add_to_cart_btn', function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        url: '{% url "cart_add" %}',
+        data: {
+          productid: $(this).data("value"),
+		  productqty: 1,
+		// chưa làm được quantity nên mặc định là 1
+        //   productqty: $('#id').text(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (json) {
+          document.getElementById("cart-qty").innerHTML = json.qty
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+</script>
 
 {% endblock %}
