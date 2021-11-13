@@ -150,15 +150,15 @@
 					</div>
 					<div class="col-md-6">
 						<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
-							style="background-image: url(/static/images/category-1.jpg);">
+							style="background-image: url(/static/images/category_1.jpg);">
 							<div class="text px-3 py-1">
-								<h2 class="mb-0"><a href="#">Thực phẩm sống</a></h2>
+								<h2 class="mb-0"><a href="/shop/rau-cu/">Rau củ</a></h2>
 							</div>
 						</div>
 						<div class="category-wrap ftco-animate img d-flex align-items-end"
-							style="background-image: url(/static/images/category-2.jpg);">
+							style="background-image: url(/static/images/category_2.jpg);">
 							<div class="text px-3 py-1">
-								<h2 class="mb-0"><a href="#">Rau củ</a></h2>
+								<h2 class="mb-0"><a href="/shop/trai-cay/">Trái cây</a></h2>
 							</div>
 						</div>
 					</div>
@@ -167,15 +167,15 @@
 
 			<div class="col-md-4">
 				<div class="category-wrap ftco-animate img mb-4 d-flex align-items-end"
-					style="background-image: url(/static/images/category-3.jpg);">
+					style="background-image: url(/static/images/category_3.jpg);">
 					<div class="text px-3 py-1">
-						<h2 class="mb-0"><a href="#">Đồ dùng</a></h2>
+						<h2 class="mb-0"><a href="/shop/do-uong/">Nước ép</a></h2>
 					</div>
 				</div>
 				<div class="category-wrap ftco-animate img d-flex align-items-end"
-					style="background-image: url(/static/images/category-4.jpg);">
+					style="background-image: url(/static/images/category_4.jpg);">
 					<div class="text px-3 py-1">
-						<h2 class="mb-0"><a href="#">Thực phẩm khô</a></h2>
+						<h2 class="mb-0"><a href="shop/thit/">Thịt</a></h2>
 					</div>
 				</div>
 			</div>
@@ -315,7 +315,7 @@
 	    								<span><i class="ion-ios-menu"></i></span>
 	    							</a> -->
 								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-									<span><i class="ion-ios-cart"></i></span>
+									<span><i class="ion-ios-cart" id="add_to_cart_btn" data-value="{{product.id}}"></i></span>
 								</a>
 								<a href="#" class="heart d-flex justify-content-center align-items-center ">
 									<span><i class="ion-ios-heart"></i></span>
@@ -366,4 +366,26 @@
 		</a>
 	</div>
 </div>
+
+<script>
+	  $(document).on('click', '#add_to_cart_btn', function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        url: '{% url "cart_add" %}',
+        data: {
+          productid: $(this).data("value"),
+		  productqty: 1,
+		// chưa làm được quantity nên mặc định là 1
+        //   productqty: $('#id').text(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (json) {
+          document.getElementById("cart-qty").innerHTML = json.qty
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+</script>
 {% endblock %}
