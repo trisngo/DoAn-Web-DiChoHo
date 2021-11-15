@@ -119,18 +119,6 @@
             <div class="bottom-area d-flex px-3">
               <div class="m-auto d-flex">
                 <a
-                  href="{{ product.get_absolute_url }}"
-                  class="
-                    add-to-cart
-                    d-flex
-                    justify-content-center
-                    align-items-center
-                    text-center
-                  "
-                >
-                  <span><i class="ion-ios-menu"></i></span>
-                </a>
-                <a
                   href="#"
                   class="
                     buy-now
@@ -186,10 +174,6 @@
 
 <script>
 	var urlArray = window.location.href.split("/");
-	for (let i=0;i<urlArray.length;i++)
-	{
-		console.log(urlArray[i]);
-	}
 	if (urlArray[urlArray.length-2]=="rau-cu") {
 		document.getElementById("raucu").classList.add('active');
 	}
@@ -220,7 +204,7 @@
           action: 'post'
         },
         success: function (json) {
-          document.getElementById("cart-qty").innerHTML = json.qty
+          console.log("Add successfully");
         },
         error: function (xhr, errmsg, err) {}
       });
