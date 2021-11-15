@@ -18,6 +18,7 @@
 </div>
 
 <section class="ftco-section ftco-cart">
+	{% if cart|length > 0 %}
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 ftco-animate">
@@ -34,12 +35,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% if cart|length > 0 %}
-								{% for item in cart %}
-								{% with product=item.product %}
-								
+							{% for item in cart %}
+							{% with product=item.product %}
 							<tr class="text-center">
-								<td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+								<td class="product-remove"><a type="button" id="delete-button" data-index="{{product.id}}"><span class="ion-ios-close"></span></a></td>
 								<td class="image-prod">
 									<div class="img" style="margin-top: 30px;">
 										<img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="Colorlib Template" />
@@ -53,16 +52,16 @@
 
 								<td class="quantity">
 									<div class="input-group mb-3" style="margin-top:25px;">
-										<input type="text" name="quantity" class="quantity form-control input-number"
-											value="1" min="1" max="100">
+										<input id="input{{product.id}}" type="text" name="quantity" class="quantity form-control input-number"
+											value="{{item.qty}}" min="1" max="100">
 									</div>
+									<a class="btn btn-primary" type="button" id="update-button" data-index="{{product.id}}">Update</a>
 								</td>
 
-								<td class="total">{{product.price}}đ</td>
+								<td class="total">{{item.total_price}}đ</td>
 							</tr>
-								{% endwith %}
-								{% endfor %}		
-							{% endif %}
+						{% endwith %}
+						{% endfor %}	
 						</tbody>
 					</table>
 				</div>
@@ -82,11 +81,13 @@
 				</div>
 				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
 			</div>
+			<!-- Lúc này hiện thông tin địa chỉ sđt khách hàng trong tài khoản -->
 			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 				<div class="cart-total mb-3">
 					<h3>Estimate shipping and tax</h3>
-					<p>Enter your destination to get a shipping estimate</p>
-					<form action="#" class="info">
+					<p>Enter your destination to get a shipping estimate Lorem ipsum dolor sit, amet consectetur 
+						adipisicing elit. Similique deleniti eum, placeat cupiditate dignissimos possimus accusamus laudantium quibusdam. Ipsam in ipsum maxime alias delectus! Quibusdam, accusantium?</p>
+					<!-- <form action="#" class="info">
 						<div class="form-group">
 							<label for="">Country</label>
 							<input type="text" class="form-control text-left px-3" placeholder="">
@@ -99,7 +100,7 @@
 							<label for="country">Zip/Postal Code</label>
 							<input type="text" class="form-control text-left px-3" placeholder="">
 						</div>
-					</form>
+					</form> -->
 				</div>
 				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
 			</div>
@@ -108,26 +109,27 @@
 					<h3>Cart Totals</h3>
 					<p class="d-flex">
 						<span>Subtotal</span>
-						<span>$20.60</span>
+						<span>{{cart.get_subtotal_price}} VND</span>
 					</p>
 					<p class="d-flex">
 						<span>Delivery</span>
-						<span>$0.00</span>
+						<span>0 VND</span>
 					</p>
 					<p class="d-flex">
 						<span>Discount</span>
-						<span>$3.00</span>
+						<span>0 VND</span>
 					</p>
 					<hr>
-					<p class="d-flex total-price">
+					<p id = "total" class="d-flex total-price">
 						<span>Total</span>
-						<span>$17.60</span>
+						<span>{{cart.get_total_price}} VND</span>
 					</p>
 				</div>
 				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
 			</div>
 		</div>
-	</div>
+	</div>		
+	{% endif %}
 </section>
 
 <!-- <script>
@@ -204,12 +206,15 @@
 	$(document).on("click", "#update-button", function (e) {
 	  e.preventDefault();
 	  var prodid = $(this).data("index");
+	  console.log(prodid);
+	  console.log($("#input" + prodid).val());
+
 	  $.ajax({
 		type: "POST",
 		url: '{% url "cart_update" %}',
 		data: {
 		  productid: $(this).data("index"),
-		  productqty: $("#select" + prodid + " option:selected").text(),
+		  productqty: $("#input" + prodid).val(),
 		  csrfmiddlewaretoken: "{{csrf_token}}",
 		  action: "post",
 		},

@@ -169,9 +169,7 @@
         url: '{% url "cart_add" %}',
         data: {
           productid: $(this).data("value"),
-		  productqty: 1,
-		// chưa làm được quantity nên mặc định là 1
-        //   productqty: $('#id').text(),
+          productqty: $('#quantity').val(),
           csrfmiddlewaretoken: "{{csrf_token}}",
           action: 'post'
         },
