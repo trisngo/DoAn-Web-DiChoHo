@@ -38,7 +38,7 @@
 							{% for item in cart %}
 							{% with product=item.product %}
 							<tr class="text-center">
-								<td class="product-remove"><a type="button" id="delete-button" data-index="{{product.id}}"><span class="ion-ios-close"></span></a></td>
+								<td class="product-remove"><a type="button" id="delete-button{{product.id}}" data-index="{{product.id}}"><span class="ion-ios-close"></span></a></td>
 								<td class="image-prod">
 									<div class="img" style="margin-top: 30px;">
 										<img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="Colorlib Template" />
@@ -52,13 +52,12 @@
 
 								<td class="quantity">
 									<div class="input-group mb-3" style="margin-top:25px;">
-										<input id="input{{product.id}}" type="text" name="quantity" class="quantity form-control input-number"
+										<input type="text" id="input{{product.id}}" name="{{product.title}}" class="quantity form-control input-number update_value"
 											value="{{item.qty}}" min="1" max="100">
 									</div>
 									<a class="btn btn-primary" type="button" id="update-button" data-index="{{product.id}}">Update</a>
 								</td>
-
-								<td class="total">{{item.total_price}}đ</td>
+								<td class="total" id="price_input{{product.id}}" style="margin-top:25px">{{item.total_price}}đ</td>
 							</tr>
 						{% endwith %}
 						{% endfor %}	
@@ -132,46 +131,36 @@
 	{% endif %}
 </section>
 
-<!-- <script>
-	$(document).ready(function () {
-
-		var quantitiy = 0;
-		$('.quantity-right-plus').click(function (e) {
-
-			// Stop acting like a button
-			e.preventDefault();
-			// Get the field name
-			var quantity = parseInt($('#quantity').val());
-
-			// If is not undefined
-
-			$('#quantity').val(quantity + 1);
-
-
-			// Increment
-
-		});
-
-		$('.quantity-left-minus').click(function (e) {
-			// Stop acting like a button
-			e.preventDefault();
-			// Get the field name
-			var quantity = parseInt($('#quantity').val());
-
-			// If is not undefined
-
-			// Increment
-			if (quantity > 0) {
-				$('#quantity').val(quantity - 1);
-			}
-		});
-
-	});
-</script> -->
-
-<!-- script người ta cho sẵn có thể tham khảo -->
 <script>
-	// Delete Item
+	//Update quantity
+	$(document).ready(function(){
+		$(document).on('keypress',function(e) {
+    if(e.which == 13) {
+		var onlyproductid = e.target.id.replace("input","");
+		console.log(onlyproductid);
+		var productqty = document.getElementById(e.target.id).value;
+		var td_id = "price_"+e.target.id;
+		var productprice=document.getElementById(td_id).innerText;
+		productprice = productprice.replace("đ","");
+		document.getElementById(td_id).innerText = productprice*productqty + "đ";
+		$.ajax({
+        type: "POST",
+        url: '{% url "cart_update" %}',
+        data: {
+          productid: onlyproductid,
+          productqty: productqty,
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: "post",
+        },
+        success: function (json) {
+			console.log("update successfully");
+        },
+        error: function (xhr, errmsg, err) {},
+      });
+    }
+});
+
+	//Delete Item
 	$(document).on("click", "#delete-button", function (e) {
 	  e.preventDefault();
 	  var prodid = $(this).data("index");
@@ -184,8 +173,9 @@
 		  action: "post",
 		},
 		success: function (json) {
-		  $('.product-item[data-index="' + prodid + '"]').remove();
-  
+		console.log("Delete successfully")
+		// $("#delete-button").parent().parent().remove();
+		$("#delete-button").parent().parent().css("background-color","red");
 		  if (json.qty == 0) {
 			total = 0
 			subtotal = 0
@@ -193,41 +183,50 @@
 			total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
 			subtotal = json.subtotal
 		  }
-  
-		  document.getElementById("subtotal").innerHTML = subtotal;
-		  document.getElementById("cart-qty").innerHTML = json.qty;
-		  document.getElementById("total").innerHTML = total;
-		},
-		error: function (xhr, errmsg, err) {},
-	  });
-	});
-  
-	// Update Item
-	$(document).on("click", "#update-button", function (e) {
-	  e.preventDefault();
-	  var prodid = $(this).data("index");
-	  console.log(prodid);
-	  console.log($("#input" + prodid).val());
 
-	  $.ajax({
-		type: "POST",
-		url: '{% url "cart_update" %}',
-		data: {
-		  productid: $(this).data("index"),
-		  productqty: $("#input" + prodid).val(),
-		  csrfmiddlewaretoken: "{{csrf_token}}",
-		  action: "post",
-		},
-		success: function (json) {
-  
-		  total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-		  document.getElementById("cart-qty").innerHTML = json.qty;
-		  document.getElementById("subtotal").innerHTML = json.subtotal;
-		  document.getElementById("total").innerHTML = total;
+		//   document.getElementById("subtotal").innerHTML = subtotal;
+		//   document.getElementById("cart-qty").innerHTML = json.qty;
+		//   document.getElementById("total").innerHTML = total;
 		},
 		error: function (xhr, errmsg, err) {},
 	  });
 	});
+
+	// //Hàm đang phát triển
+	// $(document).on("click", function (e) {
+	//   var clickElementId = e.target.id;
+
+	//   e.preventDefault();
+	//   var prodid = $(this).data("index");
+	//   $.ajax({
+	// 	type: "POST",
+	// 	url: '{% url "cart_delete" %}',
+	// 	data: {
+	// 	  productid: $(this).data("index"),
+	// 	  csrfmiddlewaretoken: "{{csrf_token}}",
+	// 	  action: "post",
+	// 	},
+	// 	success: function (json) {
+	// 	console.log("Delete successfully")
+	// 	// $("#delete-button").parent().parent().remove();
+	// 	$("#delete-button").parent().parent().css("background-color","red");
+	// 	  if (json.qty == 0) {
+	// 		total = 0
+	// 		subtotal = 0
+	// 	  } else {
+	// 		total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
+	// 		subtotal = json.subtotal
+	// 	  }
+
+	// 	//   document.getElementById("subtotal").innerHTML = subtotal;
+	// 	//   document.getElementById("cart-qty").innerHTML = json.qty;
+	// 	//   document.getElementById("total").innerHTML = total;
+	// 	},
+	// 	error: function (xhr, errmsg, err) {},
+	//   });
+	// });
+	});
+	
   </script>
 
 {% endblock %}
