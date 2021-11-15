@@ -113,7 +113,7 @@
                     align-items-center
                     mx-1
                   ">
-                  <span><i class="ion-ios-cart"></i></span>
+                  <span><i class="ion-ios-cart" id="add_to_cart_btn" data-value="{{product.id}}"></i></span>
                 </a>
                 <a href="#" class="heart d-flex justify-content-center align-items-center">
                   <span><i class="ion-ios-heart"></i></span>
@@ -152,6 +152,28 @@
 		</a>
 	</div>
 </div>
+
+<script>
+    $(document).on('click', '#add_to_cart_btn', function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        url: '{% url "cart_add" %}',
+        data: {
+          productid: $(this).data("value"),
+		  productqty: 1,
+		// chưa làm được quantity nên mặc định là 1
+        //   productqty: $('#id').text(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: 'post'
+        },
+        success: function (json) {
+          document.getElementById("cart-qty").innerHTML = json.qty
+        },
+        error: function (xhr, errmsg, err) {}
+      });
+    })
+</script>
 
 {% endblock %}
 
