@@ -1,6 +1,7 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from .models import Profile, User, Category, Product, Order, OrderItem
@@ -249,3 +250,10 @@ def user_orders(request):
     user_id = request.user.id
     orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
     return orders
+
+
+# ----------------view xử lí Delivery và Payment ----------------------
+# @login_required
+# def deliverychoices(request):
+#     deliveryoptions = DeliveryOptions.objects.filter(is_active=True)
+#     return render(request, "checkout/delivery_choices.html", {"deliveryoptions": deliveryoptions})
