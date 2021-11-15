@@ -18,7 +18,6 @@
 </div>
 
 <section class="ftco-section ftco-cart">
-	{% if cart|length > 0 %}
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12 ftco-animate">
@@ -35,8 +34,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for item in cart %}
-							{% with product=item.product %}
+							{% if cart|length > 0 %}
+								{% for item in cart %}
+								{% with product=item.product %}
+								
 							<tr class="text-center">
 								<td class="product-remove"><a type="button" id="delete-button{{product.id}}" data-index="{{product.id}}"><span class="ion-ios-close"></span></a></td>
 								<td class="image-prod">
@@ -55,12 +56,13 @@
 										<input type="text" id="input{{product.id}}" name="{{product.title}}" class="quantity form-control input-number update_value"
 											value="{{item.qty}}" min="1" max="100">
 									</div>
-									<a class="btn btn-primary" type="button" id="update-button" data-index="{{product.id}}">Update</a>
 								</td>
+
 								<td class="total" id="price_input{{product.id}}" style="margin-top:25px">{{item.total_price}}đ</td>
 							</tr>
-						{% endwith %}
-						{% endfor %}	
+								{% endwith %}
+								{% endfor %}		
+							{% endif %}
 						</tbody>
 					</table>
 				</div>
@@ -80,13 +82,11 @@
 				</div>
 				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
 			</div>
-			<!-- Lúc này hiện thông tin địa chỉ sđt khách hàng trong tài khoản -->
 			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 				<div class="cart-total mb-3">
 					<h3>Estimate shipping and tax</h3>
-					<p>Enter your destination to get a shipping estimate Lorem ipsum dolor sit, amet consectetur 
-						adipisicing elit. Similique deleniti eum, placeat cupiditate dignissimos possimus accusamus laudantium quibusdam. Ipsam in ipsum maxime alias delectus! Quibusdam, accusantium?</p>
-					<!-- <form action="#" class="info">
+					<p>Enter your destination to get a shipping estimate</p>
+					<form action="#" class="info">
 						<div class="form-group">
 							<label for="">Country</label>
 							<input type="text" class="form-control text-left px-3" placeholder="">
@@ -99,7 +99,7 @@
 							<label for="country">Zip/Postal Code</label>
 							<input type="text" class="form-control text-left px-3" placeholder="">
 						</div>
-					</form> -->
+					</form>
 				</div>
 				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
 			</div>
@@ -108,27 +108,26 @@
 					<h3>Cart Totals</h3>
 					<p class="d-flex">
 						<span>Subtotal</span>
-						<span>{{cart.get_subtotal_price}} VND</span>
+						<span>$20.60</span>
 					</p>
 					<p class="d-flex">
 						<span>Delivery</span>
-						<span>0 VND</span>
+						<span>$0.00</span>
 					</p>
 					<p class="d-flex">
 						<span>Discount</span>
-						<span>0 VND</span>
+						<span>$3.00</span>
 					</p>
 					<hr>
-					<p id = "total" class="d-flex total-price">
+					<p class="d-flex total-price">
 						<span>Total</span>
-						<span>{{cart.get_total_price}} VND</span>
+						<span>$17.60</span>
 					</p>
 				</div>
 				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
 			</div>
 		</div>
-	</div>		
-	{% endif %}
+	</div>
 </section>
 
 <script>
@@ -192,6 +191,7 @@
 	  });
 	});
 
+
 	// //Hàm đang phát triển
 	// $(document).on("click", function (e) {
 	//   var clickElementId = e.target.id;
@@ -225,6 +225,7 @@
 	// 	error: function (xhr, errmsg, err) {},
 	//   });
 	// });
+
 	});
 	
   </script>
