@@ -26,4 +26,5 @@ urlpatterns = [
 
     path('orders/add/', views.orders_add, name='orders_add'),
     path('search/', views.search_views, name='search_views'),
+    path('404/', views.page_not_found, name='404')
 ]
