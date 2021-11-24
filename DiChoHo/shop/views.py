@@ -1,7 +1,6 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from .models import Profile, User, Category, Product, Order, OrderItem
@@ -10,7 +9,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from .cart import Cart
-from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, Paginator
 import re
 
 # get index page
@@ -37,7 +36,10 @@ def shop_view(request):
     currentPage = 1
     if request.method == 'GET' and 'page' in request.GET:
         currentPage = request.GET.get("page")
-    products = p.page(currentPage)
+    try:
+        products = p.page(currentPage)
+    except EmptyPage:
+        return redirect('404')
     return render(request, 'shop.html', {'products': products})
 
 # get login page
@@ -151,7 +153,10 @@ def category_list(request, category_slug=None):
     currentPage = 1
     if request.method == 'GET' and 'page' in request.GET:
         currentPage = request.GET.get("page")
-    products = p.page(currentPage)
+    try:
+        products = p.page(currentPage)
+    except EmptyPage:
+        return redirect('404')
     return render(request, 'category.html', {'category': category.slug, 'products': products})
 
 
@@ -252,25 +257,11 @@ def user_orders(request):
     return orders
 
 
-def no_accent_vietnamese(s):
-    s = re.sub('[áàảãạăắằẳẵặâấầẩẫậ]', 'a', s)
-    s = re.sub('[ÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬ]', 'A', s)
-    s = re.sub('[éèẻẽẹêếềểễệ]', 'e', s)
-    s = re.sub('[ÉÈẺẼẸÊẾỀỂỄỆ]', 'E', s)
-    s = re.sub('[óòỏõọôốồổỗộơớờởỡợ]', 'o', s)
-    s = re.sub('[ÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢ]', 'O', s)
-    s = re.sub('[íìỉĩị]', 'i', s)
-    s = re.sub('[ÍÌỈĨỊ]', 'I', s)
-    s = re.sub('[úùủũụưứừửữự]', 'u', s)
-    s = re.sub('[ÚÙỦŨỤƯỨỪỬỮỰ]', 'U', s)
-    s = re.sub('[ýỳỷỹỵ]', 'y', s)
-    s = re.sub('[ÝỲỶỸỴ]', 'Y', s)
-    s = re.sub('đ', 'd', s)
-    s = re.sub('Đ', 'D', s)
-    return s
-
-
 def search_views(request):
     query_item = request.GET.get("search").lower()
     products = Product.objects.filter(title__icontains=query_item)
     return render(request, "search.html", {'products': products})
+
+
+def page_not_found(request):
+    return render(request, '404.html')
