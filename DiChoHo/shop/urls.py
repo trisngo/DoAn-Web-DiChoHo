@@ -25,4 +25,5 @@ urlpatterns = [
     path('cart/update/', views.cart_update, name='cart_update'),
 
     path('orders/add/', views.orders_add, name='orders_add'),
+    path('search/', views.search_views, name='search_views'),
 ]

@@ -89,7 +89,7 @@
 		<div class="row">
 			{% for relative_product in relative_products %}
 			<div class="col-md-6 col-lg-3 ftco-animate">
-				<div class="product">
+				<div class="product" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 350px;">
 					<a href="{{ relative_product.get_absolute_url }}" class="img-prod"><img class="img-fluid" src="{{ relative_product.image.url | slice:"10:" }}"
 							alt="anh-san-pham">
 
@@ -98,13 +98,13 @@
 						<h3><a href="{{ relative_product.get_absolute_url }}">{{ relative_product.title }}</a></h3>
 						<div class="d-flex">
 							<div class="pricing">
-								<p class="price"><span class="price-sale">{{ relative_product.price }}</span></p>
+								<p class="price"><span class="price-sale">{{ relative_product.price }}đ</span></p>
 							</div>
 						</div>
 						<div class="bottom-area d-flex px-3">
 							<div class="m-auto d-flex">
-								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-									<span><i class="ion-ios-cart"></i></span>
+								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{relative_product.id}}">
+									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{relative_product.id}}"></i></span>
 								</a>
 								<a href="#" class="heart d-flex justify-content-center align-items-center ">
 									<span><i class="ion-ios-heart"></i></span>
@@ -130,23 +130,33 @@
 </div>
 
 <script>
-    $(document).on('click', '#add_to_cart_btn', function (e) {
-      e.preventDefault();
-      $.ajax({
-        type: 'POST',
-        url: '{% url "cart_add" %}',
-        data: {
-          productid: $(this).data("value"),
-          productqty: $('#quantity').val(),
-          csrfmiddlewaretoken: "{{csrf_token}}",
-          action: 'post'
-        },
-        success: function (json) {
-          console.log("Add successfully")
-        },
-        error: function (xhr, errmsg, err) {}
-      });
-    })
+	    $(document).ready(function(){
+        $(".jqueryCatch").on('click', function (e) {
+        if(e.target !== e.currentTarget) return;
+        e.preventDefault();
+        var clickElementId = e.target.id;
+        if (clickElementId.includes("productAdd"))
+        {
+          var prodid = clickElementId.replace("productAdd1","");
+          prodid = prodid.replace("productAdd2","");
+          $.ajax({
+          type: 'POST',
+          url: '{% url "cart_add" %}',
+          data: {
+            productid: prodid,
+            productqty: 1,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post'
+          },
+          success: function (json) {
+            console.log("Add successfully");
+            // document.getElementById("cart-qty").innerHTML = json.qty
+          },
+          error: function (xhr, errmsg, err) {}
+        });
+        }
+      })
+    });
 </script>
 
 {% endblock %}
