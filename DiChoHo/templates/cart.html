@@ -30,7 +30,7 @@
     <div class="row">
       <div class="col-md-12 ftco-animate">
         <div class="cart-list">
-          <table class="table">
+          <table class="table" id="jqueryCatchClick">
             <thead class="thead-primary">
               <tr class="text-center">
                 <th>&nbsp;</th>
@@ -51,8 +51,7 @@
                   <a
                     type="button"
                     id="delete-button{{product.id}}"
-                    data-index="{{product.id}}"
-                    ><span class="ion-ios-close"></span
+                    ><span class="ion-ios-close" id="delete-span{{product.id}}"></span
                   ></a>
                 </td>
                 <td class="image-prod">
@@ -102,87 +101,19 @@
         </div>
       </div>
     </div>
-    <div class="row justify-content-end">
+    <div class="row justify-content-center">
       <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
         <div class="cart-total mb-3">
-          <h3>Coupon Code</h3>
-          <p>Enter your coupon code if you have one</p>
-          <form action="#" class="info">
-            <div class="form-group">
-              <label for="">Coupon code</label>
-              <input
-                type="text"
-                class="form-control text-left px-3"
-                placeholder=""
-              />
-            </div>
-          </form>
-        </div>
-        <p>
-          <a href="checkout.html" class="btn btn-primary py-3 px-4"
-            >Apply Coupon</a
-          >
-        </p>
-      </div>
-      <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-        <div class="cart-total mb-3">
-          <h3>Estimate shipping and tax</h3>
-          <p>Enter your destination to get a shipping estimate</p>
-          <form action="#" class="info">
-            <div class="form-group">
-              <label for="">Country</label>
-              <input
-                type="text"
-                class="form-control text-left px-3"
-                placeholder=""
-              />
-            </div>
-            <div class="form-group">
-              <label for="country">State/Province</label>
-              <input
-                type="text"
-                class="form-control text-left px-3"
-                placeholder=""
-              />
-            </div>
-            <div class="form-group">
-              <label for="country">Zip/Postal Code</label>
-              <input
-                type="text"
-                class="form-control text-left px-3"
-                placeholder=""
-              />
-            </div>
-          </form>
-        </div>
-        <p>
-          <a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a>
-        </p>
-      </div>
-      <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-        <div class="cart-total mb-3">
-          <h3>Cart Totals</h3>
-          <p class="d-flex">
-            <span>Subtotal</span>
-            <span>$20.60</span>
-          </p>
-          <p class="d-flex">
-            <span>Delivery</span>
-            <span>$0.00</span>
-          </p>
-          <p class="d-flex">
-            <span>Discount</span>
-            <span>$3.00</span>
-          </p>
+          <h3>Tính tiền</h3>
           <hr />
           <p class="d-flex total-price">
-            <span>Total</span>
-            <span>$17.60</span>
+            <span>Tổng số tiền</span>
+            <span>{{cart.get_total_price}}đ</span>
           </p>
         </div>
-        <p>
+        <p class>
           <a href="checkout.html" class="btn btn-primary py-3 px-4"
-            >Proceed to Checkout</a
+            >Thanh toán</a
           >
         </p>
       </div>
@@ -194,7 +125,7 @@
   // Bị lỗi chỗ lấy total id nhân thay vì price của 1 cái
   //Update quantity
   $(document).ready(function () {
-    $(document).on("keypress", function (e) {
+    $("#jqueryCatchClick").on("keypress", function (e) {
       if (e.which == 13) {
         var onlyproductid = e.target.id.replace("input", "");
         console.log(onlyproductid);
@@ -221,63 +152,31 @@
       }
     });
 
-    //Delete Item
-    $(document).on("click", "#delete-button", function (e) {
+    $("#jqueryCatchClick").on("click", function (e) {
       e.preventDefault();
-      var prodid = $(this).data("index");
-      $.ajax({
+      var clickElementId = e.target.id;
+      if (clickElementId.includes("delete-")) {
+        var prodid = clickElementId.replace("delete-button","");
+        prodid = prodid.replace("delete-span","");
+        console.log(prodid);
+        $.ajax({
         type: "POST",
         url: '{% url "cart_delete" %}',
         data: {
-          productid: $(this).data("index"),
+          productid: prodid,
           csrfmiddlewaretoken: "{{csrf_token}}",
           action: "post",
         },
         success: function (json) {
-          console.log("Delete successfully");
-          // $("#delete-button").parent().parent().remove();
-          $("#delete-button").parent().parent().css("background-color", "red");
+        console.log("Delete successfully")
+        $("#delete-button"+prodid).parent().parent().remove();
           if (json.qty == 0) {
-            total = 0;
-            subtotal = 0;
+          total = 0
+          subtotal = 0
           } else {
-            total = (parseFloat(json.subtotal) + 11.5).toFixed(2);
-            subtotal = json.subtotal;
+          total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
+          subtotal = json.subtotal
           }
-
-          //   document.getElementById("subtotal").innerHTML = subtotal;
-          //   document.getElementById("cart-qty").innerHTML = json.qty;
-          //   document.getElementById("total").innerHTML = total;
-        },
-        error: function (xhr, errmsg, err) {},
-      });
-    });
-
-    // //Hàm đang phát triển
-    $(document).on("click", function (e) {
-      var clickElementId = e.target.id;
-      console.log(clickElementId);
-      e.preventDefault();
-      var prodid = $(this).data("index");
-      $.ajax({
-    	type: "POST",
-    	url: '{% url "cart_delete" %}',
-    	data: {
-    	  productid: $(this).data("index"),
-    	  csrfmiddlewaretoken: "{{csrf_token}}",
-    	  action: "post",
-    	},
-    	success: function (json) {
-    	console.log("Delete successfully")
-    	// $("#delete-button").parent().parent().remove();
-    	$("#delete-button").parent().parent().css("background-color","red");
-    	  if (json.qty == 0) {
-    		total = 0
-    		subtotal = 0
-    	  } else {
-    		total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-    		subtotal = json.subtotal
-    	  }
 
     	//   document.getElementById("subtotal").innerHTML = subtotal;
     	//   document.getElementById("cart-qty").innerHTML = json.qty;
@@ -285,9 +184,8 @@
     	},
     	error: function (xhr, errmsg, err) {},
       });
+      }
     });
-
-
   });
 </script>
 

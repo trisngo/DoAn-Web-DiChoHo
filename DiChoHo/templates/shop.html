@@ -103,8 +103,10 @@
                     justify-content-center
                     align-items-center
                     mx-1
-                  ">
-                  <span><i class="ion-ios-cart" id="add_to_cart_btn" data-value="{{product.id}}"></i></span>
+                    jqueryCatch
+                  "
+                  id="productAdd1{{product.id}}">
+                  <span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product.id}}" data-value="{{product.id}}"></i></span>
                 </a>
                 <a href="#" class="heart d-flex justify-content-center align-items-center">
                   <span><i class="ion-ios-heart"></i></span>
@@ -146,13 +148,19 @@
 
 <script>
     $(document).ready(function(){
-        $(document).on('click', '#add_to_cart_btn', function (e) {
+        $(".jqueryCatch").on('click', function (e) {
+        if(e.target !== e.currentTarget) return;
         e.preventDefault();
-        $.ajax({
+        var clickElementId = e.target.id;
+        if (clickElementId.includes("productAdd"))
+        {
+          var prodid = clickElementId.replace("productAdd1","");
+          prodid = prodid.replace("productAdd2","");
+          $.ajax({
           type: 'POST',
           url: '{% url "cart_add" %}',
           data: {
-            productid: $(this).data("value"),
+            productid: prodid,
             productqty: 1,
       // chưa làm được quantity nên mặc định là 1
           //   productqty: $('#id').text(),
@@ -165,6 +173,7 @@
           },
           error: function (xhr, errmsg, err) {}
         });
+        }
       })
     });
 </script>

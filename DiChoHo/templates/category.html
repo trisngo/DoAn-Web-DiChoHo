@@ -126,9 +126,10 @@
                     justify-content-center
                     align-items-center
                     mx-1
+                    jqueryCatch
                   "
-                >
-                  <span><i class="ion-ios-cart" id="add_to_cart_btn" data-value="{{product.id}}"></i></span>
+                id="productAdd1{{product.id}}">
+                  <span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product.id}}"></i></span>
                 </a>
                 <a
                   href="#"
@@ -190,25 +191,32 @@
 		document.getElementById("ca").classList.add('active');
 	}
 
-  $(document).on('click', '#add_to_cart_btn', function (e) {
-      e.preventDefault();
-      $.ajax({
-        type: 'POST',
-        url: '{% url "cart_add" %}',
-        data: {
-          productid: $(this).data("value"),
-		  productqty: 1,
-		// chưa làm được quantity nên mặc định là 1
-        //   productqty: $('#id').text(),
-          csrfmiddlewaretoken: "{{csrf_token}}",
-          action: 'post'
-        },
-        success: function (json) {
-          console.log("Add successfully");
-        },
-        error: function (xhr, errmsg, err) {}
-      });
-    })
+$(document).ready(function(){
+        $(".jqueryCatch").on('click', function (e) {
+        if(e.target !== e.currentTarget) return;
+        e.preventDefault();
+        var clickElementId = e.target.id;
+        if (clickElementId.includes("productAdd"))
+        {
+          var prodid = clickElementId.replace("productAdd1","");
+          prodid = prodid.replace("productAdd2","");
+          $.ajax({
+          type: 'POST',
+          url: '{% url "cart_add" %}',
+          data: {
+            productid: prodid,
+            productqty: 1,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post'
+          },
+          success: function (json) {
+            console.log("Add successfully");
+          },
+          error: function (xhr, errmsg, err) {}
+        });
+        }
+      })
+    });
 </script>
 
 {% endblock %}
