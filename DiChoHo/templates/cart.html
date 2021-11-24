@@ -1,233 +1,294 @@
 {% extends 'base.html' %}
-
 {% block title %}Giỏ hàng{% endblock %}
-
 {% block menu_shop_class %}active{% endblock %}
-
 {% block content %}
 {% load static %}
 
-<div class="hero-wrap hero-bread" style="background-image: url('/static/images/bg_1.jpg');">
-	<div class="container">
-		<div class="row no-gutters slider-text align-items-center justify-content-center">
-			<div class="col-md-9 ftco-animate text-center">
-				<h1 class="mb-0 bread">Giỏ hàng</h1>
-			</div>
-		</div>
-	</div>
+<div
+  class="hero-wrap hero-bread"
+  style="background-image: url('/static/images/bg_1.jpg')"
+>
+  <div class="container">
+    <div
+      class="
+        row
+        no-gutters
+        slider-text
+        align-items-center
+        justify-content-center
+      "
+    >
+      <div class="col-md-9 ftco-animate text-center">
+        <h1 class="mb-0 bread">Giỏ hàng</h1>
+      </div>
+    </div>
+  </div>
 </div>
 
 <section class="ftco-section ftco-cart">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12 ftco-animate">
-				<div class="cart-list">
-					<table class="table">
-						<thead class="thead-primary">
-							<tr class="text-center">
-								<th>&nbsp;</th>
-								<th>&nbsp;</th>
-								<th>Sản phẩm</th>
-								<th>Giá</th>
-								<th>Số lượng</th>
-								<th>Tổng cộng</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% if cart|length > 0 %}
-								{% for item in cart %}
-								{% with product=item.product %}
-								
-							<tr class="text-center">
-								<td class="product-remove"><a type="button" id="delete-button{{product.id}}" data-index="{{product.id}}"><span class="ion-ios-close"></span></a></td>
-								<td class="image-prod">
-									<div class="img" style="margin-top: 30px;">
-										<img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="Colorlib Template" />
-									</div>
-								</td>
-								<td class="product-name">
-									<h3 style="margin-top: 15px;">{{product.title}}</h3>
-								</td>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 ftco-animate">
+        <div class="cart-list">
+          <table class="table">
+            <thead class="thead-primary">
+              <tr class="text-center">
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Tổng cộng</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if cart|length > 0 %}
+                {% for item in cart %}
+                {% with product=item.product %}
 
-								<td class="price" style="padding-top: 47px;">{{product.price}}đ</td>
+              <tr class="text-center">
+                <td class="product-remove">
+                  <a
+                    type="button"
+                    id="delete-button{{product.id}}"
+                    data-index="{{product.id}}"
+                    ><span class="ion-ios-close"></span
+                  ></a>
+                </td>
+                <td class="image-prod">
+                  <div class="img" style="margin-top: 30px">
+                    <img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="Colorlib Template" />
+                  </div>
+                </td>
+                <td class="product-name">
+                  <h3 style="margin-top: 15px">{{product.title}}</h3>
+                </td>
 
-								<td class="quantity">
-									<div class="input-group mb-3" style="margin-top:25px;">
-										<input type="text" id="input{{product.id}}" name="{{product.title}}" class="quantity form-control input-number update_value"
-											value="{{item.qty}}" min="1" max="100">
-									</div>
-								</td>
+                <td
+                  class="price"
+                  id="price_input{{product.id}}"
+                  style="padding-top: 47px"
+                >
+                  {{product.price}}đ
+                </td>
 
-								<td class="total" id="price_input{{product.id}}" style="margin-top:25px">{{item.total_price}}đ</td>
-							</tr>
-								{% endwith %}
-								{% endfor %}		
-							{% endif %}
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div class="row justify-content-end">
-			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-				<div class="cart-total mb-3">
-					<h3>Coupon Code</h3>
-					<p>Enter your coupon code if you have one</p>
-					<form action="#" class="info">
-						<div class="form-group">
-							<label for="">Coupon code</label>
-							<input type="text" class="form-control text-left px-3" placeholder="">
-						</div>
-					</form>
-				</div>
-				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
-			</div>
-			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-				<div class="cart-total mb-3">
-					<h3>Estimate shipping and tax</h3>
-					<p>Enter your destination to get a shipping estimate</p>
-					<form action="#" class="info">
-						<div class="form-group">
-							<label for="">Country</label>
-							<input type="text" class="form-control text-left px-3" placeholder="">
-						</div>
-						<div class="form-group">
-							<label for="country">State/Province</label>
-							<input type="text" class="form-control text-left px-3" placeholder="">
-						</div>
-						<div class="form-group">
-							<label for="country">Zip/Postal Code</label>
-							<input type="text" class="form-control text-left px-3" placeholder="">
-						</div>
-					</form>
-				</div>
-				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
-			</div>
-			<div class="col-lg-4 mt-5 cart-wrap ftco-animate">
-				<div class="cart-total mb-3">
-					<h3>Cart Totals</h3>
-					<p class="d-flex">
-						<span>Subtotal</span>
-						<span>$20.60</span>
-					</p>
-					<p class="d-flex">
-						<span>Delivery</span>
-						<span>$0.00</span>
-					</p>
-					<p class="d-flex">
-						<span>Discount</span>
-						<span>$3.00</span>
-					</p>
-					<hr>
-					<p class="d-flex total-price">
-						<span>Total</span>
-						<span>$17.60</span>
-					</p>
-				</div>
-				<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
-			</div>
-		</div>
-	</div>
+                <td class="quantity">
+                  <div class="input-group mb-3" style="margin-top: 25px">
+                    <input
+                      type="text"
+                      id="input{{product.id}}"
+                      name="{{product.title}}"
+                      class="quantity form-control input-number update_value"
+                      value="{{item.qty}}"
+                      min="1"
+                      max="100"
+                    />
+                  </div>
+                </td>
+
+                <td
+                  class="total"
+                  id="totalprice_input{{product.id}}"
+                  style="margin-top: 25px"
+                >
+                  {{item.total_price}}đ
+                </td>
+              </tr>
+              {% endwith %}
+              {% endfor %}
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-end">
+      <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+        <div class="cart-total mb-3">
+          <h3>Coupon Code</h3>
+          <p>Enter your coupon code if you have one</p>
+          <form action="#" class="info">
+            <div class="form-group">
+              <label for="">Coupon code</label>
+              <input
+                type="text"
+                class="form-control text-left px-3"
+                placeholder=""
+              />
+            </div>
+          </form>
+        </div>
+        <p>
+          <a href="checkout.html" class="btn btn-primary py-3 px-4"
+            >Apply Coupon</a
+          >
+        </p>
+      </div>
+      <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+        <div class="cart-total mb-3">
+          <h3>Estimate shipping and tax</h3>
+          <p>Enter your destination to get a shipping estimate</p>
+          <form action="#" class="info">
+            <div class="form-group">
+              <label for="">Country</label>
+              <input
+                type="text"
+                class="form-control text-left px-3"
+                placeholder=""
+              />
+            </div>
+            <div class="form-group">
+              <label for="country">State/Province</label>
+              <input
+                type="text"
+                class="form-control text-left px-3"
+                placeholder=""
+              />
+            </div>
+            <div class="form-group">
+              <label for="country">Zip/Postal Code</label>
+              <input
+                type="text"
+                class="form-control text-left px-3"
+                placeholder=""
+              />
+            </div>
+          </form>
+        </div>
+        <p>
+          <a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a>
+        </p>
+      </div>
+      <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+        <div class="cart-total mb-3">
+          <h3>Cart Totals</h3>
+          <p class="d-flex">
+            <span>Subtotal</span>
+            <span>$20.60</span>
+          </p>
+          <p class="d-flex">
+            <span>Delivery</span>
+            <span>$0.00</span>
+          </p>
+          <p class="d-flex">
+            <span>Discount</span>
+            <span>$3.00</span>
+          </p>
+          <hr />
+          <p class="d-flex total-price">
+            <span>Total</span>
+            <span>$17.60</span>
+          </p>
+        </div>
+        <p>
+          <a href="checkout.html" class="btn btn-primary py-3 px-4"
+            >Proceed to Checkout</a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script>
-	//Update quantity
-	$(document).ready(function(){
-		$(document).on('keypress',function(e) {
-    if(e.which == 13) {
-		var onlyproductid = e.target.id.replace("input","");
-		console.log(onlyproductid);
-		var productqty = document.getElementById(e.target.id).value;
-		var td_id = "price_"+e.target.id;
-		var productprice=document.getElementById(td_id).innerText;
-		productprice = productprice.replace("đ","");
-		document.getElementById(td_id).innerText = productprice*productqty + "đ";
-		$.ajax({
+  // Bị lỗi chỗ lấy total id nhân thay vì price của 1 cái
+  //Update quantity
+  $(document).ready(function () {
+    $(document).on("keypress", function (e) {
+      if (e.which == 13) {
+        var onlyproductid = e.target.id.replace("input", "");
+        console.log(onlyproductid);
+        var productqty = document.getElementById(e.target.id).value;
+        var td_id = "price_" + e.target.id;
+        var productprice = document.getElementById(td_id).innerText;
+        productprice = productprice.replace("đ", "");
+        document.getElementById("total" + td_id).innerText =
+          productprice * productqty + "đ";
+        $.ajax({
+          type: "POST",
+          url: '{% url "cart_update" %}',
+          data: {
+            productid: onlyproductid,
+            productqty: productqty,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: "post",
+          },
+          success: function (json) {
+            console.log("update successfully");
+          },
+          error: function (xhr, errmsg, err) {},
+        });
+      }
+    });
+
+    //Delete Item
+    $(document).on("click", "#delete-button", function (e) {
+      e.preventDefault();
+      var prodid = $(this).data("index");
+      $.ajax({
         type: "POST",
-        url: '{% url "cart_update" %}',
+        url: '{% url "cart_delete" %}',
         data: {
-          productid: onlyproductid,
-          productqty: productqty,
+          productid: $(this).data("index"),
           csrfmiddlewaretoken: "{{csrf_token}}",
           action: "post",
         },
         success: function (json) {
-			console.log("update successfully");
+          console.log("Delete successfully");
+          // $("#delete-button").parent().parent().remove();
+          $("#delete-button").parent().parent().css("background-color", "red");
+          if (json.qty == 0) {
+            total = 0;
+            subtotal = 0;
+          } else {
+            total = (parseFloat(json.subtotal) + 11.5).toFixed(2);
+            subtotal = json.subtotal;
+          }
+
+          //   document.getElementById("subtotal").innerHTML = subtotal;
+          //   document.getElementById("cart-qty").innerHTML = json.qty;
+          //   document.getElementById("total").innerHTML = total;
         },
         error: function (xhr, errmsg, err) {},
       });
-    }
-});
+    });
 
-	//Delete Item
-	$(document).on("click", "#delete-button", function (e) {
-	  e.preventDefault();
-	  var prodid = $(this).data("index");
-	  $.ajax({
-		type: "POST",
-		url: '{% url "cart_delete" %}',
-		data: {
-		  productid: $(this).data("index"),
-		  csrfmiddlewaretoken: "{{csrf_token}}",
-		  action: "post",
-		},
-		success: function (json) {
-		console.log("Delete successfully")
-		// $("#delete-button").parent().parent().remove();
-		$("#delete-button").parent().parent().css("background-color","red");
-		  if (json.qty == 0) {
-			total = 0
-			subtotal = 0
-		  } else {
-			total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-			subtotal = json.subtotal
-		  }
+    // //Hàm đang phát triển
+    $(document).on("click", function (e) {
+      var clickElementId = e.target.id;
+      console.log(clickElementId);
+      e.preventDefault();
+      var prodid = $(this).data("index");
+      $.ajax({
+    	type: "POST",
+    	url: '{% url "cart_delete" %}',
+    	data: {
+    	  productid: $(this).data("index"),
+    	  csrfmiddlewaretoken: "{{csrf_token}}",
+    	  action: "post",
+    	},
+    	success: function (json) {
+    	console.log("Delete successfully")
+    	// $("#delete-button").parent().parent().remove();
+    	$("#delete-button").parent().parent().css("background-color","red");
+    	  if (json.qty == 0) {
+    		total = 0
+    		subtotal = 0
+    	  } else {
+    		total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
+    		subtotal = json.subtotal
+    	  }
 
-		//   document.getElementById("subtotal").innerHTML = subtotal;
-		//   document.getElementById("cart-qty").innerHTML = json.qty;
-		//   document.getElementById("total").innerHTML = total;
-		},
-		error: function (xhr, errmsg, err) {},
-	  });
-	});
+    	//   document.getElementById("subtotal").innerHTML = subtotal;
+    	//   document.getElementById("cart-qty").innerHTML = json.qty;
+    	//   document.getElementById("total").innerHTML = total;
+    	},
+    	error: function (xhr, errmsg, err) {},
+      });
+    });
 
 
-	// //Hàm đang phát triển
-	// $(document).on("click", function (e) {
-	//   var clickElementId = e.target.id;
-
-	//   e.preventDefault();
-	//   var prodid = $(this).data("index");
-	//   $.ajax({
-	// 	type: "POST",
-	// 	url: '{% url "cart_delete" %}',
-	// 	data: {
-	// 	  productid: $(this).data("index"),
-	// 	  csrfmiddlewaretoken: "{{csrf_token}}",
-	// 	  action: "post",
-	// 	},
-	// 	success: function (json) {
-	// 	console.log("Delete successfully")
-	// 	// $("#delete-button").parent().parent().remove();
-	// 	$("#delete-button").parent().parent().css("background-color","red");
-	// 	  if (json.qty == 0) {
-	// 		total = 0
-	// 		subtotal = 0
-	// 	  } else {
-	// 		total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-	// 		subtotal = json.subtotal
-	// 	  }
-
-	// 	//   document.getElementById("subtotal").innerHTML = subtotal;
-	// 	//   document.getElementById("cart-qty").innerHTML = json.qty;
-	// 	//   document.getElementById("total").innerHTML = total;
-	// 	},
-	// 	error: function (xhr, errmsg, err) {},
-	//   });
-	// });
-
-	});
-	
-  </script>
+  });
+</script>
 
 {% endblock %}
