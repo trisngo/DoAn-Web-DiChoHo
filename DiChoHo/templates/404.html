@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Về Chúng Tôi{% endblock %}
+
+{% block menu_about_class %}active{% endblock %}
+
+{% block content %}
+{% load static %}
+<h1 class="mt-5">404</h1>
+<p class="zoom-area">Trang web mà bạn đang tìm kiếm không tồn tại :(</p>
+<section class="error-container">
+  <span class="four"><span class="screen-reader-text">4</span></span>
+  <span class="zero"><span class="screen-reader-text">0</span></span>
+  <span class="four"><span class="screen-reader-text">4</span></span>
+</section>
+<div class="link-container">
+  <a href="{% url 'home' %}" class="more-link">Về trang chủ</a>
+</div>
+
+{% endblock %}
