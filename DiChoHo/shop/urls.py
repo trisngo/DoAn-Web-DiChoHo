@@ -30,4 +30,7 @@ urlpatterns = [
     path("addresses/delete/<slug:id>/", views.delete_address, name="delete_address"),
     path("addresses/set_default/<slug:id>/", views.set_default, name="set_default"),
     path("user_orders/", views.user_orders, name="user_orders"),
+
+    path('search/', views.search_views, name='search_views'),
+    path('404/', views.page_not_found, name='404')
 ]

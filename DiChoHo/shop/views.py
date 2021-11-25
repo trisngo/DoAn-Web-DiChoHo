@@ -1,7 +1,6 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 from .models import Profile, User, Category, Product
@@ -11,6 +10,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from .cart import Cart
 from orders.models import Order
+from django.core.paginator import EmptyPage, Paginator
+import re
 
 # get index page
 
@@ -31,7 +32,15 @@ def product_view(request):
 
 
 def shop_view(request):
-    products = Product.objects.all()
+    allProducts = Product.objects.all()
+    p = Paginator(allProducts, 12)
+    currentPage = 1
+    if request.method == 'GET' and 'page' in request.GET:
+        currentPage = request.GET.get("page")
+    try:
+        products = p.page(currentPage)
+    except EmptyPage:
+        return redirect('404')
     return render(request, 'shop.html', {'products': products})
 
 # get login page
@@ -140,26 +149,22 @@ def profile_view(request):
 # view category và product mẫu.
 def category_list(request, category_slug=None):
     category = get_object_or_404(Category, slug=category_slug)
-    products = Product.objects.filter(category=category)
-    return render(request, 'category.html', {'category': category, 'products': products})
+    allFilterProducts = Product.objects.filter(category=category)
+    p = Paginator(allFilterProducts, 12)
+    currentPage = 1
+    if request.method == 'GET' and 'page' in request.GET:
+        currentPage = request.GET.get("page")
+    try:
+        products = p.page(currentPage)
+    except EmptyPage:
+        return redirect('404')
+    return render(request, 'category.html', {'category': category.slug, 'products': products})
 
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
     relative_products = Product.objects.filter(category=product.category)
     return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products})
-
-
-# Hàm này dùng cho ajax, giờ như cc rồi nên bỏ
-# @csrf_exempt
-# def filter_product(request):
-#     category = Category.objects.get(name=request.POST["category"])
-#     products = list(Product.objects.filter(category=category).values())
-#     # neu muon return nhu la Json
-#     # return JsonResponse(products, safe=False)
-#     # return render(request, 'filter_product.html', {"products": products})
-#     # neu muon return nhu hien tai
-#     return render(request, 'filter_product.html', locals())
 
 
 #  ----------------view xử lí giỏ hàng------------------------
@@ -270,3 +275,12 @@ def user_orders(request):
     user_id = request.user.id
     orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
     return render(request, "profile/user_orders.html", {"orders": orders})
+
+def search_views(request):
+    query_item = request.GET.get("search").lower()
+    products = Product.objects.filter(title__icontains=query_item)
+    return render(request, "search.html", {'products': products})
+
+
+def page_not_found(request):
+    return render(request, '404.html')

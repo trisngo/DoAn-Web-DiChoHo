@@ -9,24 +9,14 @@
   <div class="col-lg-12 card-margin">
     <div class="card search-form">
       <div class="card-body p-0">
-        <form id="search-form">
+        <form id="search-form" action="{% url 'search_views' %}" method="get">
           <div class="row">
             <div class="col-12">
               <div class="row no-gutters">
-                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-                  <select class="form-control" id="exampleFormControlSelect1">
-                    <option>Tất cả</option>
-                    <option>Công Nghệ</option>
-                    <option>Đồ Dùng</option>
-                    <option>Hóa Mỹ Phẩm</option>
-                    <option>May Mặc</option>
-                    <option>Tươi sống</option>
-                  </select>
-                </div>
-                <div class="col-lg-8 col-md-6 col-sm-12 p-0">
+                <div class="col-lg-11 col-md-6 col-sm-12 p-0">
                   <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder="Tìm kiếm"
                     class="form-control"
                     id="search"
                     name="search"
@@ -126,9 +116,10 @@
                     justify-content-center
                     align-items-center
                     mx-1
+                    jqueryCatch
                   "
-                >
-                  <span><i class="ion-ios-cart" id="add_to_cart_btn" data-value="{{product.id}}"></i></span>
+                id="productAdd1{{product.id}}">
+                  <span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product.id}}"></i></span>
                 </a>
                 <a
                   href="#"
@@ -147,13 +138,19 @@
       <div class="col text-center">
         <div class="block-27">
           <ul>
-            <li><a href="#">&lt;</a></li>
-            <li class="active"><span>1</span></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">&gt;</a></li>
+            {% if products.has_previous %}
+            <li><a href="{% url 'shop' %}{{category}}/?page={{products.previous_page_number}}">&lt;</a></li>
+            {% endif %}
+            {% for n in products.paginator.page_range %}
+            {% if products.number == n %}
+            <li class="active"><span>{{n}}</span></li>
+            {% else %}
+            <li><a href="{% url 'shop' %}{{category}}/?page={{n}}">{{n}}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if products.has_next %}
+            <li><a href="{% url 'shop' %}{{category}}/?page={{products.next_page_number}}">&gt;</a></li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -190,25 +187,32 @@
 		document.getElementById("ca").classList.add('active');
 	}
 
-  $(document).on('click', '#add_to_cart_btn', function (e) {
-      e.preventDefault();
-      $.ajax({
-        type: 'POST',
-        url: '{% url "cart_add" %}',
-        data: {
-          productid: $(this).data("value"),
-		  productqty: 1,
-		// chưa làm được quantity nên mặc định là 1
-        //   productqty: $('#id').text(),
-          csrfmiddlewaretoken: "{{csrf_token}}",
-          action: 'post'
-        },
-        success: function (json) {
-          console.log("Add successfully");
-        },
-        error: function (xhr, errmsg, err) {}
-      });
-    })
+$(document).ready(function(){
+        $(".jqueryCatch").on('click', function (e) {
+        if(e.target !== e.currentTarget) return;
+        e.preventDefault();
+        var clickElementId = e.target.id;
+        if (clickElementId.includes("productAdd"))
+        {
+          var prodid = clickElementId.replace("productAdd1","");
+          prodid = prodid.replace("productAdd2","");
+          $.ajax({
+          type: 'POST',
+          url: '{% url "cart_add" %}',
+          data: {
+            productid: prodid,
+            productqty: 1,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post'
+          },
+          success: function (json) {
+            console.log("Add successfully");
+          },
+          error: function (xhr, errmsg, err) {}
+        });
+        }
+      })
+    });
 </script>
 
 {% endblock %}
