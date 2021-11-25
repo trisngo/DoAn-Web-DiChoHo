@@ -2,6 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from .models import Product
+from checkout.models import DeliveryOptions
 
 class Cart:
 
@@ -56,12 +57,23 @@ class Cart:
     def get_subtotal_price(self):
         return sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
 
+    def get_delivery_price(self):
+        newprice = 0.00
+
+        if "purchase" in self.session:
+            newprice = DeliveryOptions.objects.get(id=self.session["purchase"]["delivery_id"]).delivery_price
+
+        return newprice
 
     def get_total_price(self):
-        total = sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
-        # chưa có thông tin giao hàng, nếu có tính thêm tiền giao hàng
-        return total
+        newprice = 0.00
+        subtotal = sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
 
+        if "purchase" in self.session:
+            newprice = DeliveryOptions.objects.get(id=self.session["purchase"]["delivery_id"]).delivery_price
+
+        total = subtotal + Decimal(newprice)
+        return total
 
     def delete(self, product):
         # Xóa sản phẩm trong session 
@@ -81,3 +93,8 @@ class Cart:
 
     def save(self):
         self.session.modified = True
+    
+    def cart_update_delivery(self, deliveryprice=0):
+        subtotal = sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
+        total = subtotal + Decimal(deliveryprice)
+        return total

@@ -23,8 +23,14 @@ urlpatterns = [
     path('cart/add/', views.cart_add, name='cart_add'),
     path('cart/delete/', views.cart_delete, name='cart_delete'),
     path('cart/update/', views.cart_update, name='cart_update'),
+    #address and order
+    path("addresses/", views.view_address, name="addresses"),
+    path("add_address/", views.add_address, name="add_address"),
+    path("addresses/edit/<slug:id>/", views.edit_address, name="edit_address"),
+    path("addresses/delete/<slug:id>/", views.delete_address, name="delete_address"),
+    path("addresses/set_default/<slug:id>/", views.set_default, name="set_default"),
+    path("user_orders/", views.user_orders, name="user_orders"),
 
-    path('orders/add/', views.orders_add, name='orders_add'),
     path('search/', views.search_views, name='search_views'),
     path('404/', views.page_not_found, name='404')
 ]

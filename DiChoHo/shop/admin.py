@@ -1,5 +1,5 @@
 from django.contrib import admin
-from shop.models import Profile, Category, Product, Order, OrderItem
+from shop.models import Profile, Category, Product, Address
 # Register your models here.
 admin.site.register(Profile)
 
@@ -16,6 +16,5 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['in_stock', 'is_active']
     list_editable = ['price', 'in_stock']
     prepopulated_fields = {'slug': ('title',)}
-
-admin.site.register(Order)
-admin.site.register(OrderItem)
+    
+admin.site.register(Address)
