@@ -204,7 +204,7 @@
 
                       <div class="form-phone" style="display:flex;padding-top:30px">
                         <div class= " " style="z-index:1 ;flex : 1 1 0%;position : relative;padding-left: 180px;box-sizing: border-box;">
-                          <button type="submit" class="btn-solve" style="color:white;background-color:blue;padding: 10px 40px 7px 40px;box-sizing: border-box;">Lưu thông tin</button>
+                          <button type="submit" class="btn-solve" style="color:white;background-color:#02BE6E;padding: 10px 40px 7px 40px;box-sizing: border-box;">Lưu thông tin</button>
                         </div>
                       </div>                      
                       
@@ -227,33 +227,33 @@
         
         
         <div class="tab-pane" id="security">
-          <div class="form-group" style="font-size:25px">Thêm mật khẩu</div>
+          <div class="form-group" style="font-size:25px">Đổi mật khẩu</div>
           <h6>Để bảo mật tài khoản vui lòng không chia sẻ mật khẩu cho người khác</h6>
           <hr>
           <div class="block_change_password" style="display:block;margin-top:0em;">
-            <form style="padding:16px;border:1px solid rgb(235,235,240);box-sizing:border-box;border-radius:4px;display:block;width: 80%;float:left;">
+            <form style="padding:16px;border:1px solid rgb(235,235,240);box-sizing:border-box;border-radius:4px;display:block;width: 80%;float:left;" method="post" action="">
               <div class="form-password-current" style="font-size:20px;padding-top:10px;">Mật khẩu hiện tại</div>
               <div class="input-password-current" style="border:1px solid rgb(235,235,240);box-sizing:border-box;border-radius:4px">
-                <input name="oldPassowrd" type="password" maxlength="50" placeholder="Nhập mật khẩu hiện tại" value="" style="font-size:15px;padding-right:470px;margin:10px 4px" id="typepass">
+                <input name="oldPassword" type="password" maxlength="50" placeholder="Nhập mật khẩu hiện tại" value="" style="font-size:15px;padding-right:470px;margin:10px 4px" id="typepass">
                 <input type="checkbox" onclick="Toggle()">
                     <b style="right:0">Hiện mật khẩu</b>
               </div>
 
               <div class="form-password-new" style="font-size:20px;padding-top:20px">Mật khẩu mới</div>
               <div class="input-password-new" style="border:1px solid rgb(235,235,240);box-sizing:border-box;border-radius:4px">
-                <input name="newPassowrd" type="password" maxlength="50" placeholder="Nhập mật khẩu mới" value="" style="font-size:15px;padding-right:470px;margin:10px 4px" id="typepassnew">
+                <input name="newPassword" type="password" maxlength="50" placeholder="Nhập mật khẩu mới" value="" style="font-size:15px;padding-right:470px;margin:10px 4px" id="typepassnew">
                 <input type="checkbox" onclick="Toggle1()" >
                     <b style="right:0">Hiện mật khẩu</b>
               </div>
 
               <div class="form-confirm-password" style="font-size:20px;padding-top:20px">Nhập lại mật khẩu mới</div>
               <div class="input-confirm-password" style="border:1px solid rgb(235,235,240);box-sizing:border-box;border-radius:4px">
-                <input name="newPassowrd" type="password" maxlength="50" placeholder="Nhập lại mật khẩu mới" value="" style="font-size:15px;padding-right:470px;margin:10px 4px" id="typepassconfirmnew">
+                <input name="retypePassword" type="password" maxlength="50" placeholder="Nhập lại mật khẩu mới" value="" style="font-size:15px;padding-right:470px;margin:10px 4px" id="typepassconfirmnew">
                 <input type="checkbox" onclick="Toggle2()">
                     <b style="right:0">Hiện mật khẩu</b>
               </div>
               <div class="btn_finish" style="padding-top:20px;">  
-              <button type="submit" class="btn-solve" style="color:white;background-color:blue;box-sizing: border-box;width:280px;padding:8px 2px 8px;font-size:20px">Lưu</button>
+              <button type="submit" class="btn-solve" style="color:white;background-color:#02BE6E;box-sizing: border-box;width:280px;padding:8px 2px 8px;font-size:20px">Lưu</button>
               </div>
             
             </form>
@@ -317,6 +317,8 @@
               temp.type = "password";
           }
       }
+
+
 </script>
 <br><br><br>
 {% endblock %}

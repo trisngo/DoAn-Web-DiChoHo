@@ -151,10 +151,20 @@ def logout_view(request):
 
 
 def profile_view(request):
-    return render(
-        request,
-        'profile.html'
-    )
+    if request.method == "POST":
+        if 'oldPassword' and 'newPassword' and 'retypePassword' in request.POST:
+            if User.objects.filter(password=request.POST.get("oldPassword")).exists():
+                pass
+            else:
+                return render(
+                    request,
+                    'profile.html'
+                )
+    else:
+        return render(
+            request,
+            'profile.html'
+        )
 
 
 # view category và product mẫu.
