@@ -177,9 +177,8 @@
 	<div class="container">
 		<div class="row justify-content-center mb-3 pb-3">
 			<div class="col-md-12 heading-section text-center ftco-animate">
-				<span class="subheading">Nhu yếu phẩm</span>
-				<h2 class="mb-4">Nhu Yếu Phẩm Mùa Dịch</h2>
-				<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+				<span class="subheading">Bán chạy</span>
+				<h2 class="mb-4">Sản phẩm bán chạy mùa dịch</h2>
 			</div>
 		</div>
 	</div>
@@ -188,7 +187,7 @@
 		<div class="row">
 			{% for product in products|slice:":12" %}
 			<div class="col-md-4 col-lg-2 ftco-animate">
-				<div class="product" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
+				<div class="product bg-white" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
 					<a href="{{ product.get_absolute_url }}" class="img-prod"><img class="img-fluid"
 							src="{{ product.image.url | slice:"10:" }}" alt="Product">
 						<div class="overlay"></div>
@@ -227,32 +226,31 @@
 	<div class="container">
 		<div class="row justify-content-center mb-3 pb-3">
 			<div class="col-md-12 heading-section text-center ftco-animate">
-				<span class="subheading">Combo mùa dịch</span>
-				<h2 class="mb-4">Combo mùa dịch</h2>
-				<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+				<span class="subheading">Mới ra mắt</span>
+				<h2 class="mb-4">Sản phẩm mới được đưa lên kệ</h2>
 			</div>
 		</div>
 	</div>
 	<div class="container">
 		<div class="row">
-			{% for product in products|slice:":12" %}
+			{% for product2 in products2|slice:":12" %}
 			<div class="col-md-4 col-lg-2 ftco-animate">
-				<div class="product" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
-					<a href="{{ product.get_absolute_url }}" class="img-prod"><img class="img-fluid"
-							src="{{ product.image.url | slice:"10:" }}" alt="Product">
+				<div class="product bg-white" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
+					<a href="{{ product2.get_absolute_url }}" class="img-prod"><img class="img-fluid"
+							src="{{ product2.image.url | slice:"10:" }}" alt="Product">
 						<div class="overlay"></div>
 					</a>
 					<div class="text py-3 pb-4 px-3 text-center">
-						<h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+						<h3><a href="{{ product2.get_absolute_url }}">{{ product2.title }}</a></h3>
 						<div class="d-flex">
 							<div class="pricing">
-								<p class="price"><span>{{ product.price }}đ</span></p>
+								<p class="price"><span>{{ product2.price }}đ</span></p>
 							</div>
 						</div>
 						<div class="bottom-area d-flex px-3">
 							<div class="m-auto d-flex">
-								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{product.id}}">
-									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product.id}}" data-value="{{product.id}}"></i></span>
+								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{product2.id}}">
+									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product2.id}}" data-value="{{product2.id}}"></i></span>
 								</a>
 								<a href="#" class="heart d-flex justify-content-center align-items-center ">
 									<span><i class="ion-ios-heart"></i></span>
@@ -271,32 +269,31 @@
 	<div class="container">
 		<div class="row justify-content-center mb-3 pb-3">
 			<div class="col-md-12 heading-section text-center ftco-animate">
-				<span class="subheading">Combo giảm giá</span>
-				<h2 class="mb-4">Combo giảm giá</h2>
-				<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+				<span class="subheading">Giá rẻ</span>
+				<h2 class="mb-4">Sản phẩm ngon, bổ, rẻ</h2>
 			</div>
 		</div>
 	</div>
 	<div class="container">
 		<div class="row">
-			{% for product in products|slice:":12" %}
+			{% for product3 in products3|slice:":12" %}
 			<div class="col-md-4 col-lg-2 ftco-animate">
-				<div class="product" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
-					<a href="{{ product.get_absolute_url }}" class="img-prod"><img class="img-fluid"
-							src="{{ product.image.url | slice:"10:" }}" alt="Product">
+				<div class="product bg-white" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
+					<a href="{{ product3.get_absolute_url }}" class="img-prod"><img class="img-fluid"
+							src="{{ product3.image.url | slice:"10:" }}" alt="Product">
 						<div class="overlay"></div>
 					</a>
 					<div class="text py-3 pb-4 px-3 text-center">
-						<h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+						<h3><a href="{{ product3.get_absolute_url }}">{{ product3.title }}</a></h3>
 						<div class="d-flex">
 							<div class="pricing">
-								<p class="price"><span>{{ product.price }}đ</span></p>
+								<p class="price"><span>{{ product3.price }}đ</span></p>
 							</div>
 						</div>
 						<div class="bottom-area d-flex px-3">
 							<div class="m-auto d-flex">
-								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{product.id}}">
-									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product.id}}" data-value="{{product.id}}"></i></span>
+								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{product3.id}}">
+									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product3.id}}" data-value="{{product3.id}}"></i></span>
 								</a>
 								<a href="#" class="heart d-flex justify-content-center align-items-center ">
 									<span><i class="ion-ios-heart"></i></span>
