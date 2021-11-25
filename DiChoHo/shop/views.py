@@ -147,7 +147,7 @@ def profile_view(request):
                 user = fm.save()
                 update_session_auth_hash(request, user)
                 messages.success(request, "Mật khẩu được đổi thành công")
-                return HttpResponseRedirect('profile')
+                return redirect('profile')
             else:
                 messages.error(request, 'Mật khẩu được đổi không thành công')
 
