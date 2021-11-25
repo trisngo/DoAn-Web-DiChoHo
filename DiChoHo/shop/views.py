@@ -16,9 +16,16 @@ import re
 # get index page
 
 
+# def index_view(request):
+#     products = Product.objects.all()
+#     return render(request, 'index.html', {'products': products})
+
+
 def index_view(request):
-    products = Product.objects.all()
-    return render(request, 'index.html', {'products': products})
+    products = Product.objects.all().order_by('-sold')
+    products2 = Product.objects.all().order_by('-updated')
+    products3 = Product.objects.all().order_by('price')
+    return render(request, 'index.html', {'products': products, 'products2': products2, 'products3': products3},)
 # get product page
 
 
