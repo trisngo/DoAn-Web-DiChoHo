@@ -150,6 +150,7 @@ def logout_view(request):
     return redirect('/')
 
 
+@login_required
 def profile_view(request):
     if request.method == "POST":
         if 'oldPassword' and 'newPassword' and 'retypePassword' in request.POST:
@@ -166,8 +167,9 @@ def profile_view(request):
             'profile.html'
         )
 
-
 # view category và product mẫu.
+
+
 def category_list(request, category_slug=None):
     category = get_object_or_404(Category, slug=category_slug)
     allFilterProducts = Product.objects.filter(category=category)
