@@ -222,7 +222,7 @@
               style="padding:16px;border:1px solid rgb(235,235,240);box-sizing:border-box;border-radius:4px;display:block;width: 80%;float:left;">
               {% csrf_token %}
               {{ form }}
-              <div class="form-password-current" style="font-size:20px;padding-top:10px;">Mật khẩu hiện tại</div>
+              {% comment %} <div class="form-password-current" style="font-size:20px;padding-top:10px;">Mật khẩu hiện tại</div>
               <div class="input-password-current"
                 style="border:1px solid rgb(235,235,240);box-sizing:border-box;border-radius:4px">
                 <input name="oldPassword" type="password" maxlength="50" placeholder="Nhập mật khẩu hiện tại" value=""
@@ -247,7 +247,7 @@
                   style="font-size:15px;padding-right:470px;margin:10px 4px" id="typepassconfirmnew">
                 <input type="checkbox" onclick="Toggle2()">
                 <b style="right:0">Hiện</b>
-              </div>
+              </div> {% endcomment %}
               <div class="btn_finish" style="padding-top:20px;">
                 <button type="submit" class="btn-solve"
                   style="color:white;background-color:#02BE6E;box-sizing: border-box;width:280px;padding:8px 2px 8px;font-size:20px">Lưu</button>
