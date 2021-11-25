@@ -4,12 +4,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
-from .models import Profile, User, Category, Product, Order, OrderItem
+from .models import Profile, User, Category, Product
 from django.contrib import messages
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from .cart import Cart
+from orders.models import Order
 
 # get index page
 
@@ -204,56 +205,68 @@ def cart_update(request):
         response = JsonResponse({"qty": cartqty, "subtotal": cartsubtotal})
         return response
 
-#  ----------------view xử lí đơn hàng------------------------
 
-
-def orders_add(request):
-    cart = Cart(request)
-    if request.POST.get("action") == "post":
-
-        order_key = request.POST.get("order_key")
-        user_id = request.user.id
-        carttotal = cart.get_total_price()
-
-        # Kiểm tra xem cái đơn này đã tồn tại chưa
-        if Order.objects.filter(order_key=order_key).exists():
-            pass
-        else:
-            # Nếu chưa tồn tại ta tạo 1 đơn mới
-            order = Order.objects.create(
-                user_id=user_id,
-                # các trường dưới đây chưa xử lí tự lấy thông tin từ table user, có trong đơn vì cần hiển thị thông tin này ra khi in hóa đơn
-                full_name="name",
-                address="add",
-                phone="phone",
-                total_paid=carttotal,
-                order_key=order_key,
-            )
-            # tạo 1 biến id để lấy primary key của order phía trên vừa tạo, dùng biến này để tạo khóa
-            order_id = order.pk
-
-            # Tạo sản phẩm trong mỗi đơn, ở đây có 1 db OrderItem để quản lí nên tự động tạo cùng luôn
-            for item in cart:
-                OrderItem.objects.create(
-                    order=order_id, product=item["product"], price=item["price"], quantity=item["qty"]
-                )
-
-        response = JsonResponse({"success": "Return something"})
-        return response
-
-
-def payment_confirmation(data):
-    Order.objects.filter(order_key=data).update(billing_status=True)
-
-
-def user_orders(request):
-    user_id = request.user.id
-    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
-    return orders
 
 
 # ----------------view xử lí Delivery và Payment ----------------------
-# @login_required
-# def deliverychoices(request):
-#     deliveryoptions = DeliveryOptions.objects.filter(is_active=True)
-#     return render(request, "checkout/delivery_choices.html", {"deliveryoptions": deliveryoptions})
+# Addresses chưa có thêm template để update address(chờ)
+
+
+@login_required
+def view_address(request):
+    addresses = Address.objects.filter(customer=request.user)
+    return render(request, "account/dashboard/addresses.html", {"addresses": addresses})
+
+
+@login_required
+def add_address(request):
+    if request.method == "POST":
+        address_form = UserAddressForm(data=request.POST)
+        if address_form.is_valid():
+            address_form = address_form.save(commit=False)
+            address_form.customer = request.user
+            address_form.save()
+            return HttpResponseRedirect(reverse("account:addresses"))
+    else:
+        address_form = UserAddressForm()
+    return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
+
+
+@login_required
+def edit_address(request, id):
+    if request.method == "POST":
+        address = Address.objects.get(pk=id, customer=request.user)
+        address_form = UserAddressForm(instance=address, data=request.POST)
+        if address_form.is_valid():
+            address_form.save()
+            return HttpResponseRedirect(reverse("account:addresses"))
+    else:
+        address = Address.objects.get(pk=id, customer=request.user)
+        address_form = UserAddressForm(instance=address)
+    return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
+
+
+@login_required
+def delete_address(request, id):
+    address = Address.objects.filter(pk=id, customer=request.user).delete()
+    return redirect("account:addresses")
+
+
+@login_required
+def set_default(request, id):
+    Address.objects.filter(customer=request.user, default=True).update(default=False)
+    Address.objects.filter(pk=id, customer=request.user).update(default=True)
+
+    previous_url = request.META.get("HTTP_REFERER")
+
+    if "delivery_address" in previous_url:
+        return redirect("checkout:delivery_address")
+
+    return redirect("account:addresses")
+
+
+@login_required
+def user_orders(request):
+    user_id = request.user.id
+    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
+    return render(request, "profile/user_orders.html", {"orders": orders})

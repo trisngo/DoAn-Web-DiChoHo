@@ -6,14 +6,13 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import gettext_lazy as _
+import uuid
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
     profile_pic = models.ImageField(
         default='defaultavatar.png', upload_to='profiles_pics')
-    address = models.TextField(max_length=500, null=False)
-    phone = models.CharField(max_length=100, null=False)
 
 
 @receiver(post_save, sender=User)
@@ -26,6 +25,29 @@ def create_profile(sender, instance, created, **kwargs):
 def save_profile(sender, instance, **kwargs):
     instance.profile.save()
 
+class Address(models.Model):
+    """
+    Address
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
+    # full_name = models.CharField(_("Full Name"), max_length=150)
+    phone = models.CharField(_("Phone Number"), max_length=50)
+    postcode = models.CharField(_("Postcode"), max_length=50)
+    address_line = models.CharField(_("Address Line 1"), max_length=255)
+    address_line2 = models.CharField(_("Address Line 2"), max_length=255)
+    town_city = models.CharField(_("Town/City/State"), max_length=150)
+    delivery_instructions = models.CharField(_("Delivery Instructions"), max_length=255)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    default = models.BooleanField(_("Default"), default=False)
+
+    class Meta:
+        verbose_name = "Address"
+        verbose_name_plural = "Addresses"
+
+    def __str__(self):
+        return "Address"
 
 class Category(models.Model):
     name = models.CharField(max_length=255, db_index=True)
@@ -72,38 +94,6 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product_detail', args=[self.slug])
 
-class Order(models.Model):
-    # django tự tạo khóa id của mỗi class
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='order_user')
-    full_name = models.CharField(max_length=50) #tên user, xử lí trong view tự động cạp nhật
-    address = models.CharField(max_length=250)
-    phone = models.CharField(max_length=100)
-    created = models.DateTimeField(auto_now_add=True) #ngay tạo order, còn hiểu là ngày thanh toán
-    updated = models.DateTimeField(auto_now=True) #nếu có update thay đổi do trục trặc hay khách thay đổi địa chỉ thì thêm ngày
-    total_paid = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
-    order_key = models.CharField(max_length=200) # mã order key, cung cấp cho khách hàng chứ không cung cấp id order cho khách(khách hàng tìm kiếm lại bằng mã này)
-    billing_status = models.BooleanField(default=False) #thanh toán hay chưa
-
-    class Meta:
-        ordering = ('-created',)
-    
-    def __str__(self):
-        return str(self.created)
-
-
-class OrderItem(models.Model):
-    # django tự tạo khóa id của mỗi class
-    order = models.ForeignKey(Order,
-                              related_name='items',
-                              on_delete=models.CASCADE)
-    product = models.ForeignKey(Product,
-                                related_name='order_items',
-                                on_delete=models.CASCADE)
-    payment = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])#giá sản phẩn đó
-    quantity = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return str(self.id)
 
 
 
