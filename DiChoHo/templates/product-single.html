@@ -46,7 +46,8 @@
 						<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Đánh giá</span></a>
 					</p>
 					<p class="text-left">
-						<a href="#" class="mr-2" style="color: #000;">{{product.sold}} <span style="color: #bbb;">Đã bán</span></a>
+						<a href="#" class="mr-2" style="color: #000;">{{product.sold}} <span style="color: #bbb;">Đã
+								bán</span></a>
 					</p>
 				</div>
 				<p class="price"><span></span></p>
@@ -71,10 +72,25 @@
 					<div class="w-100"></div>
 				</div>
 				<p class="price" style="margin-left: 70px; color:#28a745;">{{product.price}}đ</p>
-				<p><a href="cart.html" class="btn btn-black py-3 px-5" id="add_to_cart_btn" data-value="{{product.id}}">Thêm vào giỏ</a></p>
+				<p><a href="cart.html" class="btn btn-black py-3 px-5" id="add_to_cart_btn"
+						data-value="{{product.id}}">Thêm vào giỏ</a></p>
 			</div>
 		</div>
 	</div>
+</section>
+
+
+<section>
+	{% if ratings|length > 0 %}
+	{% for rating in ratings %}
+	{% comment %} {% with user=item.product %} {% endcomment %}
+
+	<h5>{{rating.user.username}}</h5>
+	<h5>{{rating.ratingStar|floatformat:"1"}}</h5>
+	<p>{{rating.content}}</p>
+	
+	{% endfor %}
+	{% endif %}
 </section>
 
 <section class="ftco-section">
@@ -89,9 +105,10 @@
 		<div class="row">
 			{% for relative_product in relative_products %}
 			<div class="col-md-6 col-lg-3 ftco-animate">
-				<div class="product bg-white" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 350px;">
-					<a href="{{ relative_product.get_absolute_url }}" class="img-prod"><img class="img-fluid" src="{{ relative_product.image.url | slice:"10:" }}"
-							alt="anh-san-pham">
+				<div class="product bg-white"
+					style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 350px;">
+					<a href="{{ relative_product.get_absolute_url }}" class="img-prod"><img class="img-fluid"
+							src="{{ relative_product.image.url | slice:"10:" }}" alt="anh-san-pham">
 
 					</a>
 					<div class="text py-3 pb-4 px-3 text-center">
@@ -103,8 +120,11 @@
 						</div>
 						<div class="bottom-area d-flex px-3">
 							<div class="m-auto d-flex">
-								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{relative_product.id}}">
-									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{relative_product.id}}"></i></span>
+								<a href="#"
+									class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch"
+									id="productAdd1{{relative_product.id}}">
+									<span><i class="ion-ios-cart jqueryCatch"
+											id="productAdd2{{relative_product.id}}"></i></span>
 								</a>
 								<a href="#" class="heart d-flex justify-content-center align-items-center ">
 									<span><i class="ion-ios-heart"></i></span>
@@ -115,7 +135,7 @@
 				</div>
 			</div>
 			{% endfor %}
-	</div>
+		</div>
 
 </section>
 
@@ -130,33 +150,32 @@
 </div>
 
 <script>
-	    $(document).ready(function(){
-        $(".jqueryCatch").on('click', function (e) {
-        if(e.target !== e.currentTarget) return;
-        e.preventDefault();
-        var clickElementId = e.target.id;
-        if (clickElementId.includes("productAdd"))
-        {
-          var prodid = clickElementId.replace("productAdd1","");
-          prodid = prodid.replace("productAdd2","");
-          $.ajax({
-          type: 'POST',
-          url: '{% url "cart_add" %}',
-          data: {
-            productid: prodid,
-            productqty: 1,
-            csrfmiddlewaretoken: "{{csrf_token}}",
-            action: 'post'
-          },
-          success: function (json) {
-            console.log("Add successfully");
-            // document.getElementById("cart-qty").innerHTML = json.qty
-          },
-          error: function (xhr, errmsg, err) {}
-        });
-        }
-      })
-    });
+	$(document).ready(function () {
+		$(".jqueryCatch").on('click', function (e) {
+			if (e.target !== e.currentTarget) return;
+			e.preventDefault();
+			var clickElementId = e.target.id;
+			if (clickElementId.includes("productAdd")) {
+				var prodid = clickElementId.replace("productAdd1", "");
+				prodid = prodid.replace("productAdd2", "");
+				$.ajax({
+					type: 'POST',
+					url: '{% url "cart_add" %}',
+					data: {
+						productid: prodid,
+						productqty: 1,
+						csrfmiddlewaretoken: "{{csrf_token}}",
+						action: 'post'
+					},
+					success: function (json) {
+						console.log("Add successfully");
+						// document.getElementById("cart-qty").innerHTML = json.qty
+					},
+					error: function (xhr, errmsg, err) {}
+				});
+			}
+		})
+	});
 </script>
 
 {% endblock %}

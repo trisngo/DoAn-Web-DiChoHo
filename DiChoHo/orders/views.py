@@ -1,12 +1,12 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import login_required
 from shop import cart
 
 from .models import Order, OrderItem
 
 #  ----------------view xử lí đơn hàng------------------------
-
+@login_required
 def orders_add(request):
     cart = Cart(request)
     if request.POST.get("action") == "post":

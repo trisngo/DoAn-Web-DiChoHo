@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import Profile, User, Category, Product, Address
+from .models import Profile, User, Category, Product, Address, Rating
 from django.contrib import messages
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -123,19 +123,9 @@ def about_view(request):
         'about.html',
     )
 
-
-# get checkout page
-
-
-def checkout_view(request):
-    return render(
-        request,
-        'checkout.html',
-    )
-
 # get wishlist page
 
-
+@login_required
 def wishlist_view(request):
     return render(
         request,
@@ -190,7 +180,8 @@ def category_list(request, category_slug=None):
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
     relative_products = Product.objects.filter(category=product.category)
-    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products})
+    allRatings = Rating.objects.filter(product=product)
+    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings})
 
 
 #  ----------------view xử lí giỏ hàng------------------------
@@ -235,7 +226,6 @@ def cart_update(request):
         cartsubtotal = cart.get_subtotal_price()
         response = JsonResponse({"qty": cartqty, "subtotal": cartsubtotal})
         return response
-
 
 # ----------------view xử lí Delivery và Payment ----------------------
 # Addresses chưa có thêm template để update address(chờ)
