@@ -12,14 +12,17 @@ from django.template.loader import render_to_string
 from .cart import Cart
 from orders.models import Order
 from django.core.paginator import EmptyPage, Paginator
-import re
+from django.template import RequestContext
+import django.shortcuts
 
 # get index page
 
 
-# def index_view(request):
-#     products = Product.objects.all()
-#     return render(request, 'index.html', {'products': products})
+def handler404(request):
+    response = django.shortcuts.render_to_response('404.html', {},
+                                                   context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
 
 
 def index_view(request):
@@ -219,8 +222,6 @@ def cart_update(request):
         return response
 
 
-
-
 # ----------------view xử lí Delivery và Payment ----------------------
 # Addresses chưa có thêm template để update address(chờ)
 
@@ -267,7 +268,8 @@ def delete_address(request, id):
 
 @login_required
 def set_default(request, id):
-    Address.objects.filter(customer=request.user, default=True).update(default=False)
+    Address.objects.filter(customer=request.user,
+                           default=True).update(default=False)
     Address.objects.filter(pk=id, customer=request.user).update(default=True)
 
     previous_url = request.META.get("HTTP_REFERER")
@@ -283,6 +285,7 @@ def user_orders(request):
     user_id = request.user.id
     orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
     return render(request, "profile/user_orders.html", {"orders": orders})
+
 
 def search_views(request):
     query_item = request.GET.get("search").lower()
