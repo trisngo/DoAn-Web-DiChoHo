@@ -108,7 +108,7 @@
           <hr />
           <p class="d-flex total-price">
             <span>Tổng số tiền</span>
-            <span style="text-transform: lowercase;">{{cart.get_total_price}}đ</span>
+            <span id="totalPrice" style="text-transform: lowercase;">{{cart.get_total_price}}đ</span>
           </p>
         </div>
         <p class="row justify-content-center">
@@ -126,7 +126,6 @@
     $("#jqueryCatchClick").on("keypress", function (e) {
       if (e.which == 13) {
         var onlyproductid = e.target.id.replace("input", "");
-        console.log(onlyproductid);
         var productqty = document.getElementById(e.target.id).value;
         var td_id = "price_" + e.target.id;
         var productprice = document.getElementById(td_id).innerText;
@@ -143,7 +142,7 @@
             action: "post",
           },
           success: function (json) {
-            console.log("update successfully");
+            document.getElementById("totalPrice").innerText = json.subtotal + "đ";
           },
           error: function (xhr, errmsg, err) {},
         });
@@ -166,7 +165,7 @@
           action: "post",
         },
         success: function (json) {
-        console.log("Delete successfully")
+        document.getElementById("totalPrice").innerText = json.subtotal + "đ";
         $("#delete-button"+prodid).parent().parent().remove();
           if (json.qty == 0) {
           total = 0
