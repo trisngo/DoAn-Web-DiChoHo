@@ -149,13 +149,15 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-
+@login_required
 def profile_view(request):
-    return render(
-        request,
-        'profile.html'
-    )
-
+    user_id = request.user.id
+    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
+    user = get_object_or_404(User, id=user_id)
+    profile = Profile.objects.filter(id=user_id)
+    
+    print(user.first_name)
+    return render(request, 'profile.html', {"user": user, "profile": profile, "orders": orders})
 
 # view category và product mẫu.
 def category_list(request, category_slug=None):
