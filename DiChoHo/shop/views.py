@@ -127,6 +127,7 @@ def about_view(request):
 
 # get wishlist page
 
+
 @login_required
 def wishlist_view(request):
     return render(
@@ -181,7 +182,9 @@ def category_list(request, category_slug=None):
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
-    relative_products = Product.objects.filter(category=product.category)
+    all_relative_products = Product.objects.filter(category=product.category)
+    p = Paginator(all_relative_products, 4)
+    relative_products = p.page(1)
     allRatings = Rating.objects.filter(product=product)
     return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings})
 

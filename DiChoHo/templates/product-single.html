@@ -72,25 +72,11 @@
 					<div class="w-100"></div>
 				</div>
 				<p class="price" style="margin-left: 70px; color:#28a745;">{{product.price}}đ</p>
-				<p><a href="cart.html" class="btn btn-black py-3 px-5" id="add_to_cart_btn"
+				<p><a href="#" class="btn btn-black py-3 px-5 jqueryCatch" id="current_product{{product.id}}"
 						data-value="{{product.id}}">Thêm vào giỏ</a></p>
 			</div>
 		</div>
 	</div>
-</section>
-
-
-<section>
-	{% if ratings|length > 0 %}
-	{% for rating in ratings %}
-	{% comment %} {% with user=item.product %} {% endcomment %}
-
-	<h5>{{rating.user.username}}</h5>
-	<h5>{{rating.ratingStar|floatformat:"1"}}</h5>
-	<p>{{rating.content}}</p>
-	
-	{% endfor %}
-	{% endif %}
 </section>
 
 <section class="ftco-section">
@@ -139,10 +125,24 @@
 
 </section>
 
+<section class="mt-5 mb-5">
+	{% if ratings|length > 0 %}
+	<h2 class="text-center" style="font-size: 40px; font-weight: 600;">Đánh giá về sản phẩm</h2>
+	<div class="container mt-5">
+	{% for rating in ratings %}
+	{% comment %} {% with user=item.product %} {% endcomment %}
+		<hr>
+		<h4>{{rating.user.username}} <span style="border-radius: 50%; background-color: #3cde67; padding: 10px; font-size: 10px; color:white;">{{rating.ratingStar|floatformat:"1"}}</span></h4>
+		<p>{{rating.content}}</p>
+	{% endfor %}
+	</div>
+	{% endif %}
+</section>
+
 {% endblock %}
 {% block arrow %}
 <div class="row">
-	<div class="mouse">
+	<div class="mouse mt-5">
 		<a href="#" class="mouse-icon">
 			<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
 		</a>
@@ -168,13 +168,69 @@
 						action: 'post'
 					},
 					success: function (json) {
-						console.log("Add successfully");
+						alert("Thêm vào giỏ thành công!");
 						// document.getElementById("cart-qty").innerHTML = json.qty
 					},
 					error: function (xhr, errmsg, err) {}
 				});
 			}
-		})
+			else {
+				var prodid = parseInt(clickElementId.replace("current_product",""));
+				var product_qty = parseInt(document.getElementById("quantity").value);
+				if (isNaN(product_qty)) {
+					alert("Số lượng sản phẩm không hợp lệ!");
+					document.getElementById("quantity").value = 1;
+				}
+				else {
+					$.ajax({
+					type: 'POST',
+					url: '{% url "cart_add" %}',
+					data: {
+						productid: prodid,
+						productqty: product_qty,
+						csrfmiddlewaretoken: "{{csrf_token}}",
+						action: 'post'
+					},
+					success: function (json) {
+						console.log("Add successfully");
+						window.location.href = '{% url "cart" %}'
+					},
+					error: function (xhr, errmsg, err) {}
+				});
+				}
+			}
+		});
+
+		$(".quantity-left-minus").on('click', function (e) {
+			var product_qty = parseInt(document.getElementById("quantity").value);
+			if (product_qty<=1) {
+				alert("Không thể giảm số lượng sản phẩm xuống nữa");
+			} else {
+				document.getElementById("quantity").value = product_qty - 1;
+			}
+		});
+
+		$(".quantity-right-plus").on('click', function (e) {
+			var product_qty = parseInt(document.getElementById("quantity").value);
+			if (product_qty>=100) {
+				alert("Không thể tăng số lượng sản phẩm lên nữa");
+			} else {
+				document.getElementById("quantity").value = product_qty + 1;
+			}
+		});
+
+		$("#quantity").on("keypress", function(e){
+			if (e.which == 13)
+			{
+				var product_qty = parseInt(document.getElementById("quantity").value);
+				if (product_qty>100||product_qty<1)
+				{
+					alert("Số lượng sản phẩm không hợp lệ!");
+					document.getElementById("quantity").value = 1;
+				}
+			}
+			
+		});
 	});
 </script>
 
