@@ -1,14 +1,14 @@
 {% extends "../base.html" %}
 {% load static %}
-{% block title %}Delivery Address{%endblock %}
+{% block title %}Địa chỉ giao{%endblock %}
 {% block content %}
 
 <div class="container">
   <div class="col-12">
-    <h1 class="h2">Delivery Address</h1>
+    <h1 class="h2">Địa chỉ giao</h1>
   </div>
   <div class="col-12">
-    <p>Please select your delivery address</p>
+    <p>Chọn địa chỉ để nhận hàng</p>
   </div>
   <hr />
 </div>
@@ -17,16 +17,16 @@
 <div class="container">
   <div class="row g-3">
     {% if addresses|length == 0 %}
-    <div class="col-12">There are no delivery addresses, <a href="{% url 'add_address' %}">add address</a></div>
+    <div class="col-12">Không có địa chỉ nhận hàng, hãy thử thêm<a href="{% url 'add_address' %}"> địa chỉ</a></div>
     {% else %}
     <div class="col-md-4 col-lg-4 order-md-last p-0 order-3">
     
 <div class="d-flex bd-highlight ms-0">
-  <div class="p-2 flex-grow-1 bd-highlight">Sub Total:</div>
+  <div class="p-2 flex-grow-1 bd-highlight">Đơn hàng</div>
   <div class="p-2 bd-highlight"><span class="fw-bold h5">£</span><span id="sub_total"class="fw-bold h5">{{cart.get_subtotal_price}}</span></div>
 </div>
 <div class="d-flex bd-highlight">
-  <div class="p-2 flex-grow-1 bd-highlight">Delivery Cost:</div>
+  <div class="p-2 flex-grow-1 bd-highlight">Phí giao hàng</div>
   <div class="p-2 bd-highlight"><span class="fw-bold h5">£</span><span id="delivery_price" class="fw-bold h5">{{cart.get_delivery_price}}</span></div>
 </div>
 <div class="d-flex bd-highlight">

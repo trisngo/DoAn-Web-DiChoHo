@@ -17,8 +17,6 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('product/<slug:slug>', views.product_detail, name='product_detail'),
     path('shop/<slug:category_slug>/', views.category_list, name='category_list'),
-    # Hiện cái path phía dưới không sử dụng
-    # path('filter_product/', views.filter_product, name='filter_product'),
     path('cart/', views.cart_view, name='cart'),
     path('cart/add/', views.cart_add, name='cart_add'),
     path('cart/delete/', views.cart_delete, name='cart_delete'),
@@ -27,8 +25,10 @@ urlpatterns = [
     path("addresses/", views.view_address, name="addresses"),
     path("add_address/", views.add_address, name="add_address"),
     path("addresses/edit/<slug:id>/", views.edit_address, name="edit_address"),
-    path("addresses/delete/<slug:id>/", views.delete_address, name="delete_address"),
-    path("addresses/set_default/<slug:id>/", views.set_default, name="set_default"),
+    path("addresses/delete/<slug:id>/",
+         views.delete_address, name="delete_address"),
+    path("addresses/set_default/<slug:id>/",
+         views.set_default, name="set_default"),
     path("user_orders/", views.user_orders, name="user_orders"),
 
     path('search/', views.search_views, name='search_views'),

@@ -108,10 +108,10 @@
           <hr />
           <p class="d-flex total-price">
             <span>Tổng số tiền</span>
-            <span>{{cart.get_total_price}}đ</span>
+            <span style="text-transform: lowercase;">{{cart.get_total_price}}đ</span>
           </p>
         </div>
-        <p class>
+        <p class="row justify-content-center">
           <a role="button" href="{% url 'checkout:deliverychoices' %}" class="btn btn-primary py-3 px-4">Thanh toán</a>
         </p>
       </div>
