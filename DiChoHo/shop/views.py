@@ -150,20 +150,18 @@ def profile_view(request):
                 return HttpResponseRedirect('profile')
             else:
                 messages.error(request, 'Mật khẩu được đổi không thành công')
-                fm=PasswordChangeForm(request.user)
-                return render(request,'/profile.html',{'form':fm})
-    else:
-        fm=PasswordChangeForm(request.user)
-        userid = request.user.id
-        orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
-        user1 = get_object_or_404(User, id=userid)
-        profile = Profile.objects.filter(id=userid)
-        # user_address = Address.objects.filter(user = request.user).order_by("-default")
-        return render(
-            request,
-            'profile.html',
-            {'user': user1, 'profile': profile, 'orders': orders, 'form': fm}
-        )
+
+    fm=PasswordChangeForm(request.user)
+    userid = request.user.id
+    orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
+    user1 = get_object_or_404(User, id=userid)
+    profile = Profile.objects.filter(id=userid)
+    # user_address = Address.objects.filter(user = request.user).order_by("-default")
+    return render(
+        request,
+        'profile.html',
+        {'user': user1, 'profile': profile, 'orders': orders, 'form': fm}
+    )
 # view category và product mẫu.
 
 
