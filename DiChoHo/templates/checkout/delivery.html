@@ -21,6 +21,9 @@
 <section class="ftco-section">
 	<div class="container">
 	<h3 class="mb-4 billing-heading">Billing Details</h3>
+	{% for message in messages %}
+	<h5 class="msg">{{message}}</h5>
+	{% endfor %}
 		<div class="row justify-content-center">
 			<div class="col-12 col-md-7">
 				<div class="ftco-animate">
@@ -180,13 +183,11 @@
 								<div class="form-group">
 									<div class="col-md-12">
 										<div class="checkbox">
-											<label><input type="checkbox" value="" class="mr-2"> I have read and accept
-												the
-												terms and conditions</label>
+											<label><input type="checkbox" value="" class="mr-2"> Tôi đã đọc và chấp nhận các điều kiện và điều khoảng</label>
 										</div>
 									</div>
 								</div>
-								<p><a href="{% url 'checkout:payment_selection' %}" class="btn btn-primary py-3 px-4">Place an order</a></p>
+								<p><a href="{% url 'checkout:payment_option' %}" class="btn btn-primary py-3 px-4">Place an order</a></p>
 							</div>
 						</div>
 					</div>

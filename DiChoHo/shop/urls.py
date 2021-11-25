@@ -1,6 +1,6 @@
 from django.urls import path
 from shop import views
-
+from django.conf.urls import url
 
 urlpatterns = [
     # khi goi duong dan home thi se render html minh lien ket ben views.py, name dung de goi duong dan cho nhanh
@@ -32,5 +32,6 @@ urlpatterns = [
     path("user_orders/", views.user_orders, name="user_orders"),
 
     path('search/', views.search_views, name='search_views'),
-    path('404/', views.page_not_found, name='404')
+    path('404/', views.page_not_found, name='404'),
+    url(r'^password/$', views.change_password, name='change_password'),
 ]

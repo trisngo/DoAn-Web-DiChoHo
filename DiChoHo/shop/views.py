@@ -14,6 +14,8 @@ from orders.models import Order
 from django.core.paginator import EmptyPage, Paginator
 from django.template import RequestContext
 import django.shortcuts
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 # get index page
 
@@ -137,29 +139,29 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-
 @login_required
 def profile_view(request):
     if request.method == "POST":
-        if 'oldPassword' and 'newPassword' and 'retypePassword' in request.POST:
-            if User.objects.filter(password=request.POST.get("oldPassword")).exists():
-                pass
+            fm = PasswordChangeForm(request.user,request.POST)
+            if fm.is_valid():
+                user = fm.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, "Mật khẩu được đổi thành công")
+                return redirect('profile')
             else:
-                return render(
-                    request,
-                    'profile.html'
-                )
-    else:
-        userid = request.user.id
-        user1 = get_object_or_404(User, id=userid)
-        profile = Profile.objects.filter(id=userid)
-        # user_address = Address.objects.filter(user = request.user).order_by("-default")
-        return render(
-            request,
-            'profile.html',
-            {'user': user1, 'profile': profile}
-        )
+                messages.error(request, 'Mật khẩu được đổi không thành công')
 
+    fm=PasswordChangeForm(request.user)
+    userid = request.user.id
+    orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
+    user1 = get_object_or_404(User, id=userid)
+    profile = Profile.objects.filter(id=userid)
+    # user_address = Address.objects.filter(user = request.user).order_by("-default")
+    return render(
+        request,
+        'profile.html',
+        {'user': user1, 'profile': profile, 'orders': orders, 'form': fm}
+    )
 # view category và product mẫu.
 
 
@@ -302,3 +304,22 @@ def search_views(request):
 
 def page_not_found(request):
     return render(request, '404.html')
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        print("user")
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            print(user)
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'profile.html', {
+        'form': form
+    })
