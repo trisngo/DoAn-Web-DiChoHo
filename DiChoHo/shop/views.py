@@ -15,6 +15,7 @@ from django.core.paginator import EmptyPage, Paginator
 from django.template import RequestContext
 import django.shortcuts
 
+
 # get index page
 
 
@@ -151,13 +152,14 @@ def profile_view(request):
                 )
     else:
         userid = request.user.id
+        orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
         user1 = get_object_or_404(User, id=userid)
         profile = Profile.objects.filter(id=userid)
         # user_address = Address.objects.filter(user = request.user).order_by("-default")
         return render(
             request,
             'profile.html',
-            {'user': user1, 'profile': profile}
+            {'user': user1, 'profile': profile, 'orders': orders}
         )
 
 # view category và product mẫu.

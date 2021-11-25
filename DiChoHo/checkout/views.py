@@ -2,6 +2,7 @@ import json
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect
 from .models import DeliveryOptions
 from shop.cart import Cart
 from django.contrib import messages
@@ -9,11 +10,29 @@ from shop.models import Address
 from orders.models import Order, OrderItem
 
 @login_required
-def deliverychoices(request):
-    deliveryoptions = DeliveryOptions.objects.filter(is_active=True) # lấy danh sách các dịch vụ vận chuyển nào đang hoạt động
-    
+def delivery(request):
     session = request.session
 
+    if "cart" not in request.session:
+        messages.warning(request, "Vì tình hình dịch bệnh hệ thống chỉ nhận đơn hàng trên 200.000 VNĐ. Xin quý khách thông cảm")
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+    print(session['cart'])
+    total_product_price = 0
+    for item in session['cart']:
+        total_product_price += int(session['cart'][item]['price']) * int(session['cart'][item]['qty'])
+    print(total_product_price)
+    
+    if (total_product_price <= 0):
+        messages.warning(request, "Vui lòng thêm hàng vào giỏ trước khi thanh toán")
+        return redirect('cart')
+
+    if (total_product_price < 200000):
+        messages.warning(request, "Vì tình hình dịch bệnh hệ thống chỉ nhận đơn hàng trên 200.000 VNĐ. Xin quý khách thông cảm")
+        return redirect('cart')
+
+    deliveryoptions = DeliveryOptions.objects.filter(is_active=True) # lấy danh sách các dịch vụ vận chuyển nào đang hoạt động
+    
     addresses = Address.objects.filter(user=request.user).order_by("-default")
 
     if "address" not in request.session:
@@ -22,7 +41,7 @@ def deliverychoices(request):
         session["address"]["address_id"] = str(addresses[0].id)
         session.modified = True
         
-    return render(request, "checkout/checkout.html", {"deliveryoptions": deliveryoptions, "addresses": addresses})
+    return render(request, "checkout/delivery.html", {"deliveryoptions": deliveryoptions, "addresses": addresses})
 
 
 @login_required
@@ -65,24 +84,21 @@ def cart_update_delivery(request):
 #     return render(request, "checkout/delivery_address.html", {"addresses": addresses})
 
 @login_required
-def payment_selection(request):
+def payment_option(request):
 
     session = request.session
     if "purchase" not in request.session:
-        messages.success(request, "Please select delivery option")
+        messages.success(request, "Vui lòng lựa chọn đơn vị giao hàng")
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
     if "address" not in request.session:
-        messages.success(request, "Please select address option")
+        messages.success(request, "Vui lòng lựa chọn địa chỉ giao hàng")
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
     return render(request, "checkout/payment_selection.html", {})
 
-####
-# PayPal
-####
-from paypalcheckoutsdk.orders import OrdersGetRequest
 
+from paypalcheckoutsdk.orders import OrdersGetRequest
 from .paypal import PayPalClient
 
 
@@ -115,8 +131,7 @@ def payment_complete(request):
     for item in cart:
         OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
 
-    return JsonResponse("Payment completed!", safe=False)
-
+    return JsonResponse("Thanh toán thành công", safe=False)
 
 
 @login_required
