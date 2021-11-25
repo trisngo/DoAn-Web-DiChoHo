@@ -149,17 +149,27 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+
 @login_required
 def profile_view(request):
-    user_id = request.user.id
-    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
-    user = get_object_or_404(User, id=user_id)
-    profile = Profile.objects.filter(id=user_id)
-    
-    print(user.first_name)
-    return render(request, 'profile.html', {"user": user, "profile": profile, "orders": orders})
+    if request.method == "POST":
+        if 'oldPassword' and 'newPassword' and 'retypePassword' in request.POST:
+            if User.objects.filter(password=request.POST.get("oldPassword")).exists():
+                pass
+            else:
+                return render(
+                    request,
+                    'profile.html'
+                )
+    else:
+        return render(
+            request,
+            'profile.html'
+        )
 
 # view category và product mẫu.
+
+
 def category_list(request, category_slug=None):
     category = get_object_or_404(Category, slug=category_slug)
     allFilterProducts = Product.objects.filter(category=category)
