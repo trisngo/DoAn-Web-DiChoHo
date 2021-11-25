@@ -95,84 +95,22 @@ class Product(models.Model):
         return reverse('product_detail', args=[self.slug])
 
 
-
-
-# talbe comment:
-# id rating
-# id Product
-# id User
-# comment
-# rating(desau)
-
-class DeliveryOptions(models.Model):
-
-    DELIVERY_CHOICES = [
-        ("IS", "In Store"),
-        ("HD", "Home Delivery"),
-        ("DD", "Digital Delivery"),
-    ]
-
-    delivery_name = models.CharField(
-        verbose_name=_("delivery_name"),
-        help_text=_("Required"),
-        max_length=255,
-    )
-
-    
-    delivery_price = models.DecimalField(
-        verbose_name=_("delivery price"),
-        help_text=_("Maximum 999.99"),
-        error_messages={
-            "name": {
-                "max_length": _("The price must be between 0 and 999.99."),
-            },
-        },
-        max_digits=5,
-        decimal_places=2,
-    )
-    delivery_method = models.CharField(
-        choices=DELIVERY_CHOICES,
-        verbose_name=_("delivery_method"),
-        help_text=_("Required"),
-        max_length=255,
-    )
-    delivery_timeframe = models.CharField(
-        verbose_name=_("delivery timeframe"),
-        help_text=_("Required"),
-        max_length=255,
-    )
-    delivery_window = models.CharField(
-        verbose_name=_("delivery window"),
-        help_text=_("Required"),
-        max_length=255,
-    )
-    order = models.IntegerField(verbose_name=_("list order"), help_text=_("Required"), default=0)
-    is_active = models.BooleanField(default=True)
+class Rating(models.Model):
+    rating_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user')
+    product = models.ForeignKey(
+        Product, related_name="items", on_delete=models.CASCADE)
+    content = models.TextField(blank=True)
+    ratingStar = models.DecimalField(max_digits=6, decimal_places=1, validators=[
+        MinValueValidator(0), MaxValueValidator(5)])
 
     class Meta:
-        verbose_name = _("Delivery Option")
-        verbose_name_plural = _("Delivery Options")
+        verbose_name = "Rating"
+        verbose_name_plural = "Rating"
 
-    def __str__(self):
-        return self.delivery_name
+    def str(self):
+        return "Rating"
 
 
-class PaymentSelections(models.Model):
-    """
-    Store payment options
-    """
-
-    name = models.CharField(
-        verbose_name=_("name"),
-        help_text=_("Required"),
-        max_length=255,
-    )
-
-    is_active = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = _("Payment Selection")
-        verbose_name_plural = _("Payment Selections")
-
-    def __str__(self):
-        return self.name
