@@ -86,7 +86,7 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     objects = models.Manager()
-    sold = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    users_wishlist = models.ManyToManyField(User, related_name="user_wishlist", blank=True)
     class Meta:
         verbose_name_plural = 'Products'
         ordering = ('-created',)
