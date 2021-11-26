@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from .cart import Cart
-from orders.models import Order
+from orders.models import Order, OrderItem
 from django.core.paginator import EmptyPage, Paginator
 from django.template import RequestContext
 import django.shortcuts
@@ -28,10 +28,11 @@ def handler404(request):
 
 
 def index_view(request):
-    products = Product.objects.all().order_by('-sold')
+    order_items = OrderItem.objects.all().order_by('-quantity')
+    # products = Product.objects.all().order_by('-sold')
     products2 = Product.objects.all().order_by('-updated')
     products3 = Product.objects.all().order_by('price')
-    return render(request, 'index.html', {'products': products, 'products2': products2, 'products3': products3},)
+    return render(request, 'index.html', {'order_items': order_items, 'products2': products2, 'products3': products3},)
 # get product page
 
 
