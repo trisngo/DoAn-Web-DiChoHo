@@ -292,13 +292,6 @@ def set_default(request, id):
     return redirect("account:addresses")
 
 
-@ login_required
-def user_orders(request):
-    user_id = request.user.id
-    orders = Order.objects.filter(
-        user_id=user_id).filter(billing_status=True)
-    return render(request, "profile/user_orders.html", {"orders": orders})
-
 
 def search_views(request):
     query_item = request.GET.get("search").lower()

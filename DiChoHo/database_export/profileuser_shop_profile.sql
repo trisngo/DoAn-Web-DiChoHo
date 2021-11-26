@@ -26,13 +26,11 @@ CREATE TABLE `shop_profile` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `birth_date` date DEFAULT NULL,
   `profile_pic` varchar(100) NOT NULL,
-  `address` longtext NOT NULL,
-  `phone` varchar(100) NOT NULL,
   `user_id` int NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `shop_profile_user_id_251f5ef7_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +39,7 @@ CREATE TABLE `shop_profile` (
 
 LOCK TABLES `shop_profile` WRITE;
 /*!40000 ALTER TABLE `shop_profile` DISABLE KEYS */;
-INSERT INTO `shop_profile` VALUES (1,NULL,'defaultavatar.png','','',1),(3,NULL,'defaultavatar.png','','',3);
+INSERT INTO `shop_profile` VALUES (1,'2001-11-25','defaultavatar.png',1),(6,'2001-11-27','defaultavatar.png',6),(7,'2001-11-28','defaultavatar.png',7),(8,'1980-11-28','defaultavatar.png',8),(9,'2001-08-06','defaultavatar.png',9),(10,NULL,'defaultavatar.png',10);
 /*!40000 ALTER TABLE `shop_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-09 17:48:23
+-- Dump completed on 2021-11-26 17:20:17

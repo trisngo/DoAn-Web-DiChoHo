@@ -36,7 +36,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$260000$zeiBjAIXk5DXBLBbNgxhbk$U0pPRFOwSiSM5kXRmQ520u4xWLDAZnAeqZRkaJrhoW4=','2021-11-09 09:34:22.859619',1,'admins','','','',1,1,'2021-10-22 08:43:39.546261'),(3,'pbkdf2_sha256$260000$JZTzWzilOD93VhqMhq4jnl$dMaQn1JezZVturEzy53zQM+wcwlI3rLTSMHIintUOao=','2021-11-01 03:22:14.355480',0,'huy123','','','',0,1,'2021-10-22 10:08:15.685984');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$260000$zeiBjAIXk5DXBLBbNgxhbk$U0pPRFOwSiSM5kXRmQ520u4xWLDAZnAeqZRkaJrhoW4=','2021-11-26 09:27:27.606212',1,'admins','Admin','Root','admin@dichoho.com',1,1,'2021-10-22 08:43:39.000000'),(6,'pbkdf2_sha256$260000$XXMev3uOinYAZUbO5RYA6q$PzA0ovUQbGjec7uDIYvpBM6yiDZYAU/qdq4Ocxdilro=','2021-11-26 09:56:26.000000',0,'hoangne','Hoàng','Nguyễn Văn Minh','hoangne@gmail.com',0,1,'2021-11-26 09:55:27.000000'),(7,'pbkdf2_sha256$260000$zirO70Chgzo5HWqAdMOrsd$PnOwmgQzW3gvu/0mdz2336Cc5DvcfRMT70Q/kWUSoGQ=','2021-11-26 09:58:40.000000',0,'ductri','Tri','Ngo Duc','ngoductri14@gmail.com',1,1,'2021-11-26 09:57:58.000000'),(8,'pbkdf2_sha256$260000$RXiFBzYvTw3N1pwaaY3hr1$GtI73n9GPgSJeCm598rgTzJXu3GbbIGOpLNqKYeB4Og=','2021-11-26 10:01:12.000000',0,'huy123','Huy','Bui','huybui@gmail.com',0,1,'2021-11-26 10:00:41.000000'),(9,'pbkdf2_sha256$260000$j2DrO8HPM9fHnNCAziaJ4L$QX1c+0unNirhEDe/VCj9MDgXVdQcSZVHls4HLYoMuj4=','2021-11-26 10:11:08.783258',0,'ducanhbd','Anh','Bui Duc','anhbd@gmail.com',0,1,'2021-11-26 10:02:10.000000'),(10,'pbkdf2_sha256$260000$QzF8gsCkbEsUnaC46Sh8bP$XCbfLDJJJ9khIR9/zwXfQS7k6qjX124zMaV4x21WWO8=','2021-11-26 10:17:00.231243',1,'admin','','','admin@dichoho.com',1,1,'2021-11-26 10:16:04.538637');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-09 17:48:22
+-- Dump completed on 2021-11-26 17:20:18

@@ -65,23 +65,6 @@ def cart_update_delivery(request):
         return response
 
 
-# @login_required
-# def delivery_address(request):
-
-#     session = request.session
-#     if "purchase" not in request.session:
-#         messages.success(request, "Please select delivery option")
-#         return HttpResponseRedirect(request.META["HTTP_REFERER"])
-
-#     addresses = Address.objects.filter(user=request.user).order_by("-default")
-
-#     if "address" not in request.session:
-#         session["address"] = {"address_id": str(addresses[0].id)}
-#     else:
-#         session["address"]["address_id"] = str(addresses[0].id)
-#         session.modified = True
-
-#     return render(request, "checkout/delivery_address.html", {"addresses": addresses})
 
 @login_required
 def payment_option(request):
