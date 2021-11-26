@@ -185,7 +185,8 @@
 
 	<div class="container">
 		<div class="row">
-			{% for product in products|slice:":12" %}
+		{% for item in order_items|slice:":12" %}
+		{% with product=item.product %} 
 			<div class="col-md-4 col-lg-2 ftco-animate">
 				<div class="product bg-white" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
 					<a href="{{ product.get_absolute_url }}" class="img-prod"><img class="img-fluid"
@@ -212,7 +213,9 @@
 					</div>
 				</div>
 			</div>
-			{% endfor %}
+
+		{% endwith %}
+		{% endfor %}
 		</div>
 	</div>
 </section>
