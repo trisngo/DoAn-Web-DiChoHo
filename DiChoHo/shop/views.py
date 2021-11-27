@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Profile, User, Category, Product, Address, Rating
 from django.contrib import messages
 from django.urls import reverse
@@ -16,7 +16,7 @@ from django.template import RequestContext
 import django.shortcuts
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-
+from .forms import AddressForm
 # get index page
 
 
@@ -157,12 +157,13 @@ def profile_view(request):
     userid = request.user.id
     orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
     user1 = get_object_or_404(User, id=userid)
-    profile = Profile.objects.filter(id=userid)
+    profile = get_object_or_404(Profile,id=userid)
     # user_address = Address.objects.filter(user = request.user).order_by("-default")
+    addresses = Address.objects.filter(user=request.user)
     return render(
         request,
         'profile.html',
-        {'user': user1, 'profile': profile, 'orders': orders, 'form': fm}
+        {'user': user1, 'profile': profile, 'orders': orders, 'form': fm, 'addresses': addresses}
     )
 # view category và product mẫu.
 
@@ -233,63 +234,51 @@ def cart_update(request):
         response = JsonResponse({"qty": cartqty, "subtotal": cartsubtotal})
         return response
 
-# ----------------view xử lí Delivery và Payment ----------------------
-# Addresses chưa có thêm template để update address(chờ)
-
-
-@ login_required
-def view_address(request):
-    addresses = Address.objects.filter(customer=request.user)
-    return render(request, "account/dashboard/addresses.html", {"addresses": addresses})
-
 
 @ login_required
 def add_address(request):
     if request.method == "POST":
-        address_form = UserAddressForm(data=request.POST)
+        address_form = AddressForm(data=request.POST)
         if address_form.is_valid():
             address_form = address_form.save(commit=False)
-            address_form.customer = request.user
+            address_form.user = request.user
             address_form.save()
-            return HttpResponseRedirect(reverse("account:addresses"))
+            return HttpResponseRedirect(reverse("profile"))
     else:
-        address_form = UserAddressForm()
-    return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
+        address_form = AddressForm()
+    return render(request, "edit_address.html", {"form": address_form})
 
 
 @ login_required
 def edit_address(request, id):
     if request.method == "POST":
-        address = Address.objects.get(pk=id, customer=request.user)
-        address_form = UserAddressForm(instance=address, data=request.POST)
+        address = Address.objects.get(pk=id, user=request.user)
+        address_form = AddressForm(instance=address, data=request.POST)
         if address_form.is_valid():
             address_form.save()
-            return HttpResponseRedirect(reverse("account:addresses"))
+            return HttpResponseRedirect(reverse("profile"))
     else:
-        address = Address.objects.get(pk=id, customer=request.user)
-        address_form = UserAddressForm(instance=address)
-    return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
+        address = Address.objects.get(pk=id, user=request.user)
+        address_form = AddressForm(instance=address)
+    return render(request, "edit_address.html", {"form": address_form})
 
 
 @ login_required
 def delete_address(request, id):
-    address = Address.objects.filter(pk=id, customer=request.user).delete()
-    return redirect("account:addresses")
+    address = Address.objects.filter(pk=id, user=request.user).delete()
+    return redirect("profile")
 
 
 @ login_required
-def set_default(request, id):
-    Address.objects.filter(customer=request.user,
-                           default=True).update(default=False)
-    Address.objects.filter(
-        pk=id, customer=request.user).update(default=True)
-
+def set_address_default(request, id):
+    Address.objects.filter(user=request.user,default=True).update(default=False)
+    Address.objects.filter(pk=id, user=request.user).update(default=True)
     previous_url = request.META.get("HTTP_REFERER")
 
     if "delivery_address" in previous_url:
         return redirect("checkout:delivery_address")
 
-    return redirect("account:addresses")
+    return redirect("profile")
 
 
 
@@ -302,21 +291,3 @@ def search_views(request):
 def page_not_found(request):
     return render(request, '404.html')
 
-
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        print("user")
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            print(user)
-            return redirect('change_password')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = PasswordChangeForm(request.user)
-    return render(request, 'profile.html', {
-        'form': form
-    })

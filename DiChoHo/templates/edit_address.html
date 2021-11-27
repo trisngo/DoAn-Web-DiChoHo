@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Edit Addresses{% endblock %}
+
+{% block content %}
+<div
+  class="hero-wrap hero-bread"
+  style="background-image: url('/static/images/bg_1.jpg')"
+>
+  <div class="container">
+    <div
+      class="
+        row
+        no-gutters
+        slider-text
+        align-items-center
+        justify-content-center
+      "
+    >
+      <div class="col-md-9 ftco-animate text-center">
+        <h1 class="mb-0 bread">Tạo/Chỉnh sửa địa chỉ nhận hàng</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-6 mx-auto">
+  {% comment %} <h1 class="h3">Create/Edit Address</h1>
+  <div>Add a new delivery <b>address</b> and delivery preferences</div>
+  <hr /> {% endcomment %}
+  <form name="address_form" class="account-form" method="post" enctype="multipart/form-data">
+    {% if form.errors %}
+    <div class="alert alert-primary" role="alert">
+      Error: Please try again!
+    </div>
+    {% endif %}
+    {% csrf_token %}
+    <label class="small fw-bold">{{ form.full_name.label}}</label>
+    {{ form.full_name }}
+    <label class="small fw-bold">{{ form.phone.label}}</label>
+    {{ form.phone }}
+    <label class="small fw-bold">{{ form.address_line.label}}</label>
+    {{ form.address_line }}
+    <label class="small fw-bold">{{ form.city.label}}</label>
+    {{ form.city }}
+    <button class="btn btn-primary btn-block py-2 mb-4 mt-4 fw-bold w-100" type="button" value="Submit" onclick="submitForm()">
+    Add Address
+    </button>
+  </form>
+
+</div>
+
+<script> 
+function submitForm() {
+   var form = document.getElementsByName('address_form')[0];
+   form.submit(); // Submit the form
+   form.reset();  // Reset all form data
+   return false; // Prevent page refresh
+}
+</script>
+{% endblock %}
