@@ -11,6 +11,7 @@ import uuid
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
+    phone = phone = models.CharField(_("Số điện thoại"), max_length=10, default="0")
     profile_pic = models.ImageField(
         default='defaultavatar.png', upload_to='profiles_pics')
 
@@ -26,17 +27,13 @@ def save_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 class Address(models.Model):
-    """
-    Address
-    """
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.CASCADE)
     full_name = models.CharField(_("Họ tên người nhận"), max_length=150, default="Chưa tạo")
-    phone = models.CharField(_("Số điện thoại"), max_length=50)
-    postcode = models.CharField(_("Postcode"), max_length=50)
-    address_line = models.CharField(_("Địa chỉ giao hàng"), max_length=255)
+    phone = models.CharField(_("Số điện thoại nhận hàng"), max_length=10)
+    address_line = models.CharField(_("Địa chỉ nhận hàng"), max_length=255)
     city = models.CharField(_("Thành Phố/Tỉnh"), max_length=150, default="Chưa tạo")
-    delivery_instructions = models.CharField(_("Ghi chú giao hàng"), max_length=255, default="Không có")
+    delivery_instructions = models.CharField(_("Ghi chú nhận hàng"), max_length=255, default="Không có")
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     default = models.BooleanField(_("Default"), default=False)
