@@ -3,3 +3,16 @@ ducanhbd: AdminAdmin123
 ductri: AdminAdmin123
 hoangne: AdminAdmin123
 huy123: AdminAdmin123
+
+paypal sandbox test account:
+Email ID:
+sb-wtipl8697620@personal.example.com
+System Generated Password:
+v;L1$z?Q
+
+
+Email ID:
+sb-07o468697619@business.example.com
+System Generated Password:
+GCQ>S0g"
+

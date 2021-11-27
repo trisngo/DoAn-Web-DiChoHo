@@ -160,17 +160,18 @@
 								<div class="form-group">
 									<div class="col-md-12">
 										<div class="radio">
-											<label><input type="radio" name="optradio" class="mr-2">Trả tiền khi nhận hàng(COD)</label>
+											<label><input type="radio" name="paymentopt" class="mr-2" id="COD" value="1" >Trả tiền khi nhận hàng(COD)</label>
 										</div>
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="col-md-12">
 										<div class="radio">
-											<label><input type="radio" name="optradio" class="mr-2"> Paypal</label>
+											<label><input type="radio" name="paymentopt" class="mr-2" id="paypal" value="2"> Paypal</label>
 										</div>
 									</div>
 								</div>
+								<span id="optionpay">Chưa chọn</span>
 								<div class="form-group">
 									<div class="col-md-12">
 										<span class="fw-bold">Nếu bạn bấm tiêp tục thì bạn đã chấp nhận các điều kiện và điều khoảng của chúng tôi</span>
@@ -201,6 +202,24 @@
 			success: function (json) {
 				document.getElementById("total").innerHTML = json.total;
 				document.getElementById("delivery_price").innerHTML = json.delivery_price;
+			},
+			error: function (xhr, errmsg, err) {},
+		});
+
+	});
+
+	$('input[type=radio][name=paymentopt]').on('change', function (e) {
+		e.preventDefault($(this).val());
+		$.ajax({
+			type: "POST",
+			url: '{% url "checkout:session_update_payment" %}',
+			data: {
+				paymentoption: $(this).val(),
+				csrfmiddlewaretoken: "{{csrf_token}}",
+				action: "post",
+			},
+			success: function (json) {
+				document.getElementById("optionpay").innerHTML = json.payment;
 			},
 			error: function (xhr, errmsg, err) {},
 		});

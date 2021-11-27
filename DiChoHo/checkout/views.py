@@ -6,10 +6,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import DeliveryOptions
 from shop.cart import Cart
 from django.contrib import messages
-from shop.models import Address, Product
+from shop.models import Address, Product, User
 from orders.models import Order, OrderItem
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from .paypal import PayPalClient
+from decimal import Decimal
 
 @login_required
 def delivery(request):
@@ -69,10 +70,12 @@ def cart_update_delivery(request):
         return response
 
 @login_required
-def cart_update_payment(request):
+def session_update_payment(request):
     session = request.session
+
     if request.POST.get("action") == "post":
         payment_option = int(request.POST.get("paymentoption"))
+        print(payment_option)
 
         session["payment"] = {
                 "payment_option": payment_option,
@@ -96,41 +99,66 @@ def payment_option(request):
         messages.success(request, "Vui lòng lựa chọn phương thức thanh toán")
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
     
-    if session["purchase"]["delivery_id"] == 1:
-        # payment_complete(request)
+    print(session["payment"]["payment_option"])
+    if session["payment"]["payment_option"] == 1:
+        print("hello")
+        payment_complete(request)
         return render(request, "checkout/payment_successful.html", {})
-    else if session["purchase"]["delivery_id"] == 2:
+    elif session["purchase"]["delivery_id"] == 2:
         return render(request, "checkout/payment_selection.html", {})
     else:
         messages.success(request, "Có lỗi xảy ra")
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
-    
+
     return render(request, "checkout/payment_selection.html", {})
+    
+   
 
 @login_required
 def payment_complete(request):
-    PPClient = PayPalClient()
-
-    body = json.loads(request.body)
-    data = body["orderID"]
+    
     user_id = request.user.id
 
-    requestorder = OrdersGetRequest(data)
-    response = PPClient.client.execute(requestorder)
-
-    total_paid = response.result.purchase_units[0].amount.value
-
+    session = request.session
+    user = get_object_or_404(User, id=user_id)
+    address = get_object_or_404(Address, user=user, default=True)
     cart = Cart(request)
-    order = Order.objects.create(
-        user_id=user_id,
-        full_name=response.result.purchase_units[0].shipping.name.full_name,
-        email=response.result.payer.email_address,
-        address=response.result.purchase_units[0].shipping.address.address_line_1,
-        total_paid=response.result.purchase_units[0].amount.value,
-        order_key=response.result.id,
-        payment_option="paypal",
-        billing_status=True,
-    )
+
+    if session["payment"]["payment_option"] == 1:
+        payment = "cod"
+        order = Order.objects.create(
+            user_id=user_id,
+            full_name=address.full_name,
+            email=user.email,
+            address=address.address_line,
+            phone=address.phone,
+            total_paid=Decimal(cart.get_total_price()),
+            order_key="cod",
+            payment_option=payment,
+            billing_status=True,
+        )
+    else:
+        PPClient = PayPalClient()
+
+        body = json.loads(request.body)
+        data = body["orderID"]
+        payment = "paypal"
+
+        requestorder = OrdersGetRequest(data)
+        response = PPClient.client.execute(requestorder)
+
+        order = Order.objects.create(
+            user_id=user_id,
+            full_name=address.full_name,
+            email=user.email,
+            address=address.address_line,
+            phone=address.phone,
+            total_paid=response.result.purchase_units[0].amount.value, #lấy thông tin tiền được trả từ paypal
+            order_key=response.result.id,
+            payment_option=payment,
+            billing_status=True,
+        )
+
     order_id = order.pk
 
     for item in cart:
@@ -145,4 +173,5 @@ def payment_complete(request):
 def payment_successful(request):
     cart = Cart(request)
     cart.clear()
+    del request.session["payment"]
     return render(request, "checkout/payment_successful.html", {})
