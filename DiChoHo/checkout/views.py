@@ -2,11 +2,11 @@ import json
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import DeliveryOptions
 from shop.cart import Cart
 from django.contrib import messages
-from shop.models import Address
+from shop.models import Address, Product
 from orders.models import Order, OrderItem
 
 @login_required
@@ -113,7 +113,8 @@ def payment_complete(request):
 
     for item in cart:
         OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
-
+        sold_qty = get_object_or_404(Product, id=item["product"].id).sold + item["qty"]
+        Product.objects.filter(id=item["product"].id).update(sold=sold_qty)
     return JsonResponse("Thanh toán thành công", safe=False)
 
 

@@ -31,19 +31,11 @@ def handler404(request):
 
 
 def index_view(request):
-    order_items = OrderItem.objects.all().order_by('-quantity')
-    # products = Product.objects.all().order_by('-sold')
+    products = Product.objects.all().order_by('-sold')
     products2 = Product.objects.all().order_by('-updated')
     products3 = Product.objects.all().order_by('price')
-    return render(request, 'index.html', {'order_items': order_items, 'products2': products2, 'products3': products3},)
-# get product page
+    return render(request, 'index.html', {'products': products, 'products2': products2, 'products3': products3},)
 
-
-def product_view(request):
-    return render(
-        request,
-        'product-single.html',
-    )
 
 # get shop page
 
@@ -206,6 +198,7 @@ def category_list(request, category_slug=None):
     return render(request, 'category.html', {'category': category, 'products': products})
 
 
+
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
     all_relative_products = Product.objects.filter(category=product.category)
@@ -213,6 +206,26 @@ def product_detail(request, slug):
     relative_products = p.page(1)
     allRatings = Rating.objects.filter(product=product)
     return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings})
+
+def review_add(request):
+    # if request.method == "POST":
+    if request.POST.get("action") == "post":
+        user_id = request.user.id
+        product_id = int(request.POST.get("productid"))
+        product = get_object_or_404(Product, id=product_id)
+        user = get_object_or_404(User, id=user_id)
+        content = str(request.POST.get("content"))
+        ratingStar = float(request.POST.get("star"))
+
+        rating =  Rating.objects.create(
+            user = user,
+            product = product,
+            content = content,
+            ratingStar = ratingStar,
+        )
+
+        response = JsonResponse({"user": user})
+        return response
 
 
 #  ----------------view xử lí giỏ hàng------------------------

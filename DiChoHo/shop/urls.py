@@ -6,7 +6,6 @@ urlpatterns = [
     # khi goi duong dan home thi se render html minh lien ket ben views.py, name dung de goi duong dan cho nhanh
     path('', views.index_view, name='home'),
     path('shop/', views.shop_view, name='shop'),
-    path('product/', views.product_view, name='product'),
     path('login/', views.login_view, name='login'),
     path('register/', views.register_view, name='register'),
     path('contact/', views.contact_view, name='contact'),

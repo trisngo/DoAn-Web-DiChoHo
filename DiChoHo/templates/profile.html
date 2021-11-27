@@ -243,13 +243,8 @@
                   Tổng tiền đã trả: <span class="fw-bold">{{ order.total_paid }} VNĐ</span>
                 </div>
               </div>
-              <div class="col-md-5 col-lg-4 order-md-last p-0 order-3">
-                <div class="d-grid gap-2 ">
-                  {% comment %} <button class="btn btn-warning" type="button">Hủy đơn</button> {% endcomment %}
-                  <button class="btn btn-light" type="button" data-toggle="modal" data-target="#guidanhgia"> Để lại đánh giá</button>
-                </div>
-              </div>
-              <div class="col-md-7 col-lg-8 p-0">
+              <div class="col-md-7 col-lg-12 p-0">
+
                 {% for item in order.items.all %}
                 <div class="card mb-3 border-0">
                   <div class="row g-0">
@@ -265,6 +260,7 @@
                         <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">
                           <p class="card-text small">{{item.product.title}}</p>
                         </a>
+                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#guidanhgia"> Để lại đánh giá</button>
                       </div>
                     </div>
                   </div>

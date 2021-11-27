@@ -82,6 +82,7 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     objects = models.Manager()
+    sold = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     users_wishlist = models.ManyToManyField(User, related_name="user_wishlist", blank=True)
     class Meta:
         verbose_name_plural = 'Products'
@@ -92,8 +93,6 @@ class Product(models.Model):
 
 
 class Rating(models.Model):
-    rating_id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='user')
     product = models.ForeignKey(
