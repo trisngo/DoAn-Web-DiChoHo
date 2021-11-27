@@ -115,6 +115,7 @@ def payment_complete(request):
         OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
         sold_qty = get_object_or_404(Product, id=item["product"].id).sold + item["qty"]
         Product.objects.filter(id=item["product"].id).update(sold=sold_qty)
+
     return JsonResponse("Thanh toán thành công", safe=False)
 
 
