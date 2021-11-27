@@ -93,8 +93,6 @@ class Product(models.Model):
 
 
 class Rating(models.Model):
-    rating_id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='user')
     product = models.ForeignKey(
