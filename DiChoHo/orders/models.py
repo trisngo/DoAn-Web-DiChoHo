@@ -15,7 +15,7 @@ class Order(models.Model):
     created = models.DateTimeField(auto_now_add=True) #ngay tạo order, còn hiểu là ngày thanh toán
     updated = models.DateTimeField(auto_now=True) #nếu có update thay đổi do trục trặc hay khách thay đổi địa chỉ thì thêm ngày
     total_paid = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
-    order_key = models.CharField(max_length=200) # mã order key, cung cấp cho khách hàng chứ không cung cấp id order cho khách(khách hàng tìm kiếm lại bằng mã này)
+    order_key = models.CharField(max_length=200) # mã order key của paypal trả về, nếu cod thì là cod
     payment_option = models.CharField(max_length=200, blank=True)
     billing_status = models.BooleanField(default=False) #thanh toán hay chưa
 

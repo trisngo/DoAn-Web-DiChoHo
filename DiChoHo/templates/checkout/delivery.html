@@ -99,7 +99,7 @@
 								<div class="card pb-3 rounded-0">
 									<div class="card-header bg-white small text-muted">
 										{% if address.default %}
-										Selected
+										Chọn
 										{% endif %}
 										&nbsp;
 									</div>
@@ -109,13 +109,13 @@
 										<p class="card-text m-0">{{address.address_line2}}</p>
 										<p class="card-text m-0">{{address.town_city}}</p>
 										<p class="card-text m-0">{{address.postcode}}</p>
-										<p class="card-text m-0">Phone number: {{address.phone}}</p>
+										<p class="card-text m-0">Số điện thoại: {{address.phone}}</p>
 										<div class="pt-5">
 											<a href="{% url 'edit_address' address.id %}"
-												class="text-decoration-none">Edit</a>
+												class="text-decoration-none">Điều chỉnh</a>
 											{% if not address.default %}
 											| <a href="{% url 'set_address_default' address.id %}"
-												class="text-decoration-none">Select</a>
+												class="text-decoration-none">Chọn</a>
 											{% endif %}
 										</div>
 									</div>
@@ -160,34 +160,24 @@
 								<div class="form-group">
 									<div class="col-md-12">
 										<div class="radio">
-											<label><input type="radio" name="optradio" class="mr-2"> Direct Bank
-												Tranfer</label>
+											<label><input type="radio" name="paymentopt" class="mr-2" id="COD" value="1" >Trả tiền khi nhận hàng(COD)</label>
 										</div>
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="col-md-12">
 										<div class="radio">
-											<label><input type="radio" name="optradio" class="mr-2"> Check
-												Payment</label>
+											<label><input type="radio" name="paymentopt" class="mr-2" id="paypal" value="2"> Paypal</label>
 										</div>
 									</div>
 								</div>
+								<span id="optionpay">Chưa chọn</span>
 								<div class="form-group">
 									<div class="col-md-12">
-										<div class="radio">
-											<label><input type="radio" name="optradio" class="mr-2"> Paypal</label>
-										</div>
+										<span class="fw-bold">Nếu bạn bấm tiêp tục thì bạn đã chấp nhận các điều kiện và điều khoảng của chúng tôi</span>
 									</div>
 								</div>
-								<div class="form-group">
-									<div class="col-md-12">
-										<div class="checkbox">
-											<label><input type="checkbox" value="" class="mr-2"> Tôi đã đọc và chấp nhận các điều kiện và điều khoảng</label>
-										</div>
-									</div>
-								</div>
-								<p><a href="{% url 'checkout:payment_option' %}" class="btn btn-primary py-3 px-4">Place an order</a></p>
+								<p><a href="{% url 'checkout:payment_option' %}" class="btn btn-primary py-3 px-4">Tiếp tục</a></p>
 							</div>
 						</div>
 					</div>
@@ -212,6 +202,24 @@
 			success: function (json) {
 				document.getElementById("total").innerHTML = json.total;
 				document.getElementById("delivery_price").innerHTML = json.delivery_price;
+			},
+			error: function (xhr, errmsg, err) {},
+		});
+
+	});
+
+	$('input[type=radio][name=paymentopt]').on('change', function (e) {
+		e.preventDefault($(this).val());
+		$.ajax({
+			type: "POST",
+			url: '{% url "checkout:session_update_payment" %}',
+			data: {
+				paymentoption: $(this).val(),
+				csrfmiddlewaretoken: "{{csrf_token}}",
+				action: "post",
+			},
+			success: function (json) {
+				document.getElementById("optionpay").innerHTML = json.payment;
 			},
 			error: function (xhr, errmsg, err) {},
 		});
