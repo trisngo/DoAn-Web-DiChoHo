@@ -28,19 +28,11 @@ def handler404(request):
 
 
 def index_view(request):
-    order_items = OrderItem.objects.all().order_by('-quantity')
-    # products = Product.objects.all().order_by('-sold')
+    products = Product.objects.all().order_by('-sold')
     products2 = Product.objects.all().order_by('-updated')
     products3 = Product.objects.all().order_by('price')
-    return render(request, 'index.html', {'order_items': order_items, 'products2': products2, 'products3': products3},)
-# get product page
+    return render(request, 'index.html', {'products': products, 'products2': products2, 'products3': products3},)
 
-
-def product_view(request):
-    return render(
-        request,
-        'product-single.html',
-    )
 
 # get shop page
 

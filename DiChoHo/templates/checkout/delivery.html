@@ -114,7 +114,7 @@
 											<a href="{% url 'edit_address' address.id %}"
 												class="text-decoration-none">Edit</a>
 											{% if not address.default %}
-											| <a href="{% url 'set_default' address.id %}"
+											| <a href="{% url 'set_address_default' address.id %}"
 												class="text-decoration-none">Select</a>
 											{% endif %}
 										</div>
