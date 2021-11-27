@@ -8,6 +8,10 @@ from shop.cart import Cart
 from django.contrib import messages
 from shop.models import Address
 from orders.models import Order, OrderItem
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 
 @login_required
 def delivery(request):
@@ -114,6 +118,8 @@ def payment_complete(request):
     for item in cart:
         OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
 
+    send_mail(user_id,order)
+
     return JsonResponse("Thanh toán thành công", safe=False)
 
 
@@ -122,3 +128,18 @@ def payment_successful(request):
     cart = Cart(request)
     cart.clear()
     return render(request, "checkout/payment_successful.html", {})
+
+@csrf_exempt
+def send_mail(uid,order):
+    template = render_to_string('send_bill.html',{'name':uid.first_name,'order':order})
+    email = EmailMessage(
+        'Cám ơn bạn đã mua hàng tại trang Đi chợ hộ của chúng tôi !',
+        template,
+        settings.EMAIL_HOST_USER, 
+        [uid.email],
+    )
+
+    email.fail_silently = False
+    email.send()
+    print(email)
+    return redirect('login')
