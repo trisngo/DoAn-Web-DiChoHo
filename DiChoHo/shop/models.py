@@ -107,5 +107,3 @@ class Rating(models.Model):
 
     def str(self):
         return "Rating"
-
-
