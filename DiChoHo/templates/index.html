@@ -205,8 +205,8 @@
 								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{product.id}}">
 									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product.id}}" data-value="{{product.id}}"></i></span>
 								</a>
-								<a href="#" class="heart d-flex justify-content-center align-items-center ">
-									<span><i class="ion-ios-heart"></i></span>
+								<a href="#" class="heart d-flex justify-content-center align-items-center jqueryCatch" id="wishlist1{{product.id}}">
+									<span><i class="ion-ios-heart jqueryCatch" id="wishlist2{{product.id}}"></i></span>
 								</a>
 							</div>
 						</div>
@@ -252,11 +252,11 @@
 						</div>
 						<div class="bottom-area d-flex px-3">
 							<div class="m-auto d-flex">
-								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{product2.id}}">
-									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product2.id}}" data-value="{{product2.id}}"></i></span>
+								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd3{{product2.id}}">
+									<span><i class="ion-ios-cart jqueryCatch" id="productAdd4{{product2.id}}"></i></span>
 								</a>
-								<a href="#" class="heart d-flex justify-content-center align-items-center ">
-									<span><i class="ion-ios-heart"></i></span>
+								<a href="#" class="heart d-flex justify-content-center align-items-center jqueryCatch" id="wishlist3{{product2.id}}">
+									<span><i class="ion-ios-heart jqueryCatch" id="wishlist4{{product2.id}}"></i></span>
 								</a>
 							</div>
 						</div>
@@ -295,11 +295,11 @@
 						</div>
 						<div class="bottom-area d-flex px-3">
 							<div class="m-auto d-flex">
-								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd1{{product3.id}}">
-									<span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product3.id}}" data-value="{{product3.id}}"></i></span>
+								<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1 jqueryCatch" id="productAdd5{{product3.id}}">
+									<span><i class="ion-ios-cart jqueryCatch" id="productAdd6{{product3.id}}"></i></span>
 								</a>
-								<a href="#" class="heart d-flex justify-content-center align-items-center ">
-									<span><i class="ion-ios-heart"></i></span>
+								<a href="#" class="heart d-flex justify-content-center align-items-center jqueryCatch" id="wishlist5{{product3.id}}">
+									<span><i class="ion-ios-heart jqueryCatch" id="wishlist6{{product3.id}}"></i></span>
 								</a>
 							</div>
 						</div>
@@ -358,6 +358,10 @@
         {
           var prodid = clickElementId.replace("productAdd1","");
           prodid = prodid.replace("productAdd2","");
+		  prodid = prodid.replace("productAdd3","");
+		  prodid = prodid.replace("productAdd4","");
+		  prodid = prodid.replace("productAdd5","");
+		  prodid = prodid.replace("productAdd6","");
           $.ajax({
           type: 'POST',
           url: '{% url "cart_add" %}',
@@ -369,6 +373,28 @@
           },
           success: function (json) {
             console.log("Add successfully");
+          },
+          error: function (xhr, errmsg, err) {}
+        });
+        }
+		else 
+        {
+          var prodid = clickElementId.replace("wishlist1","");
+          prodid = prodid.replace("wishlist2","");
+		  prodid = prodid.replace("wishlist3","");
+		  prodid = prodid.replace("wishlist4","");
+		  prodid = prodid.replace("wishlist5","");
+		  prodid = prodid.replace("wishlist6","");
+          $.ajax({
+          type: 'POST',
+          url: '{% url "wishlist_add" %}',
+          data: {
+            productid: prodid,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post'
+          },
+          success: function (json) {
+            console.log("Add to wishlist successfully");
           },
           error: function (xhr, errmsg, err) {}
         });

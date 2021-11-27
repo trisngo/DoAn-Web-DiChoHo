@@ -12,6 +12,8 @@ urlpatterns = [
     path('contact/', views.contact_view, name='contact'),
     path('about/', views.about_view, name='about'),
     path('wishlist/', views.wishlist_view, name='wishlist'),
+    path('wishlist/add', views.wishlist_add, name='wishlist_add'),
+    path('wishlist/delete', views.wishlist_delete, name='wishlist_delete'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
     path('product/<slug:slug>', views.product_detail, name='product_detail'),
@@ -22,7 +24,8 @@ urlpatterns = [
     path('cart/update/', views.cart_update, name='cart_update'),
     #address and order
     path("profile/add_addresses", views.add_address, name="add_address"),
-    path("profile/edit_addresses/<slug:id>/", views.edit_address, name="edit_address"),
+    path("profile/edit_addresses/<slug:id>/",
+         views.edit_address, name="edit_address"),
     path("profile/delete_addresses/<slug:id>/",
          views.delete_address, name="delete_address"),
     path("profile/set_address_default/<slug:id>/",
