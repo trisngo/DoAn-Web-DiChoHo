@@ -158,7 +158,6 @@
       if (clickElementId.includes("delete-")) {
         var prodid = clickElementId.replace("delete-button","");
         prodid = prodid.replace("delete-span","");
-        console.log(prodid);
         $.ajax({
         type: "POST",
         url: '{% url "cart_delete" %}',
