@@ -12,11 +12,13 @@ from django.template.loader import render_to_string
 from .cart import Cart
 from orders.models import Order, OrderItem
 from django.core.paginator import EmptyPage, Paginator
-from django.template import RequestContext
+from django.template import RequestContext, context
 import django.shortcuts
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from .forms import AddressForm
+from django.core.mail import EmailMessage
+from django.conf import settings
 # get index page
 
 
@@ -102,6 +104,7 @@ def register_view(request):
                 user.profile.address = address
                 user.profile.phone = phone
                 user.save()
+                send_mail(user)
                 return redirect('home')
         else:
             messages.info(request, 'Password is not same')
@@ -291,3 +294,17 @@ def search_views(request):
 def page_not_found(request):
     return render(request, '404.html')
 
+@csrf_exempt
+def send_mail(uid):
+    template = render_to_string('email_send.html',{'name':uid.first_name})
+    email = EmailMessage(
+        'Cám ơn bạn đã đăng ký tại trang Đi chợ hộ của chúng tôi !',
+        template,
+        settings.EMAIL_HOST_USER, 
+        [uid.email],
+    )
+
+    email.fail_silently = False
+    email.send()
+    print(email)
+    return redirect('login')
