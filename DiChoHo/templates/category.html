@@ -123,9 +123,9 @@
                 </a>
                 <a
                   href="#"
-                  class="heart d-flex justify-content-center align-items-center"
+                  class="heart d-flex justify-content-center align-items-center jqueryCatch" id="wishlist1{{product.id}}"
                 >
-                  <span><i class="ion-ios-heart"></i></span>
+                  <span><i class="ion-ios-heart jqueryCatch" id="wishlist2{{product.id}}"></i></span>
                 </a>
               </div>
             </div>
@@ -207,6 +207,24 @@ $(document).ready(function(){
           },
           success: function (json) {
             console.log("Add successfully");
+          },
+          error: function (xhr, errmsg, err) {}
+        });
+        }
+        else 
+        {
+          var prodid = clickElementId.replace("wishlist1","");
+          prodid = prodid.replace("wishlist2","");
+          $.ajax({
+          type: 'POST',
+          url: '{% url "wishlist_add" %}',
+          data: {
+            productid: prodid,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post'
+          },
+          success: function (json) {
+            console.log("Add to wishlist successfully");
           },
           error: function (xhr, errmsg, err) {}
         });

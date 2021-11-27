@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
@@ -12,11 +13,13 @@ from django.template.loader import render_to_string
 from .cart import Cart
 from orders.models import Order, OrderItem
 from django.core.paginator import EmptyPage, Paginator
-from django.template import RequestContext
+from django.template import RequestContext, context
 import django.shortcuts
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from .forms import AddressForm
+from django.core.mail import EmailMessage
+from django.conf import settings
 # get index page
 
 
@@ -94,6 +97,7 @@ def register_view(request):
                 user.profile.address = address
                 user.profile.phone = phone
                 user.save()
+                send_mail(user)
                 return redirect('home')
         else:
             messages.info(request, 'Password is not same')
@@ -123,39 +127,59 @@ def about_view(request):
 
 @login_required
 def wishlist_view(request):
+    products = Product.objects.filter(users_wishlist=request.user)
     return render(
         request,
         'wishlist.html',
+        {"products": products}
     )
+
+
+def wishlist_add(request):
+    prodid = request.POST.get("productid")
+    product = get_object_or_404(Product, id=prodid)
+    product.users_wishlist.add(request.user)
+    response = JsonResponse({"Status": "OK"})
+    return response
+
+
+def wishlist_delete(request):
+    prodid = request.POST.get("productid")
+    product = get_object_or_404(Product, id=prodid)
+    product.users_wishlist.remove(request.user)
+    response = JsonResponse({"Status": "OK"})
+    return response
 
 
 def logout_view(request):
     logout(request)
     return redirect('/')
 
+
 @login_required
 def profile_view(request):
     if request.method == "POST":
-            fm = PasswordChangeForm(request.user,request.POST)
-            if fm.is_valid():
-                user = fm.save()
-                update_session_auth_hash(request, user)
-                messages.success(request, "Mật khẩu được đổi thành công")
-                return redirect('profile')
-            else:
-                messages.error(request, 'Mật khẩu được đổi không thành công')
+        fm = PasswordChangeForm(request.user, request.POST)
+        if fm.is_valid():
+            user = fm.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Mật khẩu được đổi thành công")
+            return redirect('profile')
+        else:
+            messages.error(request, 'Mật khẩu được đổi không thành công')
 
-    fm=PasswordChangeForm(request.user)
+    fm = PasswordChangeForm(request.user)
     userid = request.user.id
     orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
     user1 = get_object_or_404(User, id=userid)
-    profile = get_object_or_404(Profile,id=userid)
+    profile = get_object_or_404(Profile, id=userid)
     # user_address = Address.objects.filter(user = request.user).order_by("-default")
     addresses = Address.objects.filter(user=request.user)
     return render(
         request,
         'profile.html',
-        {'user': user1, 'profile': profile, 'orders': orders, 'form': fm, 'addresses': addresses}
+        {'user': user1, 'profile': profile, 'orders': orders,
+            'form': fm, 'addresses': addresses}
     )
 # view category và product mẫu.
 
@@ -171,7 +195,7 @@ def category_list(request, category_slug=None):
         products = p.page(currentPage)
     except EmptyPage:
         return redirect('404')
-    return render(request, 'category.html', {'category': category.slug, 'products': products})
+    return render(request, 'category.html', {'category': category, 'products': products})
 
 
 
@@ -284,7 +308,8 @@ def delete_address(request, id):
 
 @ login_required
 def set_address_default(request, id):
-    Address.objects.filter(user=request.user,default=True).update(default=False)
+    Address.objects.filter(
+        user=request.user, default=True).update(default=False)
     Address.objects.filter(pk=id, user=request.user).update(default=True)
     previous_url = request.META.get("HTTP_REFERER")
 
@@ -292,7 +317,6 @@ def set_address_default(request, id):
         return redirect("checkout:delivery_address")
 
     return redirect("profile")
-
 
 
 def search_views(request):
@@ -303,4 +327,19 @@ def search_views(request):
 
 def page_not_found(request):
     return render(request, '404.html')
+
+@csrf_exempt
+def send_mail(uid):
+    template = render_to_string('email_send.html',{'name':uid.first_name})
+    email = EmailMessage(
+        'Cám ơn bạn đã đăng ký tại trang Đi chợ hộ của chúng tôi !',
+        template,
+        settings.EMAIL_HOST_USER, 
+        [uid.email],
+    )
+
+    email.fail_silently = False
+    email.send()
+    print(email)
+    return redirect('login')
 
