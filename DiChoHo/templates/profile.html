@@ -193,7 +193,7 @@
 
 
         <div class="tab-pane" id="security">
-          <div class="form-group" style= "font-size:25px;" >Đổi mật khẩu</div>
+          <div class="form-group" style="font-size:25px;" >Đổi mật khẩu</div>
           <h6>Để bảo mật tài khoản vui lòng không chia sẻ mật khẩu cho người khác</h6>
           <hr>
           <div class="block_change_password" style="display:block;margin-top:0em;">
@@ -262,7 +262,7 @@
                         <a class="text-decoration-none" id="{{ item.product.id }}" href="{{ item.product.get_absolute_url }}">
                           <p class="card-text medium">{{item.product.title}}</p>
                         </a>
-                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#guidanhgia"> Để
+                        <button class="btn btn-primary jQueryEvaluate" id="evaluate{{item.product.id}}" type="button" data-toggle="modal" data-target="#guidanhgia"> Để
                           lại đánh giá</button>
                       </div>
                     </div>
@@ -298,13 +298,13 @@
 
                 <div class="md-form">
                   <label data-error="wrong" data-success="right" for="form2">Số sao cho sản phẩm</label>
-                  <input type="number" id="form2" class="form-control validate">
+                  <input type="number" id="form2" class="form-control validate" min="1" max="5">
                 </div>
               </div>
 
               <div class="modal-footer justify-content-center">
                 <a type="button" class="btn btn-outline-warning waves-effect text-light submit_evaluation"
-                  style="background:#02BE6E; border-radius: 15px">Gửi đánh giá</a>
+                  style="background:#02BE6E; border-radius: 15px" id="sendRating">Gửi đánh giá</a>
               </div>
             </div>
           </div>
@@ -314,6 +314,10 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="alert alert-success" role="alert" style="position: fixed; bottom: 0px; left: 25px; display: none;" id="success-alert">
+  Đã gửi đánh giá
 </div>
 
 <script>
@@ -349,6 +353,45 @@
     e.preventDefault();
     $('#guidanhgia').modal('toggle');
     return false;
+  });
+
+  $(document).ready(function(){
+    var prodid = ""
+    $(".jQueryEvaluate").on("click",function(e){
+      if (e.target !== e.currentTarget) return;
+      e.preventDefault();
+			var clickElementId = e.target.id;
+			if (clickElementId.includes("evaluate"))
+      {
+        prodid = clickElementId.replace("evaluate","");
+      }
+    });
+
+    $("#sendRating").on("click",function(event) {
+            var contentRating = document.getElementById("form3").value;
+            var starRating = parseFloat(document.getElementById("form2").value);
+            console.log(contentRating);
+            $.ajax({
+            type: 'POST',
+            url: '{% url "review_add" %}',
+            data: {
+              productid: prodid,
+              star: starRating,
+              content: contentRating,
+              csrfmiddlewaretoken: "{{csrf_token}}",
+              action: 'post'
+            },
+            success: function (json) {
+              document.getElementById("form3").value = "";
+              document.getElementById("form2").value = "";
+              $("#success-alert").show();
+              $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+              $("#success-alert").slideUp(500);
+            });
+            },
+            error: function (xhr, errmsg, err) {}
+          });
+        })
   });
 </script>
 <br><br><br>

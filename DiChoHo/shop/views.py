@@ -194,12 +194,13 @@ def edit_profile(request, id):
         user = User.objects.get(pk=id, username=request.user)
         user_form = UserForm(instance=user, data=request.POST)
         profile = Profile.objects.get(pk=id, user=request.user)
-        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        profile_form = ProfileForm(
+            request.POST, request.FILES, instance=profile)
         if user_form.is_valid() and profile_form.is_valid():
             print(profile_form)
             print(profile)
             user_form.save()
- 
+
             if Profile.objects.filter(user=request.user).exists() == False:
                 profile_form.save(commit=False)
                 profile_form.user = request.user
@@ -211,8 +212,7 @@ def edit_profile(request, id):
         user_form = UserForm(instance=user)
         profile = Profile.objects.get(pk=id, user=request.user)
         profile_form = ProfileForm(instance=user)
-    return render(request, "edit_profile.html", {"user_form": user_form, "profile_form": profile_form })
-
+    return render(request, "edit_profile.html", {"user_form": user_form, "profile_form": profile_form})
 
 
 def category_list(request, category_slug=None):
@@ -229,7 +229,6 @@ def category_list(request, category_slug=None):
     return render(request, 'category.html', {'category': category, 'products': products})
 
 
-
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)
     all_relative_products = Product.objects.filter(category=product.category)
@@ -241,6 +240,7 @@ def product_detail(request, slug):
         count += 1
     return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings, "rating_count": count})
 
+
 def review_add(request):
     # if request.method == "POST":
     if request.POST.get("action") == "post":
@@ -251,14 +251,16 @@ def review_add(request):
         content = str(request.POST.get("content"))
         ratingStar = float(request.POST.get("star"))
 
-        rating =  Rating.objects.create(
-            user = user,
-            product = product,
-            content = content,
-            ratingStar = ratingStar,
+        rating = Rating.objects.create(
+            user=user,
+            product=product,
+            content=content,
+            ratingStar=ratingStar,
         )
-
-        response = JsonResponse({"user": user})
+        # Dòng này gửi dữ liệu nó bị lỗi, vì cái user không nhét vô response được
+        # response = JsonResponse({"user": user})
+        # Tui chỉ gửi về chữ status thui, nếu cần gì thì chỉnh lại
+        response = JsonResponse({"status": "OK"})
         return response
 
 
@@ -362,19 +364,19 @@ def search_views(request):
 def page_not_found(request):
     return render(request, '404.html')
 
+
 @csrf_exempt
 def send_mail(uid):
-    template = render_to_string('email_send.html',{'name':uid.first_name})
+    template = render_to_string('email_send.html', {'name': uid.first_name})
     email = EmailMessage(
         'Cám ơn bạn đã đăng ký tại trang Đi chợ hộ của chúng tôi !',
         template,
-        settings.EMAIL_HOST_USER, 
+        settings.EMAIL_HOST_USER,
         [uid.email],
     )
 
     email.fail_silently = False
-    email.content_subtype='html'
+    email.content_subtype = 'html'
     email.send()
     print(email)
     return redirect('login')
-
