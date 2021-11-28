@@ -1,3 +1,4 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
@@ -30,19 +31,11 @@ def handler404(request):
 
 
 def index_view(request):
-    order_items = OrderItem.objects.all().order_by('-quantity')
-    # products = Product.objects.all().order_by('-sold')
+    products = Product.objects.all().order_by('-sold')
     products2 = Product.objects.all().order_by('-updated')
     products3 = Product.objects.all().order_by('price')
-    return render(request, 'index.html', {'order_items': order_items, 'products2': products2, 'products3': products3},)
-# get product page
+    return render(request, 'index.html', {'products': products, 'products2': products2, 'products3': products3},)
 
-
-def product_view(request):
-    return render(
-        request,
-        'product-single.html',
-    )
 
 # get shop page
 
@@ -134,39 +127,59 @@ def about_view(request):
 
 @login_required
 def wishlist_view(request):
+    products = Product.objects.filter(users_wishlist=request.user)
     return render(
         request,
         'wishlist.html',
+        {"products": products}
     )
+
+
+def wishlist_add(request):
+    prodid = request.POST.get("productid")
+    product = get_object_or_404(Product, id=prodid)
+    product.users_wishlist.add(request.user)
+    response = JsonResponse({"Status": "OK"})
+    return response
+
+
+def wishlist_delete(request):
+    prodid = request.POST.get("productid")
+    product = get_object_or_404(Product, id=prodid)
+    product.users_wishlist.remove(request.user)
+    response = JsonResponse({"Status": "OK"})
+    return response
 
 
 def logout_view(request):
     logout(request)
     return redirect('/')
 
+
 @login_required
 def profile_view(request):
     if request.method == "POST":
-            fm = PasswordChangeForm(request.user,request.POST)
-            if fm.is_valid():
-                user = fm.save()
-                update_session_auth_hash(request, user)
-                messages.success(request, "Mật khẩu được đổi thành công")
-                return redirect('profile')
-            else:
-                messages.error(request, 'Mật khẩu được đổi không thành công')
+        fm = PasswordChangeForm(request.user, request.POST)
+        if fm.is_valid():
+            user = fm.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Mật khẩu được đổi thành công")
+            return redirect('profile')
+        else:
+            messages.error(request, 'Mật khẩu được đổi không thành công')
 
-    fm=PasswordChangeForm(request.user)
+    fm = PasswordChangeForm(request.user)
     userid = request.user.id
     orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
     user1 = get_object_or_404(User, id=userid)
-    profile = get_object_or_404(Profile,id=userid)
+    profile = get_object_or_404(Profile, id=userid)
     # user_address = Address.objects.filter(user = request.user).order_by("-default")
     addresses = Address.objects.filter(user=request.user)
     return render(
         request,
         'profile.html',
-        {'user': user1, 'profile': profile, 'orders': orders, 'form': fm, 'addresses': addresses}
+        {'user': user1, 'profile': profile, 'orders': orders,
+            'form': fm, 'addresses': addresses}
     )
 # view category và product mẫu.
 
@@ -182,7 +195,8 @@ def category_list(request, category_slug=None):
         products = p.page(currentPage)
     except EmptyPage:
         return redirect('404')
-    return render(request, 'category.html', {'category': category.slug, 'products': products})
+    return render(request, 'category.html', {'category': category, 'products': products})
+
 
 
 def product_detail(request, slug):
@@ -192,6 +206,26 @@ def product_detail(request, slug):
     relative_products = p.page(1)
     allRatings = Rating.objects.filter(product=product)
     return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings})
+
+def review_add(request):
+    # if request.method == "POST":
+    if request.POST.get("action") == "post":
+        user_id = request.user.id
+        product_id = int(request.POST.get("productid"))
+        product = get_object_or_404(Product, id=product_id)
+        user = get_object_or_404(User, id=user_id)
+        content = str(request.POST.get("content"))
+        ratingStar = float(request.POST.get("star"))
+
+        rating =  Rating.objects.create(
+            user = user,
+            product = product,
+            content = content,
+            ratingStar = ratingStar,
+        )
+
+        response = JsonResponse({"user": user})
+        return response
 
 
 #  ----------------view xử lí giỏ hàng------------------------
@@ -274,7 +308,8 @@ def delete_address(request, id):
 
 @ login_required
 def set_address_default(request, id):
-    Address.objects.filter(user=request.user,default=True).update(default=False)
+    Address.objects.filter(
+        user=request.user, default=True).update(default=False)
     Address.objects.filter(pk=id, user=request.user).update(default=True)
     previous_url = request.META.get("HTTP_REFERER")
 
@@ -282,7 +317,6 @@ def set_address_default(request, id):
         return redirect("checkout:delivery_address")
 
     return redirect("profile")
-
 
 
 def search_views(request):
@@ -308,3 +342,4 @@ def send_mail(uid):
     email.send()
     print(email)
     return redirect('login')
+

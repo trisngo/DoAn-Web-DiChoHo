@@ -38,7 +38,7 @@ CREATE TABLE `orders_order` (
   PRIMARY KEY (`id`),
   KEY `orders_order_user_id_e9b59eb1_fk_auth_user_id` (`user_id`),
   CONSTRAINT `orders_order_user_id_e9b59eb1_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,7 @@ CREATE TABLE `orders_order` (
 
 LOCK TABLES `orders_order` WRITE;
 /*!40000 ALTER TABLE `orders_order` DISABLE KEYS */;
-INSERT INTO `orders_order` VALUES (1,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 09:32:26.320435','2021-11-26 09:32:26.320435',400000,'2H089670064955226','paypal',1,1),(2,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 09:35:02.039680','2021-11-26 09:35:02.039680',2650000,'1HP552942P733761W','paypal',1,1),(3,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 09:36:17.079166','2021-11-26 09:36:17.079166',470000,'5XN146331E589764K','paypal',1,1),(4,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 09:53:01.622502','2021-11-26 09:53:01.622502',892000,'1N182494RW294664Y','paypal',1,1),(5,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 10:12:30.264676','2021-11-26 10:12:30.264676',811000,'1NV86842XW071705L','paypal',1,9);
+INSERT INTO `orders_order` VALUES (1,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 09:32:26.320435','2021-11-26 09:32:26.320435',400000,'2H089670064955226','paypal',1,1),(2,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 09:35:02.039680','2021-11-26 09:35:02.039680',2650000,'1HP552942P733761W','paypal',1,1),(3,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 09:36:17.079166','2021-11-26 09:36:17.079166',470000,'5XN146331E589764K','paypal',1,1),(4,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 09:53:01.622502','2021-11-26 09:53:01.622502',892000,'1N182494RW294664Y','paypal',1,1),(5,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-26 10:12:30.264676','2021-11-26 10:12:30.264676',811000,'1NV86842XW071705L','paypal',1,9),(6,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-27 11:39:11.183182','2021-11-27 11:39:11.183182',684000,'710037215K489820X','paypal',1,7),(7,'John Doe','sb-wtipl8697620@personal.example.com','1 Main St','','2021-11-27 11:41:05.875255','2021-11-27 11:41:05.875255',1120000,'7G661961L91762743','paypal',1,7);
 /*!40000 ALTER TABLE `orders_order` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-26 17:20:18
+-- Dump completed on 2021-11-27 18:43:39

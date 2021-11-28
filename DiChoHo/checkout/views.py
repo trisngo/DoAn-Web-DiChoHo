@@ -2,16 +2,22 @@ import json
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import DeliveryOptions
 from shop.cart import Cart
 from django.contrib import messages
-from shop.models import Address
+from shop.models import Address, Product, User
 from orders.models import Order, OrderItem
+
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
+
+from paypalcheckoutsdk.orders import OrdersGetRequest
+from .paypal import PayPalClient
+from decimal import Decimal
+
 
 @login_required
 def delivery(request):
@@ -39,11 +45,13 @@ def delivery(request):
     
     addresses = Address.objects.filter(user=request.user).order_by("-default")
 
-    if "address" not in request.session:
-        session["address"] = {"address_id": str(addresses[0].id)}
-    else:
-        session["address"]["address_id"] = str(addresses[0].id)
-        session.modified = True
+    if Address.objects.filter(user=request.user).exists():
+
+        if "address" not in request.session:
+            session["address"] = {"address_id": str(addresses[0].id)}
+        else:
+            session["address"]["address_id"] = str(addresses[0].id)
+            session.modified = True
         
     return render(request, "checkout/delivery.html", {"deliveryoptions": deliveryoptions, "addresses": addresses})
 
@@ -68,55 +76,102 @@ def cart_update_delivery(request):
         response = JsonResponse({"total": updated_total_price, "delivery_price": delivery_type.delivery_price})
         return response
 
+@login_required
+def session_update_payment(request):
+    session = request.session
+
+    if request.POST.get("action") == "post":
+        payment_option = int(request.POST.get("paymentoption"))
+        print(payment_option)
+
+        session["payment"] = {
+                "payment_option": payment_option,
+        }
+        response = JsonResponse({"payment": payment_option})
+        return response
 
 
 @login_required
 def payment_option(request):
-
     session = request.session
     if "purchase" not in request.session:
         messages.success(request, "Vui lòng lựa chọn đơn vị giao hàng")
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
     if "address" not in request.session:
-        messages.success(request, "Vui lòng lựa chọn địa chỉ giao hàng")
+        messages.success(request, "Vui lòng lựa chọn địa chỉ nhận hàng / Vui lòng tạo mới nếu chưa có địa chỉ nhận hàng.")
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+    if "payment" not in request.session:
+        messages.success(request, "Vui lòng lựa chọn phương thức thanh toán")
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+    
+    print(session["payment"]["payment_option"])
+    if session["payment"]["payment_option"] == 1:
+        print("hello")
+        payment_complete(request)
+        return render(request, "checkout/payment_successful.html", {})
+    elif session["purchase"]["delivery_id"] == 2:
+        return render(request, "checkout/payment_selection.html", {})
+    else:
+        messages.success(request, "Có lỗi xảy ra")
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
     return render(request, "checkout/payment_selection.html", {})
-
-
-from paypalcheckoutsdk.orders import OrdersGetRequest
-from .paypal import PayPalClient
-
+    
+   
 
 @login_required
 def payment_complete(request):
-    PPClient = PayPalClient()
-
-    body = json.loads(request.body)
-    data = body["orderID"]
+    
     user_id = request.user.id
 
-    requestorder = OrdersGetRequest(data)
-    response = PPClient.client.execute(requestorder)
-
-    total_paid = response.result.purchase_units[0].amount.value
-
+    session = request.session
+    user = get_object_or_404(User, id=user_id)
+    address = get_object_or_404(Address, user=user, default=True)
     cart = Cart(request)
-    order = Order.objects.create(
-        user_id=user_id,
-        full_name=response.result.purchase_units[0].shipping.name.full_name,
-        email=response.result.payer.email_address,
-        address=response.result.purchase_units[0].shipping.address.address_line_1,
-        total_paid=response.result.purchase_units[0].amount.value,
-        order_key=response.result.id,
-        payment_option="paypal",
-        billing_status=True,
-    )
+
+    if session["payment"]["payment_option"] == 1:
+        payment = "cod"
+        order = Order.objects.create(
+            user_id=user_id,
+            full_name=address.full_name,
+            email=user.email,
+            address=address.address_line,
+            phone=address.phone,
+            total_paid=Decimal(cart.get_total_price()),
+            order_key="cod",
+            payment_option=payment,
+            billing_status=True,
+        )
+    else:
+        PPClient = PayPalClient()
+
+        body = json.loads(request.body)
+        data = body["orderID"]
+        payment = "paypal"
+
+        requestorder = OrdersGetRequest(data)
+        response = PPClient.client.execute(requestorder)
+
+        order = Order.objects.create(
+            user_id=user_id,
+            full_name=address.full_name,
+            email=user.email,
+            address=address.address_line,
+            phone=address.phone,
+            total_paid=response.result.purchase_units[0].amount.value, #lấy thông tin tiền được trả từ paypal
+            order_key=response.result.id,
+            payment_option=payment,
+            billing_status=True,
+        )
+
     order_id = order.pk
 
     for item in cart:
         OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
+        sold_qty = get_object_or_404(Product, id=item["product"].id).sold + item["qty"]
+        Product.objects.filter(id=item["product"].id).update(sold=sold_qty)
 
     send_mail(request.user,cart)
 
@@ -127,6 +182,7 @@ def payment_complete(request):
 def payment_successful(request):
     cart = Cart(request)
     cart.clear()
+    del request.session["payment"]
     return render(request, "checkout/payment_successful.html", {})
 
 @csrf_exempt

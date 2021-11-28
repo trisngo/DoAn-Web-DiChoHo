@@ -72,12 +72,17 @@
       <div class="col-md-2 col-lg- ftco-animate">
         <div class="product bg-white" style="text-overflow: ellipsis;max-width: 100%;overflow: hidden;height: 270px;">
           <a href="{{ product.get_absolute_url }}" class="img-prod">
-            <img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="Colorlib Template" />
+            <img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="product" />
             <div class="overlay"></div>
           </a>
 
           <div class="text py-3 pb-4 px-3 text-center">
-            <h3><a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
+            <h3 style="overflow: hidden;
+						text-overflow: ellipsis;
+						display: -webkit-box;
+						-webkit-line-clamp: 2;
+						-webkit-box-orient: vertical;">
+              <a href="{{ product.get_absolute_url }}">{{ product.title }}</a></h3>
             <div class="d-flex">
               <div class="pricing">
                 <p class="price">
@@ -94,12 +99,12 @@
                     align-items-center
                     mx-1
                     jqueryCatch
-                  "
-                  id="productAdd1{{product.id}}">
-                  <span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product.id}}" data-value="{{product.id}}"></i></span>
+                  " id="productAdd1{{product.id}}">
+                  <span><i class="ion-ios-cart jqueryCatch" id="productAdd2{{product.id}}"></i></span>
                 </a>
-                <a href="#" class="heart d-flex justify-content-center align-items-center">
-                  <span><i class="ion-ios-heart"></i></span>
+                <a href="#" class="heart d-flex justify-content-center align-items-center jqueryCatch"
+                  id="wishlist1{{product.id}}">
+                  <span><i class="ion-ios-heart jqueryCatch" id="wishlist2{{product.id}}"></i></span>
                 </a>
               </div>
             </div>
@@ -135,24 +140,23 @@
 {% endblock %}
 {% block arrow %}
 <div class="row">
-	<div class="mouse">
-		<a href="#" class="mouse-icon">
-			<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
-		</a>
-	</div>
+  <div class="mouse">
+    <a href="#" class="mouse-icon">
+      <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+    </a>
+  </div>
 </div>
 
 <script>
-    $(document).ready(function(){
-        $(".jqueryCatch").on('click', function (e) {
-        if(e.target !== e.currentTarget) return;
-        e.preventDefault();
-        var clickElementId = e.target.id;
-        if (clickElementId.includes("productAdd"))
-        {
-          var prodid = clickElementId.replace("productAdd1","");
-          prodid = prodid.replace("productAdd2","");
-          $.ajax({
+  $(document).ready(function () {
+    $(".jqueryCatch").on('click', function (e) {
+      if (e.target !== e.currentTarget) return;
+      e.preventDefault();
+      var clickElementId = e.target.id;
+      if (clickElementId.includes("productAdd")) {
+        var prodid = clickElementId.replace("productAdd1", "");
+        prodid = prodid.replace("productAdd2", "");
+        $.ajax({
           type: 'POST',
           url: '{% url "cart_add" %}',
           data: {
@@ -167,9 +171,26 @@
           },
           error: function (xhr, errmsg, err) {}
         });
-        }
-      })
-    });
+      } else {
+        var prodid = clickElementId.replace("wishlist1", "");
+        prodid = prodid.replace("wishlist2", "");
+        $.ajax({
+          type: 'POST',
+          url: '{% url "wishlist_add" %}',
+          data: {
+            productid: prodid,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+            action: 'post'
+          },
+          success: function (json) {
+            console.log("Add to wishlist successfully");
+            // document.getElementById("cart-qty").innerHTML = json.qty
+          },
+          error: function (xhr, errmsg, err) {}
+        });
+      }
+    })
+  });
 </script>
 
 {% endblock %}
