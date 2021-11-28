@@ -17,7 +17,7 @@ from django.template import RequestContext, context
 import django.shortcuts
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from .forms import AddressForm
+from .forms import AddressForm, UserForm, ProfileForm
 from django.core.mail import EmailMessage
 from django.conf import settings
 # get index page
@@ -182,6 +182,33 @@ def profile_view(request):
             'form': fm, 'addresses': addresses}
     )
 # view category và product mẫu.
+
+
+@login_required
+def edit_profile(request, id):
+    if request.method == "POST":
+        user = User.objects.get(pk=id, username=request.user)
+        user_form = UserForm(instance=user, data=request.POST)
+        profile = Profile.objects.get(pk=id, user=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            print(profile_form)
+            print(profile)
+            user_form.save()
+ 
+            if Profile.objects.filter(user=request.user).exists() == False:
+                profile_form.save(commit=False)
+                profile_form.user = request.user
+            profile_form.save()
+            return HttpResponseRedirect(reverse("profile"))
+
+    else:
+        user = User.objects.get(pk=id, username=request.user)
+        user_form = UserForm(instance=user)
+        profile = Profile.objects.get(pk=id, user=request.user)
+        profile_form = ProfileForm(instance=user)
+    return render(request, "edit_profile.html", {"user_form": user_form, "profile_form": profile_form })
+
 
 
 def category_list(request, category_slug=None):

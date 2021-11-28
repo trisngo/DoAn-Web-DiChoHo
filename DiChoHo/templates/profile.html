@@ -92,9 +92,16 @@
                     <p>{{user.email}}</p>
                   </div>
                 </div>
-                
+
                 <div class="form-phone" style="display:flex;padding-top:30px">
-                  <div class="input-label">Số điện thoại</div>
+                  <div class="input-label">Ngày tháng năm sinh</div>
+                  <div class=" " style="z-index:1 ;flex : 1 1 0%; padding-left:50px;box-sizing: border-box;">
+                    <p>{{profile.birth_date}}</p>
+                  </div>
+                </div>
+
+                <div class="form-phone" style="display:flex;padding-top:30px">
+                  <div class="input-label">Số điện thoại tài khoản</div>
                   <div class=" " style="z-index:1 ;flex : 1 1 0%; padding-left:50px;box-sizing: border-box;">
                     <p>{{profile.phone}}</p>
                   </div>
@@ -139,11 +146,12 @@
                             <p class="card-text m-0">Số điện thoại nhận hàng: {{address.phone}}</p>
                             <div class="pt-5">
                               <a href="{% url 'edit_address' address.id %}" class="text-decoration-none">Edit</a>
-                              
+
                               <a href="{% url 'delete_address' address.id %}" class="text-decoration-none">Delete</a>
                               {% if not address.default %}
 
-                              <a href="{% url 'set_address_default' address.id %}" class="text-decoration-none">Set Default</a>
+                              <a href="{% url 'set_address_default' address.id %}" class="text-decoration-none">Set
+                                Default</a>
                               {% endif %}
                             </div>
                           </div>
@@ -158,9 +166,9 @@
                 <div class="form-phone" style="display:flex;padding-top:30px">
                   <div class=" "
                     style="z-index:1 ;flex : 1 1 0%;position : relative;padding-left: 180px;box-sizing: border-box;">
-                    <button type="submit" class="btn-solve"
-                      style="color:white;background-color:#02BE6E;padding: 10px 40px 7px 40px;box-sizing: border-box;">Lưu
-                      thông tin</button>
+                    {% comment %} <button type="submit" class="btn-solve"
+                      style="color:white;background-color:#02BE6E;padding: 10px 40px 7px 40px;box-sizing: border-box;">Chỉnh sửa thông tin</button> {% endcomment %}
+                    <a role="button" href="{% url 'edit_profile' user.id %}" class="btn btn-primary py-3 px-4">Chỉnh sửa thông tin</a>
                   </div>
                 </div>
 
@@ -171,9 +179,10 @@
               <div class="image_right">
                 <div class="image_right_bottom">
                   <div class="choose_group">
-                    <div class="choose_file" style="background-image: url();"></div>
-                  </div><input class="image_file" type="file" accept=".jpg,.jpeg,.png"><button type="button"
-                    class="btn btn-light btn--m btn--inline">Chọn ảnh</button>
+                    <div class="choose_file" style="background-image: url({{profile.profile_pic.url|slice:"10:"}});"></div>
+                  </div>
+                  {% comment %} <input class="image_file" type="file" accept=".jpg,.jpeg,.png"><button type="button"
+                    class="btn btn-light btn--m btn--inline">Chọn ảnh</button> {% endcomment %}
                 </div>
               </div>
             </div>
@@ -236,11 +245,11 @@
             {% for order in orders %}
             <div class="row g-3">
               <div class="col-12 bg-light p-3 d-flex justify-content-between">
-                <div class="d-flex d-flex-inline">
-                  <div class="pe-3">{{ order.created }}</div>
-                </div>
-                <div class="text-end">
+                <div class=" pe-3">
                   Tổng tiền đã trả: <span class="fw-bold">{{ order.total_paid }} VNĐ</span>
+                </div>
+                <div class="d-flex d-flex-inline">
+                  <div class="text-end pe-3">Ngày mua hàng: {{ order.created }}</div>
                 </div>
               </div>
               <div class="col-md-7 col-lg-12 p-0">
@@ -253,7 +262,8 @@
                         <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">
                           <p class="card-text medium">{{item.product.title}}</p>
                         </a>
-                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#guidanhgia"> Để lại đánh giá</button>
+                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#guidanhgia"> Để
+                          lại đánh giá</button>
                       </div>
                     </div>
                   </div>
@@ -273,7 +283,8 @@
           <div class="modal-dialog modal-notify modal-warning" role="document">
             <div class="modal-content">
               <div class="modal-header text-center" style="background-color: #02BE6E">
-                <h4 class="modal-title white-text w-100 font-weight-bold py-2 text-light" style="margin-left:25px">Để lại đánh giá</h4>
+                <h4 class="modal-title white-text w-100 font-weight-bold py-2 text-light" style="margin-left:25px">Để
+                  lại đánh giá</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true" class="white-text">&times;</span>
                 </button>
@@ -291,8 +302,9 @@
                 </div>
               </div>
 
-              <div class="modal-footer justify-content-center"> 
-                <a type="button" class="btn btn-outline-warning waves-effect text-light submit_evaluation" style="background:#02BE6E; border-radius: 15px" >Gửi đánh giá</a>
+              <div class="modal-footer justify-content-center">
+                <a type="button" class="btn btn-outline-warning waves-effect text-light submit_evaluation"
+                  style="background:#02BE6E; border-radius: 15px">Gửi đánh giá</a>
               </div>
             </div>
           </div>
@@ -333,10 +345,10 @@
     }
   }
 
-   $('.submit_evaluation').on('click',function(e) {
-      e.preventDefault();
-      $('#guidanhgia').modal('toggle'); 
-      return false;
+  $('.submit_evaluation').on('click', function (e) {
+    e.preventDefault();
+    $('#guidanhgia').modal('toggle');
+    return false;
   });
 </script>
 <br><br><br>
