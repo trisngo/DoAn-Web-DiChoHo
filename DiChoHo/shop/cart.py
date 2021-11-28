@@ -41,12 +41,16 @@ class Cart:
             yield item
 
     def __len__(self):
-
         # Lấy dữ liệu giỏ hàng và đếm số lượng sản phẩm ở trong đó
         return sum(item["qty"] for item in self.cart.values())
 
     def get_qty(self):
-        return sum(item["qty"] for item in self.cart.values())
+        count = 0
+        cart = self.cart.copy()
+        if cart.values() != 0:
+            for item in cart.values():
+                count +=1
+        return count
     
     def update(self, product, qty):
         # Cập nhật giá trị session giỏ hàng
