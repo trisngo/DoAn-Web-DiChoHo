@@ -20,6 +20,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .forms import AddressForm, UserForm, ProfileForm
 from django.core.mail import EmailMessage
 from django.conf import settings
+from decimal import Decimal
 # get index page
 
 
@@ -138,7 +139,7 @@ def wishlist_view(request):
         {"products": products}
     )
 
-
+@login_required
 def wishlist_add(request):
     prodid = request.POST.get("productid")
     product = get_object_or_404(Product, id=prodid)
@@ -146,7 +147,7 @@ def wishlist_add(request):
     response = JsonResponse({"Status": "OK"})
     return response
 
-
+@login_required
 def wishlist_delete(request):
     prodid = request.POST.get("productid")
     product = get_object_or_404(Product, id=prodid)
@@ -177,13 +178,13 @@ def profile_view(request):
     orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
     user1 = get_object_or_404(User, id=userid)
     profile = get_object_or_404(Profile, id=userid)
-    # user_address = Address.objects.filter(user = request.user).order_by("-default")
     addresses = Address.objects.filter(user=request.user)
+    ratings = Rating.objects.filter(user=request.user)
     return render(
         request,
         'profile.html',
         {'user': user1, 'profile': profile, 'orders': orders,
-            'form': fm, 'addresses': addresses}
+            'form': fm, 'addresses': addresses, 'ratings': ratings}
     )
 # view category và product mẫu.
 
@@ -236,11 +237,23 @@ def product_detail(request, slug):
     relative_products = p.page(1)
     allRatings = Rating.objects.filter(product=product)
     count = 0
+    count_stars = 0
     for rating in allRatings:
         count += 1
-    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings, "rating_count": count})
+        count_stars += rating.ratingStar
+    average_stars = 0
+    if count > 0:
+        average_stars = count_stars/count
+
+    print(average_stars)
+    average_stars_int = int(average_stars)
+    print(average_stars_int)
+    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings, 
+    "rating_count": count, 'stars': average_stars, 'stars_int': range(average_stars_int), 'unstars_int': range(5 - average_stars_int)})
 
 
+
+@login_required
 def review_add(request):
     # if request.method == "POST":
     if request.POST.get("action") == "post":

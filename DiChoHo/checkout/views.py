@@ -179,7 +179,7 @@ def payment_complete(request):
         sold_qty = get_object_or_404(Product, id=item["product"].id).sold + item["qty"]
         Product.objects.filter(id=item["product"].id).update(sold=sold_qty)
 
-    send_mail(request.user,cart)
+    send_mail(request.user, cart, order)
 
     return JsonResponse("Thanh toán thành công", safe=False)
 
@@ -192,16 +192,16 @@ def payment_successful(request):
     return render(request, "checkout/payment_successful.html", {})
 
 @csrf_exempt
-def send_mail(uid,cart):
-    template = render_to_string('checkout/send_bill.html',{'name':uid.first_name,'cart':cart})
+def send_mail(uid, cart, order):
+    template = render_to_string('checkout/send_bill.html',{'name':uid.first_name,'cart':cart, 'order': order})
     email = EmailMessage(
-        'Cám ơn bạn đã mua hàng tại trang Đi chợ hộ của chúng tôi !',
+        'Đơn hàng của bạn đã được chấp nhận',
         template,
         settings.EMAIL_HOST_USER, 
         [uid.email],
     )
 
     email.fail_silently = False
+    email.content_subtype = 'html'
     email.send()
-    print(email)
     return JsonResponse("Gửi gmail thành công",safe=False)

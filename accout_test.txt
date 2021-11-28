@@ -1,8 +1,8 @@
 admin: admin
-ducanhbd: AdminAdmin123
 ductri: AdminAdmin123
 hoangne: AdminAdmin123
 huy123: AdminAdmin123
+anhbd: AdminAdmin123
 
 paypal sandbox test account:
 Email ID:
