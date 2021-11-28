@@ -169,7 +169,7 @@ def payment_complete(request):
             total_paid=Decimal(cart.get_total_price()),
             order_key="not paypal",
             payment_option=payment_name,
-            billing_status=True,
+            billing_status=False,
         )
 
     order_id = order.pk
