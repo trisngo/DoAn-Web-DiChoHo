@@ -28,15 +28,15 @@ class UserForm(forms.ModelForm):
             attrs={'class': 'form-control mb-3', 'placeholder': 'email', 'id': 'form-email'}))
 
     username = forms.CharField(
-        label='Tên người dùng (không thể thay đổi)', min_length=4, max_length=50, widget=forms.TextInput(
+        label='Tên người dùng (không thể thay đổi)', max_length=100, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'username', 'id': 'form-username', 'readonly': 'readonly'}))
 
     first_name = forms.CharField(
-        label='Tên của bạn (yêu cầu)', min_length=4, max_length=50, widget=forms.TextInput(
+        label='Tên của bạn (yêu cầu)', max_length=100, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Firstname', 'id': 'form-firstname'}))
     
     last_name = forms.CharField(
-        label='Họ của bạn (yêu cầu)', min_length=4, max_length=50, widget=forms.TextInput(
+        label='Họ của bạn (yêu cầu)', max_length=100, widget=forms.TextInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'Lastname', 'id': 'form-lastname'}))
 
     class Meta:
