@@ -8,9 +8,16 @@ from shop.cart import Cart
 from django.contrib import messages
 from shop.models import Address, Product, User
 from orders.models import Order, OrderItem
+
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
+
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from .paypal import PayPalClient
 from decimal import Decimal
+
 
 @login_required
 def delivery(request):
@@ -166,6 +173,8 @@ def payment_complete(request):
         sold_qty = get_object_or_404(Product, id=item["product"].id).sold + item["qty"]
         Product.objects.filter(id=item["product"].id).update(sold=sold_qty)
 
+    send_mail(request.user,cart)
+
     return JsonResponse("Thanh toán thành công", safe=False)
 
 
@@ -175,3 +184,18 @@ def payment_successful(request):
     cart.clear()
     del request.session["payment"]
     return render(request, "checkout/payment_successful.html", {})
+
+@csrf_exempt
+def send_mail(uid,cart):
+    template = render_to_string('checkout/send_bill.html',{'name':uid.first_name,'cart':cart})
+    email = EmailMessage(
+        'Cám ơn bạn đã mua hàng tại trang Đi chợ hộ của chúng tôi !',
+        template,
+        settings.EMAIL_HOST_USER, 
+        [uid.email],
+    )
+
+    email.fail_silently = False
+    email.send()
+    print(email)
+    return JsonResponse("Gửi gmail thành công",safe=False)
