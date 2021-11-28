@@ -27,7 +27,7 @@ urlpatterns = [
      path("profile/delete_addresses/<slug:id>/", views.delete_address, name="delete_address"),
      path("profile/set_address_default/<slug:id>/", views.set_address_default, name="set_address_default"),
      path("profile/edit_profile/<slug:id>/",  views.edit_profile, name="edit_profile"),
-
+     path("profile/review", views.review_add, name="review_add"),
      path('search/', views.search_views, name='search_views'),
      path('404/', views.page_not_found, name='404'),
     # url(r'^password/$', views.change_password, name='change_password'),
