@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import DeliveryOptions
+from .models import DeliveryOptions, PaymentOptions
 from shop.cart import Cart
 from django.contrib import messages
 from shop.models import Address, Product, User
@@ -42,7 +42,7 @@ def delivery(request):
         return redirect('cart')
 
     deliveryoptions = DeliveryOptions.objects.filter(is_active=True) # lấy danh sách các dịch vụ vận chuyển nào đang hoạt động
-    
+    paymentoptions = PaymentOptions.objects.filter(is_active=True)
     addresses = Address.objects.filter(user=request.user).order_by("-default")
 
     if Address.objects.filter(user=request.user).exists():
@@ -53,7 +53,7 @@ def delivery(request):
             session["address"]["address_id"] = str(addresses[0].id)
             session.modified = True
         
-    return render(request, "checkout/delivery.html", {"deliveryoptions": deliveryoptions, "addresses": addresses})
+    return render(request, "checkout/delivery.html", {"deliveryoptions": deliveryoptions, "addresses": addresses, 'paymentoptions': paymentoptions})
 
 
 @login_required
@@ -78,16 +78,19 @@ def cart_update_delivery(request):
 
 @login_required
 def session_update_payment(request):
-    session = request.session
-
     if request.POST.get("action") == "post":
         payment_option = int(request.POST.get("paymentoption"))
-        print(payment_option)
+        payment_type = PaymentOptions.objects.get(id=payment_option)
 
-        session["payment"] = {
-                "payment_option": payment_option,
-        }
-        response = JsonResponse({"payment": payment_option})
+        session = request.session
+        if "payment" not in request.session:
+            session["payment"] = {
+                "payment_option": payment_type.id,
+            }
+        else:
+            session["payment"]["payment_option"] = payment_type.id
+            session.modified = True
+        response = JsonResponse({"payment": payment_type.name})
         return response
 
 
@@ -106,16 +109,16 @@ def payment_option(request):
         messages.success(request, "Vui lòng lựa chọn phương thức thanh toán")
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
     
-    print(session["payment"]["payment_option"])
-    if session["payment"]["payment_option"] == 1:
-        print("hello")
-        payment_complete(request)
-        return render(request, "checkout/payment_successful.html", {})
-    elif session["purchase"]["delivery_id"] == 2:
+    payment_id = session["payment"]["payment_option"]
+    payment_type = PaymentOptions.objects.get(id=payment_id)
+
+    
+    print(payment_type.name)
+    if "Paypal" in payment_type.name:
         return render(request, "checkout/payment_selection.html", {})
     else:
-        messages.success(request, "Có lỗi xảy ra")
-        return HttpResponseRedirect(request.META["HTTP_REFERER"])
+        payment_complete(request)
+        return render(request, "checkout/payment_successful.html", {})
 
     return render(request, "checkout/payment_selection.html", {})
     
@@ -123,7 +126,6 @@ def payment_option(request):
 
 @login_required
 def payment_complete(request):
-    
     user_id = request.user.id
 
     session = request.session
@@ -131,25 +133,15 @@ def payment_complete(request):
     address = get_object_or_404(Address, user=user, default=True)
     cart = Cart(request)
 
-    if session["payment"]["payment_option"] == 1:
-        payment = "cod"
-        order = Order.objects.create(
-            user_id=user_id,
-            full_name=address.full_name,
-            email=user.email,
-            address=address.address_line,
-            phone=address.phone,
-            total_paid=Decimal(cart.get_total_price()),
-            order_key="cod",
-            payment_option=payment,
-            billing_status=True,
-        )
-    else:
+    payment_id = session["payment"]["payment_option"]
+    payment_type = PaymentOptions.objects.get(id=payment_id)
+    payment_name = payment_type.name
+
+    if "Paypal" in payment_type.name:
         PPClient = PayPalClient()
 
         body = json.loads(request.body)
         data = body["orderID"]
-        payment = "paypal"
 
         requestorder = OrdersGetRequest(data)
         response = PPClient.client.execute(requestorder)
@@ -162,7 +154,21 @@ def payment_complete(request):
             phone=address.phone,
             total_paid=response.result.purchase_units[0].amount.value, #lấy thông tin tiền được trả từ paypal
             order_key=response.result.id,
-            payment_option=payment,
+            payment_option=payment_name,
+            billing_status=True,
+        )
+
+
+    else:
+        order = Order.objects.create(
+            user_id=user_id,
+            full_name=address.full_name,
+            email=user.email,
+            address=address.address_line,
+            phone=address.phone,
+            total_paid=Decimal(cart.get_total_price()),
+            order_key="not paypal",
+            payment_option=payment_name,
             billing_status=True,
         )
 

@@ -157,20 +157,15 @@
 						<div class="col-md-12 col-md-5">
 							<div class="cart-detail p-3 p-md-4">
 								<h3 class="billing-heading mb-4">Payment Method</h3>
+								{% for p_option in paymentoptions %}
 								<div class="form-group">
 									<div class="col-md-12">
 										<div class="radio">
-											<label><input type="radio" name="paymentopt" class="mr-2" id="COD" value="1" >Trả tiền khi nhận hàng(COD)</label>
+											<label><input type="radio" name="paymentopt" class="mr-2" id="{{p_option.id}}" value="{{p_option.id}}" >{{p_option.name}}</label>
 										</div>
 									</div>
 								</div>
-								<div class="form-group">
-									<div class="col-md-12">
-										<div class="radio">
-											<label><input type="radio" name="paymentopt" class="mr-2" id="paypal" value="2"> Paypal</label>
-										</div>
-									</div>
-								</div>
+								{% endfor %}
 								<span id="optionpay">Chưa chọn</span>
 								<div class="form-group">
 									<div class="col-md-12">
