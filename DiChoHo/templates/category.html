@@ -147,6 +147,11 @@
   </div>
 </div>
 
+<div class="alert alert-success" role="alert" style="position: fixed; bottom: 0px; left: 25px; display: none;" id="success-alert">
+  Thêm sản phẩm thành công
+</div>
+
+
 <script>
   var urlArray = window.location.href.split("/");
   if (urlArray[urlArray.length - 2] == "rau-cu") {
@@ -179,7 +184,10 @@
             action: 'post'
           },
           success: function (json) {
-            console.log("Add successfully");
+            $("#success-alert").show();
+						$("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+						$("#success-alert").slideUp(500);
+					});
           },
           error: function (xhr, errmsg, err) {}
         });
@@ -195,7 +203,10 @@
             action: 'post'
           },
           success: function (json) {
-            console.log("Add to wishlist successfully");
+            $("#success-alert").show();
+						$("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+						$("#success-alert").slideUp(500);
+					});
           },
           error: function (xhr, errmsg, err) {}
         });
