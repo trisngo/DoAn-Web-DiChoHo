@@ -2,14 +2,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class DeliveryOptions(models.Model):
-    """
-    The Delivery methods table contining all delivery
-    """
 
     DELIVERY_CHOICES = [
-        ("IS", "In Store"),
-        ("HD", "Home Delivery"),
-        ("DD", "Digital Delivery"),
+        ("DD", "Giao tại 1 địa điểm"),
+        ("TN", "Giao tận nhà"),
     ]
 
     delivery_name = models.CharField(
@@ -58,11 +54,7 @@ class DeliveryOptions(models.Model):
         return self.delivery_name
 
 
-class PaymentSelections(models.Model):
-    """
-    Store payment options
-    """
-
+class PaymentOptions(models.Model):
     name = models.CharField(
         verbose_name=_("name"),
         help_text=_("Required"),
