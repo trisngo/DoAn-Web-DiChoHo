@@ -110,9 +110,9 @@
                           <div class="card mb-3 h-100" style="border: dashed 2px #ccc;">
                             <div class="row g-0 h-100">
                               <div class="col-12" style="min-height:100px">
-                                <div class="card-body text-center position-absolute top-50 start-50 translate-middle">
+                                <div class="card-body text-center position-relative mt-5">
                                   <svg style="color:#ccc;" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
-                                    fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                    fill="currentColor" class="bi bi-plus " viewBox="0 0 16 16">
                                     <path
                                       d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                   </svg>
@@ -125,25 +125,25 @@
                       </div>
                       {% for address in addresses %}
                       <div class="col">
-                        <div class="card pb-3">
+                        <div class="card pb-3 shadow-lg">
                           <div class="card-header bg-white small text-muted">
                             {% if address.default %}
                             Default
                             {% endif %}
                             &nbsp;
                           </div>
-                          <div class="card-body small pb-1">
+                          <div class="card-body small pb-3">
                             <p class="card-text m-0 fw-bold">{{address.full_name}}</p>
                             <p class="card-text m-0">{{address.address_line}}</p>
-                            <p class="card-text m-0">{{address.city}}</p>
-                            <p class="card-text m-0">Phone number: {{address.phone}}</p>
+                            <p class="card-text ">{{address.city}}</p>
+                            <p class="card-text m-0">Số điện thoại nhận hàng: {{address.phone}}</p>
                             <div class="pt-5">
                               <a href="{% url 'edit_address' address.id %}" class="text-decoration-none">Edit</a>
-                              |
+                              
                               <a href="{% url 'delete_address' address.id %}" class="text-decoration-none">Delete</a>
                               {% if not address.default %}
-                              | <a href="{% url 'set_address_default' address.id %}" class="text-decoration-none">Set
-                                Default</a>
+
+                              <a href="{% url 'set_address_default' address.id %}" class="text-decoration-none">Set Default</a>
                               {% endif %}
                             </div>
                           </div>
@@ -246,19 +246,12 @@
               <div class="col-md-7 col-lg-12 p-0">
 
                 {% for item in order.items.all %}
-                <div class="card mb-3 border-0">
+                <div class="card mb-3">
                   <div class="row g-0">
-                    {% comment %} <div class="col-md-2 d-none d-md-block">
-                      {% for image in item.product.image.all %}
-                      {% if image.is_feature %}
-                      <img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="..." ">
-                      {% endif %}
-                      {% endfor %}
-                    </div> {% endcomment %}
                     <div class=" col-md-10">
                       <div class="card-body p-3">
                         <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">
-                          <p class="card-text small">{{item.product.title}}</p>
+                          <p class="card-text medium">{{item.product.title}}</p>
                         </a>
                         <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#guidanhgia"> Để lại đánh giá</button>
                       </div>
