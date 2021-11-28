@@ -158,6 +158,7 @@
       if (clickElementId.includes("delete-")) {
         var prodid = clickElementId.replace("delete-button","");
         prodid = prodid.replace("delete-span","");
+        var count = document.getElementById("cart_qty").innerHTML;
         $.ajax({
         type: "POST",
         url: '{% url "cart_delete" %}',
@@ -167,6 +168,8 @@
           action: "post",
         },
         success: function (json) {
+        count--;
+        document.getElementById("cart_qty").innerHTML = count;
         document.getElementById("totalPrice").innerText = json.subtotal + "đ";
         $("#delete-button"+prodid).parent().parent().remove();
           if (json.qty == 0) {

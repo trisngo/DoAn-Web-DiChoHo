@@ -69,8 +69,8 @@
 					</li>
 					<li class="nav-item {% block menu_about_class %}{% endblock %}"><a href="{% url 'about' %}"
 							class="nav-link">Về chúng tôi</a></li>
-					<li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span
-								class="icon-shopping_cart"></span>[0]</a></li>
+					<li class="nav-item cta cta-colored"><a href="{% url 'cart' %}" class="nav-link"><span 
+								class="icon-shopping_cart"></span>[<span id="cart_qty">{{ cart.get_qty }}</span>]</a></li>
 
 					{%if user.is_authenticated %}
 					<li class="nav-item dropdown">

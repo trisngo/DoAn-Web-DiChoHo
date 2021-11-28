@@ -32,7 +32,7 @@ def handler404(request):
 
 def index_view(request):
     products = Product.objects.all().order_by('-sold')
-    products2 = Product.objects.all().order_by('-updated')
+    products2 = Product.objects.all().order_by('-created')
     products3 = Product.objects.all().order_by('price')
     return render(request, 'index.html', {'products': products, 'products2': products2, 'products3': products3},)
 
@@ -232,7 +232,10 @@ def product_detail(request, slug):
     p = Paginator(all_relative_products, 4)
     relative_products = p.page(1)
     allRatings = Rating.objects.filter(product=product)
-    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings})
+    count = 0
+    for rating in allRatings:
+        count += 1
+    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings, "rating_count": count})
 
 def review_add(request):
     # if request.method == "POST":
