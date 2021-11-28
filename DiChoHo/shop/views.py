@@ -264,12 +264,20 @@ def review_add(request):
         content = str(request.POST.get("content"))
         ratingStar = float(request.POST.get("star"))
 
-        rating = Rating.objects.create(
-            user=user,
-            product=product,
-            content=content,
-            ratingStar=ratingStar,
-        )
+        
+        if Rating.objects.filter(product=product_id).exists():
+            rating = Rating.objects.filter(product=product_id).update(
+                content=content,
+                ratingStar=ratingStar,
+            )
+            
+        else:
+            rating = Rating.objects.create(
+                user=user,
+                product=product,
+                content=content,
+                ratingStar=ratingStar,
+            )
         # Dòng này gửi dữ liệu nó bị lỗi, vì cái user không nhét vô response được
         # response = JsonResponse({"user": user})
         # Tui chỉ gửi về chữ status thui, nếu cần gì thì chỉnh lại

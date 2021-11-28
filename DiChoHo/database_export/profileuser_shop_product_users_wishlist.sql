@@ -31,7 +31,7 @@ CREATE TABLE `shop_product_users_wishlist` (
   KEY `shop_product_users_wishlist_user_id_07b2b259_fk_auth_user_id` (`user_id`),
   CONSTRAINT `shop_product_users_w_product_id_f16937bc_fk_shop_prod` FOREIGN KEY (`product_id`) REFERENCES `shop_product` (`id`),
   CONSTRAINT `shop_product_users_wishlist_user_id_07b2b259_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `shop_product_users_wishlist` (
 
 LOCK TABLES `shop_product_users_wishlist` WRITE;
 /*!40000 ALTER TABLE `shop_product_users_wishlist` DISABLE KEYS */;
+INSERT INTO `shop_product_users_wishlist` VALUES (1,52,7);
 /*!40000 ALTER TABLE `shop_product_users_wishlist` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-27 18:43:37
+-- Dump completed on 2021-11-28 23:29:03

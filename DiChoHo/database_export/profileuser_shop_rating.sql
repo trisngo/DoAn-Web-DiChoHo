@@ -33,7 +33,7 @@ CREATE TABLE `shop_rating` (
   KEY `shop_rating_user_id_038b24f5_fk_auth_user_id` (`user_id`),
   CONSTRAINT `shop_rating_product_id_9d5a8768_fk_shop_product_id` FOREIGN KEY (`product_id`) REFERENCES `shop_product` (`id`),
   CONSTRAINT `shop_rating_user_id_038b24f5_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,6 +42,7 @@ CREATE TABLE `shop_rating` (
 
 LOCK TABLES `shop_rating` WRITE;
 /*!40000 ALTER TABLE `shop_rating` DISABLE KEYS */;
+INSERT INTO `shop_rating` VALUES (1,'tốt, chất lượng',5.0,52,9),(2,'tốt, hàng chất lượng',4.0,52,7),(3,'sườn ngon lắm, nấu canh thì quá chiến',5.0,44,7),(4,'Sản phẩm tươi',4.5,50,7),(5,'thịt tươi quá',5.0,7,7),(6,'xoài ngon quá',4.0,6,7);
 /*!40000 ALTER TABLE `shop_rating` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-27 18:43:37
+-- Dump completed on 2021-11-28 23:29:03
