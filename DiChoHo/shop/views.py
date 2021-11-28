@@ -56,6 +56,8 @@ def shop_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST':
         getUsername = request.POST["username"]
         getPassword = request.POST["password"]
@@ -73,6 +75,8 @@ def login_view(request):
 
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
