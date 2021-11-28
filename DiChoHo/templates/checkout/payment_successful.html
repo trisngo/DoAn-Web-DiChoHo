@@ -3,16 +3,37 @@
 {% block title %}Payment Successful{%endblock %}
 {% block content %}
 
+<div
+  class="hero-wrap hero-bread"
+  style="background-image: url('/static/images/bg_1.jpg')"
+>
+  <div class="container">
+    <div
+      class="
+        row
+        no-gutters
+        slider-text
+        align-items-center
+        justify-content-center
+      "
+    >
+      <div class="col-md-9 ftco-animate text-center">
+        <h1 class="mb-0 bread">Thanh toán thành công</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <div class="col-12">
-    <h1 class="h2">Payment Successful</h1>
+    <h1 class="h2">Thanh toán thành công</h1>
   </div>
   <div class="col-12">
-    <p>Order Summary</p>
+    <p>Tổng quan đơn đặt hàng</p>
   </div>
   <hr />
   <div class="col-12">
-    <p>View all <a href="{% url 'profile'%}">orders</a></p>
+    <p>Xem toàn bộ <a href="{% url 'profile'%}">đơn đặt hàng</a></p>
   </div>
 </div>
 
