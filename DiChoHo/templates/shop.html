@@ -160,6 +160,7 @@
       if (clickElementId.includes("productAdd")) {
         var prodid = clickElementId.replace("productAdd1", "");
         prodid = prodid.replace("productAdd2", "");
+        var count = document.getElementById("cart_qty").innerHTML;
         $.ajax({
           type: 'POST',
           url: '{% url "cart_add" %}',
@@ -170,6 +171,8 @@
             action: 'post'
           },
           success: function (json) {
+            count++;
+            document.getElementById("cart_qty").innerHTML = count;
             $("#success-alert").show();
 						$("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
 						$("#success-alert").slideUp(500);

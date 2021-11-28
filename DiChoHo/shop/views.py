@@ -17,7 +17,7 @@ from django.template import RequestContext, context
 import django.shortcuts
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from .forms import AddressForm
+from .forms import AddressForm, UserForm, ProfileForm
 from django.core.mail import EmailMessage
 from django.conf import settings
 # get index page
@@ -32,7 +32,7 @@ def handler404(request):
 
 def index_view(request):
     products = Product.objects.all().order_by('-sold')
-    products2 = Product.objects.all().order_by('-updated')
+    products2 = Product.objects.all().order_by('-created')
     products3 = Product.objects.all().order_by('price')
     return render(request, 'index.html', {'products': products, 'products2': products2, 'products3': products3},)
 
@@ -56,6 +56,8 @@ def shop_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST':
         getUsername = request.POST["username"]
         getPassword = request.POST["password"]
@@ -73,6 +75,8 @@ def login_view(request):
 
 
 def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
@@ -184,6 +188,33 @@ def profile_view(request):
 # view category và product mẫu.
 
 
+@login_required
+def edit_profile(request, id):
+    if request.method == "POST":
+        user = User.objects.get(pk=id, username=request.user)
+        user_form = UserForm(instance=user, data=request.POST)
+        profile = Profile.objects.get(pk=id, user=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            print(profile_form)
+            print(profile)
+            user_form.save()
+ 
+            if Profile.objects.filter(user=request.user).exists() == False:
+                profile_form.save(commit=False)
+                profile_form.user = request.user
+            profile_form.save()
+            return HttpResponseRedirect(reverse("profile"))
+
+    else:
+        user = User.objects.get(pk=id, username=request.user)
+        user_form = UserForm(instance=user)
+        profile = Profile.objects.get(pk=id, user=request.user)
+        profile_form = ProfileForm(instance=user)
+    return render(request, "edit_profile.html", {"user_form": user_form, "profile_form": profile_form })
+
+
+
 def category_list(request, category_slug=None):
     category = get_object_or_404(Category, slug=category_slug)
     allFilterProducts = Product.objects.filter(category=category)
@@ -205,7 +236,10 @@ def product_detail(request, slug):
     p = Paginator(all_relative_products, 4)
     relative_products = p.page(1)
     allRatings = Rating.objects.filter(product=product)
-    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings})
+    count = 0
+    for rating in allRatings:
+        count += 1
+    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings, "rating_count": count})
 
 def review_add(request):
     # if request.method == "POST":

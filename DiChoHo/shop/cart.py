@@ -45,6 +45,9 @@ class Cart:
         # Lấy dữ liệu giỏ hàng và đếm số lượng sản phẩm ở trong đó
         return sum(item["qty"] for item in self.cart.values())
 
+    def get_qty(self):
+        return sum(item["qty"] for item in self.cart.values())
+    
     def update(self, product, qty):
         # Cập nhật giá trị session giỏ hàng
 

@@ -43,7 +43,7 @@
 						<a href="#"><span class="ion-ios-star-outline"></span></a>
 					</p>
 					<p class="text-left mr-4">
-						<a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Đánh giá</span></a>
+						<a href="#" class="mr-2" style="color: #000;">{{rating_count}} <span style="color: #bbb;">Đánh giá</span></a>
 					</p>
 					<p class="text-left">
 						<a href="#" class="mr-2" style="color: #000;">{{product.sold}} <span style="color: #bbb;">Đã
@@ -184,6 +184,7 @@
 			else if (clickElementId.includes("wishlist")) {
 				var prodid = clickElementId.replace("wishlist1","");
 				prodid = prodid.replace("wishlist2","");
+				var count = document.getElementById("cart_qty").innerHTML;
 				$.ajax({
 				type: 'POST',
 				url: '{% url "wishlist_add" %}',
@@ -193,6 +194,8 @@
 				action: 'post'
 				},
 				success: function (json) {
+					count++;
+            		document.getElementById("cart_qty").innerHTML = count;
 					$("#success-alert").show();
 					$("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
 					$("#success-alert").slideUp(500);
