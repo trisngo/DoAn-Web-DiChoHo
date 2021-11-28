@@ -373,6 +373,7 @@ def send_mail(uid):
     )
 
     email.fail_silently = False
+    email.content_subtype='html'
     email.send()
     print(email)
     return redirect('login')
