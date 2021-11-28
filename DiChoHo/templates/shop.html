@@ -137,6 +137,10 @@
   </div>
 </section>
 
+<div class="alert alert-success" role="alert" style="position: fixed; bottom: 0px; left: 25px; display: none;" id="success-alert">
+  Thêm sản phẩm thành công
+</div>
+
 {% endblock %}
 {% block arrow %}
 <div class="row">
@@ -166,8 +170,10 @@
             action: 'post'
           },
           success: function (json) {
-            console.log("Add successfully");
-            // document.getElementById("cart-qty").innerHTML = json.qty
+            $("#success-alert").show();
+						$("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+						$("#success-alert").slideUp(500);
+					});
           },
           error: function (xhr, errmsg, err) {}
         });
@@ -183,8 +189,10 @@
             action: 'post'
           },
           success: function (json) {
-            console.log("Add to wishlist successfully");
-            // document.getElementById("cart-qty").innerHTML = json.qty
+            $("#success-alert").show();
+						$("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+						$("#success-alert").slideUp(500);
+					});
           },
           error: function (xhr, errmsg, err) {}
         });
