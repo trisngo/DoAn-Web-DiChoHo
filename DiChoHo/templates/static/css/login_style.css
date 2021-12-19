@@ -44,7 +44,7 @@ form {
   align-items: center;
   justify-content: center;
   padding-bottom: 20px;
-  width: 400px;
+  width: 100%;
 }
 form h4 {
   margin-bottom: 20px;
@@ -273,7 +273,7 @@ input:focus {
 }
 
 .left {
-  width: 220px;
+  width: 50%;
   height: auto;
   min-height: 100%;
   position: relative;
@@ -287,6 +287,13 @@ input:focus {
   height: 40px;
   width: auto;
   margin: 20px;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .left {
+    width: 0%;
+  }
 }
 
 .sign-up {
