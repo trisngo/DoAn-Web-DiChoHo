@@ -11,7 +11,7 @@ import uuid
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
-    phone = phone = models.CharField(_("Số điện thoại"), max_length=11, default="0")
+    phone = phone = models.CharField(_("Số điện thoại"), max_length=11, default="0") #sđt tài khoảng, khác sđt nhận hàng
     profile_pic = models.ImageField(
         default='/templates/static/images/defaultavatar.png', upload_to='templates/static/images')
 
@@ -19,7 +19,6 @@ class Profile(models.Model):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-
 
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
@@ -55,9 +54,7 @@ class Category(models.Model):
         return reverse('category_list', args=[self.slug])
     
     def get_all_objects(self):
-        queryset = self._meta.model.objects.all()
-        # can use the below method also
-        # queryset = self.__class__.objects.all()   
+        queryset = self._meta.model.objects.all() 
         return queryset
 
     def __str__(self):

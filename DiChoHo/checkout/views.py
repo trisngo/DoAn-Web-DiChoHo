@@ -3,12 +3,6 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import DeliveryOptions, PaymentOptions
-from shop.cart import Cart
-from django.contrib import messages
-from shop.models import Address, Product, User
-from orders.models import Order, OrderItem
-
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -17,6 +11,12 @@ from django.template.loader import render_to_string
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from .paypal import PayPalClient
 from decimal import Decimal
+
+from .models import DeliveryOptions, PaymentOptions
+from shop.cart import Cart
+from django.contrib import messages
+from shop.models import Address, Product, User
+from orders.models import Order, OrderItem
 
 
 @login_required

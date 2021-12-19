@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from .models import Profile, User, Category, Product, Address, Rating
 from django.contrib import messages
 from django.urls import reverse
@@ -13,24 +13,21 @@ from django.template.loader import render_to_string
 from .cart import Cart
 from orders.models import Order, OrderItem
 from django.core.paginator import EmptyPage, Paginator
-from django.template import RequestContext, context
+from django.template import RequestContext
 import django.shortcuts
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from .forms import AddressForm, UserForm, ProfileForm
 from django.core.mail import EmailMessage
 from django.conf import settings
-from decimal import Decimal
-# get index page
 
 
 def handler404(request):
-    response = django.shortcuts.render_to_response('404.html', {},
-                                                   context_instance=RequestContext(request))
+    response = django.shortcuts.render_to_response('404.html', {}, context_instance=RequestContext(request))
     response.status_code = 404
     return response
 
-
+# get index page
 def index_view(request):
     products = Product.objects.all().order_by('-sold')
     products2 = Product.objects.all().order_by('-created')
@@ -39,8 +36,6 @@ def index_view(request):
 
 
 # get shop page
-
-
 def shop_view(request):
     allProducts = Product.objects.all()
     p = Paginator(allProducts, 12)
@@ -54,8 +49,6 @@ def shop_view(request):
     return render(request, 'shop.html', {'products': products})
 
 # get login page
-
-
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -73,8 +66,6 @@ def login_view(request):
     return render(request, 'login.html')
 
 # get register page
-
-
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -109,9 +100,29 @@ def register_view(request):
             return redirect('register')
     return render(request, 'register.html')
 
+# send mail
+@csrf_exempt
+def send_mail(uid):
+    template = render_to_string('email_send.html', {'name': uid.first_name})
+    email = EmailMessage(
+        'Cám ơn bạn đã đăng ký tại trang Đi chợ hộ của chúng tôi !',
+        template,
+        settings.EMAIL_HOST_USER,
+        [uid.email],
+    )
+
+    email.fail_silently = False
+    email.content_subtype = 'html'
+    email.send()
+    print(email)
+    return redirect('login')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
 # get contact page
-
-
 def contact_view(request):
     return render(
         request,
@@ -119,8 +130,6 @@ def contact_view(request):
     )
 
 # get about page
-
-
 def about_view(request):
     return render(
         request,
@@ -128,8 +137,6 @@ def about_view(request):
     )
 
 # get wishlist page
-
-
 @login_required
 def wishlist_view(request):
     products = Product.objects.filter(users_wishlist=request.user)
@@ -155,25 +162,20 @@ def wishlist_delete(request):
     response = JsonResponse({"Status": "OK"})
     return response
 
-
-def logout_view(request):
-    logout(request)
-    return redirect('/')
-
-
+# profile
 @login_required
 def profile_view(request):
     if request.method == "POST":
-        fm = PasswordChangeForm(request.user, request.POST)
-        if fm.is_valid():
-            user = fm.save()
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
             update_session_auth_hash(request, user)
             messages.success(request, "Mật khẩu được đổi thành công")
             return redirect('profile')
         else:
             messages.error(request, 'Mật khẩu được đổi không thành công')
 
-    fm = PasswordChangeForm(request.user)
+    form = PasswordChangeForm(request.user)
     userid = request.user.id
     orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
     user1 = get_object_or_404(User, id=userid)
@@ -184,10 +186,8 @@ def profile_view(request):
         request,
         'profile.html',
         {'user': user1, 'profile': profile, 'orders': orders,
-            'form': fm, 'addresses': addresses, 'ratings': ratings}
+            'form': form, 'addresses': addresses, 'ratings': ratings}
     )
-# view category và product mẫu.
-
 
 @login_required
 def edit_profile(request, id):
@@ -215,7 +215,7 @@ def edit_profile(request, id):
         profile_form = ProfileForm(instance=user)
     return render(request, "edit_profile.html", {"user_form": user_form, "profile_form": profile_form})
 
-
+# view category, product
 def category_list(request, category_slug=None):
     category = get_object_or_404(Category, slug=category_slug)
     allFilterProducts = Product.objects.filter(category=category)
@@ -248,11 +248,15 @@ def product_detail(request, slug):
     print(average_stars)
     average_stars_int = int(average_stars)
     print(average_stars_int)
-    return render(request, 'product-single.html', {'product': product, 'relative_products': relative_products, 'ratings': allRatings, 
-    "rating_count": count, 'stars': average_stars, 'stars_int': range(average_stars_int), 'unstars_int': range(5 - average_stars_int)})
+    return render(request, 'product-single.html', 
+                    {'product': product, 'relative_products': relative_products, 
+                    'ratings': allRatings, "rating_count": count, 
+                    'stars': average_stars, 'stars_int': range(average_stars_int), 
+                    'unstars_int': range(5 - average_stars_int)
+                    })
 
 
-
+#review
 @login_required
 def review_add(request):
     # if request.method == "POST":
@@ -278,19 +282,15 @@ def review_add(request):
                 content=content,
                 ratingStar=ratingStar,
             )
-        # Dòng này gửi dữ liệu nó bị lỗi, vì cái user không nhét vô response được
-        # response = JsonResponse({"user": user})
-        # Tui chỉ gửi về chữ status thui, nếu cần gì thì chỉnh lại
         response = JsonResponse({"status": "OK"})
         return response
 
 
-#  ----------------view xử lí giỏ hàng------------------------
+#  cart
 
 def cart_view(request):
     cart = Cart(request)
     return render(request, "cart.html", {"cart": cart})
-
 
 def cart_add(request):
     cart = Cart(request)
@@ -303,7 +303,6 @@ def cart_add(request):
         response = JsonResponse({"qty": cartqty})
         return response
 
-
 def cart_delete(request):
     cart = Cart(request)
     if request.POST.get("action") == "post":
@@ -314,7 +313,6 @@ def cart_delete(request):
         carttotal = cart.get_total_price()
         response = JsonResponse({"qty": cartqty, "subtotal": carttotal})
         return response
-
 
 def cart_update(request):
     cart = Cart(request)
@@ -328,7 +326,7 @@ def cart_update(request):
         response = JsonResponse({"qty": cartqty, "subtotal": cartsubtotal})
         return response
 
-
+# address(có nhiều địa chỉ có thể được tạo)
 @ login_required
 def add_address(request):
     if request.method == "POST":
@@ -341,7 +339,6 @@ def add_address(request):
     else:
         address_form = AddressForm()
     return render(request, "edit_address.html", {"form": address_form})
-
 
 @ login_required
 def edit_address(request, id):
@@ -356,12 +353,10 @@ def edit_address(request, id):
         address_form = AddressForm(instance=address)
     return render(request, "edit_address.html", {"form": address_form})
 
-
 @ login_required
 def delete_address(request, id):
     address = Address.objects.filter(pk=id, user=request.user).delete()
     return redirect("profile")
-
 
 @ login_required
 def set_address_default(request, id):
@@ -375,7 +370,7 @@ def set_address_default(request, id):
 
     return redirect("profile")
 
-
+# search
 def search_views(request):
     query_item = request.GET.get("search").lower()
     products = Product.objects.filter(title__icontains=query_item)
@@ -384,20 +379,3 @@ def search_views(request):
 
 def page_not_found(request):
     return render(request, '404.html')
-
-
-@csrf_exempt
-def send_mail(uid):
-    template = render_to_string('email_send.html', {'name': uid.first_name})
-    email = EmailMessage(
-        'Cám ơn bạn đã đăng ký tại trang Đi chợ hộ của chúng tôi !',
-        template,
-        settings.EMAIL_HOST_USER,
-        [uid.email],
-    )
-
-    email.fail_silently = False
-    email.content_subtype = 'html'
-    email.send()
-    print(email)
-    return redirect('login')

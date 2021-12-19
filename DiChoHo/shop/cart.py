@@ -13,18 +13,6 @@ class Cart:
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
-    def add(self, product, qty):
-        # Thêm hoặc cập nhật session của giỏ hàng
-
-        product_id = str(product.id)
-
-        if product_id in self.cart:
-            self.cart[product_id]["qty"] = qty
-        else:
-            self.cart[product_id] = {"price": str(product.price), "qty": qty}
-
-        self.save()
-
     def __iter__(self):
         # Lấy product_id trong session để query dữ liệu trong database
 
@@ -44,6 +32,17 @@ class Cart:
         # Lấy dữ liệu giỏ hàng và đếm số lượng sản phẩm ở trong đó
         return sum(item["qty"] for item in self.cart.values())
 
+    def add(self, product, qty):
+        # Thêm hoặc cập nhật session của giỏ hàng
+        product_id = str(product.id)
+
+        if product_id in self.cart:
+            self.cart[product_id]["qty"] = qty
+        else:
+            self.cart[product_id] = {"price": str(product.price), "qty": qty}
+
+        self.save()
+
     def get_qty(self):
         count = 0
         cart = self.cart.copy()
@@ -59,28 +58,6 @@ class Cart:
         if product_id in self.cart:
             self.cart[product_id]["qty"] = qty
         self.save()
-
-    # Hàm này để tính trước giá trước khi có giao hàng, nhưng chưa có giao hàng nên để qua 1 bên
-    def get_subtotal_price(self):
-        return sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
-
-    def get_delivery_price(self):
-        newprice = 0.00
-
-        if "purchase" in self.session:
-            newprice = DeliveryOptions.objects.get(id=self.session["purchase"]["delivery_id"]).delivery_price
-
-        return newprice
-
-    def get_total_price(self):
-        newprice = 0.00
-        subtotal = sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
-
-        if "purchase" in self.session:
-            newprice = DeliveryOptions.objects.get(id=self.session["purchase"]["delivery_id"]).delivery_price
-
-        total = subtotal + Decimal(newprice)
-        return total
 
     def delete(self, product):
         # Xóa sản phẩm trong session 
@@ -104,4 +81,26 @@ class Cart:
     def cart_update_delivery(self, deliveryprice=0):
         subtotal = sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
         total = subtotal + Decimal(deliveryprice)
+        return total
+    
+    # Hàm này để tính trước giá trước khi có giao hàng, nhưng chưa có giao hàng nên để qua 1 bên
+    def get_subtotal_price(self):
+        return sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
+
+    def get_delivery_price(self):
+        newprice = 0.00
+
+        if "purchase" in self.session:
+            newprice = DeliveryOptions.objects.get(id=self.session["purchase"]["delivery_id"]).delivery_price
+
+        return newprice
+
+    def get_total_price(self):
+        newprice = 0.00
+        subtotal = sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
+
+        if "purchase" in self.session:
+            newprice = DeliveryOptions.objects.get(id=self.session["purchase"]["delivery_id"]).delivery_price
+
+        total = subtotal + Decimal(newprice)
         return total
