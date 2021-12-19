@@ -63,7 +63,7 @@ Bắt đầu chạy website với lệnh sau:
 ```bash
 python3 manage.py runserver
 ```
-Truy cập website tại đường dẫn 
+Sau đó truy cập tại đường dẫn ``http://127.0.0.1:8000/``
 
 Bạn có thể vào file settings.py và đặt DEBUG = False nghĩa là khi website có lỗi thì sẽ không hiện thông tin lỗi trên trình duyệt, tuy nhiên cần phải chạy lệnh sau để cho phép chương trình load được page 404.html và các file css, js: 
 
