@@ -2,7 +2,6 @@
 Đây là đồ án của nhóm 12 môn Lập trình web, sử dụng Python phiên bản 3.9, django framework version 3.2.7 và MySQL
 
 
-
 ## Tác giả
 
 - [@Ngô Đức Trí](https://github.com/trisngo)
@@ -10,20 +9,21 @@
 - [@Bùi Đức Anh](https://github.com/BuiDucAnh68)
 ## Cài đặt
 
-Để tiến hành cài đặt, hãy clone project này về local với câu lệnh
+Để tiến hành cài đặt, hãy clone project này về local với câu lệnh:
 
 ```bash
-  https://github.com/trisngo/DoAn-Web-DiChoHo.git
+  git clone https://github.com/trisngo/DoAn-Web-DiChoHo.git
 ```
 
-Sau đó tiến hành cài đặt môi trường cần thiết cho project sử dụng câu lệnh sau 
+Sau đó tiến hành cài đặt môi trường cần thiết cho project sử dụng câu lệnh sau:
 
 ```bash
   pip install -r requirements.txt
 ```
-Ta vào file settings.py để cấu hình các tùy chọn
 
-Cấu hình để kết nối được với MySQL
+Ta vào file ``DiChoHo/settings.py`` để cấu hình các tùy chọn sau:
+
+- Cấu hình để kết nối được với MySQL
 
 ```bash
 DATABASES = {
@@ -37,7 +37,7 @@ DATABASES = {
     }
 }
 ```
-Cấu hình thiết lập host email gửi email cho người dùng.
+- Cấu hình thiết lập host email gửi email cho người dùng
 ```bash
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
@@ -47,7 +47,7 @@ EMAI_PORT = 587
 EMAIL_USE_TLS = True
 ```
 
-Sau khi đã cài đặt và cấu hình xong nếu bạn muốn sử dụng database có sẵn thì tiến hành Import database được đính kèm nằm ở thư mục ``DiChoHo\database_export`` vào MySQL Workbench
+Sau khi đã cài đặt và cấu hình xong nếu bạn muốn sử dụng database có sẵn thì tiến hành Import database được đính kèm nằm ở thư mục ``DiChoHo/database_export/`` vào MySQL Workbench
 
 Tiếp theo di chuyển đến thư mục có chứa file manage.py và apply dữ liệu cho database bằng 2 câu lệnh sau:
 
@@ -56,7 +56,7 @@ Tiếp theo di chuyển đến thư mục có chứa file manage.py và apply d�
   python3 manage.py migrate
 ```
 
-## Chạy Local
+## Chạy local
 
 Bắt đầu chạy website với lệnh sau:
 
