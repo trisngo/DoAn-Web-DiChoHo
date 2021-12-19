@@ -103,7 +103,7 @@ def register_view(request):
 # send mail
 @csrf_exempt
 def send_mail(uid):
-    template = render_to_string('email_send.html', {'name': uid.first_name})
+    template = render_to_string('register_mail.html', {'name': uid.first_name})
     email = EmailMessage(
         'Cám ơn bạn đã đăng ký tại trang Đi chợ hộ của chúng tôi !',
         template,

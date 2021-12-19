@@ -5,4 +5,4 @@ from shop import cart
 
 from .models import Order, OrderItem
 
-# Không xử lí đơn hàng tại đây nữa, ta đem qua bên module checkout để xử lí 
+# Không xử lí đơn hàng tại đây nữa, xử lí tại module checkout

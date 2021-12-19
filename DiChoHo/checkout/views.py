@@ -57,7 +57,7 @@ def delivery(request):
 
 
 @login_required
-def cart_update_delivery(request):
+def update_delivery(request):
     cart = Cart(request)
     if request.POST.get("action") == "post":
         delivery_option = int(request.POST.get("deliveryoption"))
@@ -77,7 +77,7 @@ def cart_update_delivery(request):
         return response
 
 @login_required
-def session_update_payment(request):
+def update_payment(request):
     if request.POST.get("action") == "post":
         payment_option = int(request.POST.get("paymentoption"))
         payment_type = PaymentOptions.objects.get(id=payment_option)
@@ -95,7 +95,7 @@ def session_update_payment(request):
 
 
 @login_required
-def payment_option(request):
+def payment(request):
     session = request.session
     if "purchase" not in request.session:
         messages.success(request, "Vui lòng lựa chọn đơn vị giao hàng")
@@ -112,15 +112,13 @@ def payment_option(request):
     payment_id = session["payment"]["payment_option"]
     payment_type = PaymentOptions.objects.get(id=payment_id)
 
-    
-    print(payment_type.name)
+    # nếu khách hàng lựa chọn paypal thì hướng người ta đến điền form paypal, không thì báo thành công và lấy tiền khi nhận
     if "Paypal" in payment_type.name:
-        return render(request, "checkout/payment_selection.html", {})
+        return render(request, "checkout/payment_paypal.html", {})
     else:
+        # tự động gọi complete để lưu vào hóa đơn
         payment_complete(request)
         return render(request, "checkout/payment_successful.html", {})
-
-    return render(request, "checkout/payment_selection.html", {})
     
    
 
@@ -193,7 +191,7 @@ def payment_successful(request):
 
 @csrf_exempt
 def send_mail(uid, cart, order):
-    template = render_to_string('checkout/send_bill.html',{'name':uid.first_name,'cart':cart, 'order': order})
+    template = render_to_string('checkout/bill_email.html',{'name':uid.first_name,'cart':cart, 'order': order})
     email = EmailMessage(
         'Đơn hàng của bạn đã được chấp nhận',
         template,

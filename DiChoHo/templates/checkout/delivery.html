@@ -172,7 +172,7 @@
 										<span class="fw-bold">Nếu bạn bấm tiêp tục thì bạn đã chấp nhận các điều kiện và điều khoảng của chúng tôi</span>
 									</div>
 								</div>
-								<p><a href="{% url 'checkout:payment_option' %}" class="btn btn-primary py-3 px-4">Tiếp tục</a></p>
+								<p><a href="{% url 'checkout:payment' %}" class="btn btn-primary py-3 px-4">Tiếp tục</a></p>
 							</div>
 						</div>
 					</div>
@@ -188,7 +188,7 @@
 		e.preventDefault();
 		$.ajax({
 			type: "POST",
-			url: '{% url "checkout:cart_update_delivery" %}',
+			url: '{% url "checkout:update_delivery" %}',
 			data: {
 				deliveryoption: $(this).val(),
 				csrfmiddlewaretoken: "{{csrf_token}}",
@@ -207,7 +207,7 @@
 		e.preventDefault($(this).val());
 		$.ajax({
 			type: "POST",
-			url: '{% url "checkout:session_update_payment" %}',
+			url: '{% url "checkout:update_payment" %}',
 			data: {
 				paymentoption: $(this).val(),
 				csrfmiddlewaretoken: "{{csrf_token}}",

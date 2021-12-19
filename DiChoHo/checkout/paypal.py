@@ -1,7 +1,4 @@
-import sys
-
 from paypalcheckoutsdk.core import PayPalHttpClient, SandboxEnvironment
-
 
 class PayPalClient:
     def __init__(self):
