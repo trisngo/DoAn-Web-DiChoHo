@@ -122,13 +122,6 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-# get contact page
-def contact_view(request):
-    return render(
-        request,
-        'contact.html',
-    )
-
 # get about page
 def about_view(request):
     return render(

@@ -6,11 +6,13 @@
 	<title>DICHOHO | {% block title %}{% endblock %}</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300&family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
 
-	<link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
-		rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lora:wght@300&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Amatic+SC:wght@300&display=swap" rel="stylesheet">
+	
 
 	<link rel="stylesheet" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
 	<link rel="stylesheet" href="{% static 'css/animate.css' %}">
@@ -112,9 +114,8 @@
 					<div class="ftco-footer-widget mb-4 ml-md-5">
 						<h2 class="ftco-heading-2">Menu</h2>
 						<ul class="list-unstyled">
-							<li><a href="#" class="py-2 d-block">Sản phẩm</a></li>
-							<li><a href="#" class="py-2 d-block">Về chúng tôi</a></li>
-							<li><a href="#" class="py-2 d-block">Liên lạc</a></li>
+							<li><a href="{% url 'shop' %}" class="py-2 d-block">Sản phẩm</a></li>
+							<li><a href="{% url 'about' %}" class="py-2 d-block">Về chúng tôi</a></li>
 						</ul>
 					</div>
 				</div>
