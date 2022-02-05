@@ -71,4 +71,15 @@ Bạn có thể vào file settings.py và đặt DEBUG = False nghĩa là khi we
 python3 manage.py runserver --insecure
 ```
 
+## Chạy với Docker
+
+Tại thư mục gốc có chứa docker-compose.yml chạy lệnh sau:
+```bash
+docker-compose up
+```
+Tại thời điểm này, bạn có thể không chạy được ứng dụng do ứng dụng không tìm thấy được MySQL databse với hostname là 'db', bạn hãy chạy lệnh ``docker-compose up`` 1 lần nữa.
+
+## Phụ Lục
+
 Các tài khoản sử dụng trong project có thể được tìm thấy ở ``DiChoHo/account_test.txt``
+
