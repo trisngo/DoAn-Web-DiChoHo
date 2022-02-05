@@ -84,10 +84,10 @@ WSGI_APPLICATION = 'DiChoHo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': "", # Tên database sử dụng
-        'USER': "", # Tên tài khoản sử dụng
-        'PASSWORD': "", # Mật khẩu sử dụng
-        'HOST': 'localhost',
+        'NAME': os.environ.get('MYSQL_NAME'),
+        'USER': os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'HOST': 'db',
         'PORT': '3306',
     }
 }
