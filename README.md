@@ -12,7 +12,7 @@
 Để tiến hành cài đặt, hãy clone project này về local với câu lệnh:
 
 ```bash
-  git clone https://github.com/trisngo/DoAn-Web-DiChoHo.git
+  git clone https://github.com/trisngo/project-web-dichoho.git
 ```
 
 Sau đó tiến hành cài đặt môi trường cần thiết cho project sử dụng câu lệnh sau:
