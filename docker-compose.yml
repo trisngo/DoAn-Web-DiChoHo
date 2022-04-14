@@ -14,7 +14,12 @@ services:
     volumes:
       - ./mysql/data:/var/lib/mysql
       - ./mysql/init:/docker-entrypoint-initdb.d/:ro
-      
+    healthcheck:
+      test: "/usr/bin/mysql --user=dichoho --password=dichoho --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 2s
+      retries: 10
+
   web:
     build: .
     command: bash -c "python DiChoHo/manage.py migrate && python DiChoHo/manage.py runserver 0.0.0.0:8000"
@@ -27,4 +32,5 @@ services:
       - MYSQL_DATABASE=dichoho
       - MYSQL_PASSWORD=dichoho
     depends_on: 
-      - db
+      db:
+        condition: service_healthy
