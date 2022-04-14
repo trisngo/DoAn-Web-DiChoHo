@@ -118,44 +118,22 @@
   </div>
 </section>
 
+<div class="alert alert-success" role="alert" style="position: fixed; bottom: 0px; left: 25px; display: none;" id="success-alert">
+  Thêm sản phẩm thành công
+</div>
+
 {% endblock %}
 {% block arrow %}
 <div class="row">
 	<div class="mouse">
 		<a href="#" class="mouse-icon">
 			<div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+      <input type="hidden" value="{{csrf_token}}" id="csrf_token_id" />
 		</a>
 	</div>
 </div>
 
-<script>
-    $(document).ready(function(){
-        $(".jqueryCatch").on('click', function (e) {
-        if(e.target !== e.currentTarget) return;
-        e.preventDefault();
-        var clickElementId = e.target.id;
-        if (clickElementId.includes("productAdd"))
-        {
-          var prodid = clickElementId.replace("productAdd1","");
-          prodid = prodid.replace("productAdd2","");
-          $.ajax({
-          type: 'POST',
-          url: '{% url "cart_add" %}',
-          data: {
-            productid: prodid,
-            productqty: 1,
-            csrfmiddlewaretoken: "{{csrf_token}}",
-            action: 'post'
-          },
-          success: function (json) {
-            console.log("Add successfully");
-          },
-          error: function (xhr, errmsg, err) {}
-        });
-        }
-      })
-    });
-</script>
+<script src="{% static 'js/search.js' %}"></script>
 
 {% endblock %}
 
