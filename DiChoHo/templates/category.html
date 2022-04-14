@@ -143,6 +143,7 @@
   <div class="mouse">
     <a href="#" class="mouse-icon">
       <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+      <input type="hidden" value="{{csrf_token}}" id="csrf_token_id" />
     </a>
   </div>
 </div>
@@ -151,8 +152,9 @@
   Thêm sản phẩm thành công
 </div>
 
+<script src="{% static 'js/category.js' %}"></script>
 
-<script>
+<!-- <script>
   var urlArray = window.location.href.split("/");
   if (urlArray[urlArray.length - 2] == "rau-cu") {
     document.getElementById("raucu").classList.add('active');
@@ -213,6 +215,6 @@
       }
     })
   });
-</script>
+</script> -->
 
 {% endblock %}
