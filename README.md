@@ -77,7 +77,7 @@ Tại thư mục gốc có chứa docker-compose.yml chạy lệnh sau:
 ```bash
 docker-compose up
 ```
-Tại thời điểm này, bạn có thể không chạy được ứng dụng do ứng dụng không tìm thấy được MySQL databse với hostname là 'db', bạn hãy chạy lệnh ``docker-compose up`` 1 lần nữa.
+Bạn đợi 1 lúc để database hoàn thành khởi tạo và được import dữ liệu vào. Sau đó web đã chạy thành công. Sau đó truy cập tại đường dẫn ``http://127.0.0.1:8000/``
 
 ## Phụ Lục
 
