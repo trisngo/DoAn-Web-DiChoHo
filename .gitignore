@@ -3,7 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
 DiChoHo/DiChoHo/settings.py
-
+mysql/data/*
 ### venv ###
 myapp/
 
