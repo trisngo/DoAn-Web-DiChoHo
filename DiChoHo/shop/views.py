@@ -20,14 +20,18 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .forms import AddressForm, UserForm, ProfileForm
 from django.core.mail import EmailMessage
 from django.conf import settings
+import datetime
 
 
 def handler404(request):
-    response = django.shortcuts.render_to_response('404.html', {}, context_instance=RequestContext(request))
+    response = django.shortcuts.render_to_response(
+        '404.html', {}, context_instance=RequestContext(request))
     response.status_code = 404
     return response
 
 # get index page
+
+
 def index_view(request):
     products = Product.objects.all().order_by('-sold')
     products2 = Product.objects.all().order_by('-created')
@@ -49,13 +53,15 @@ def shop_view(request):
     return render(request, 'shop.html', {'products': products})
 
 # get login page
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('/')
     if request.method == 'POST':
         getUsername = request.POST["username"]
         getPassword = request.POST["password"]
-        user = authenticate(username=getUsername,
+        user = authenticate(request=request, username=getUsername,
                             password=getPassword)
         if user is not None:
             login(request, user)
@@ -66,6 +72,8 @@ def login_view(request):
     return render(request, 'login.html')
 
 # get register page
+
+
 def register_view(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -101,6 +109,8 @@ def register_view(request):
     return render(request, 'register.html')
 
 # send mail
+
+
 @csrf_exempt
 def send_mail(uid):
     template = render_to_string('register_mail.html', {'name': uid.first_name})
@@ -123,6 +133,8 @@ def logout_view(request):
     return redirect('/')
 
 # get about page
+
+
 def about_view(request):
     return render(
         request,
@@ -130,6 +142,8 @@ def about_view(request):
     )
 
 # get wishlist page
+
+
 @login_required
 def wishlist_view(request):
     products = Product.objects.filter(users_wishlist=request.user)
@@ -139,6 +153,7 @@ def wishlist_view(request):
         {"products": products}
     )
 
+
 @login_required
 def wishlist_add(request):
     prodid = request.POST.get("productid")
@@ -146,6 +161,7 @@ def wishlist_add(request):
     product.users_wishlist.add(request.user)
     response = JsonResponse({"Status": "OK"})
     return response
+
 
 @login_required
 def wishlist_delete(request):
@@ -156,6 +172,8 @@ def wishlist_delete(request):
     return response
 
 # profile
+
+
 @login_required
 def profile_view(request):
     if request.method == "POST":
@@ -181,6 +199,7 @@ def profile_view(request):
         {'user': user1, 'profile': profile, 'orders': orders,
             'form': form, 'addresses': addresses, 'ratings': ratings}
     )
+
 
 @login_required
 def edit_profile(request, id):
@@ -209,6 +228,8 @@ def edit_profile(request, id):
     return render(request, "edit_profile.html", {"user_form": user_form, "profile_form": profile_form})
 
 # view category, product
+
+
 def category_list(request, category_slug=None):
     category = get_object_or_404(Category, slug=category_slug)
     allFilterProducts = Product.objects.filter(category=category)
@@ -236,20 +257,19 @@ def product_detail(request, slug):
         count_stars += rating.ratingStar
     average_stars = 0
     if count > 0:
-        average_stars = count_stars/count
-
-    print(average_stars)
+        average_stars = round(count_stars/count, 1)
     average_stars_int = int(average_stars)
-    print(average_stars_int)
-    return render(request, 'product-single.html', 
-                    {'product': product, 'relative_products': relative_products, 
-                    'ratings': allRatings, "rating_count": count, 
-                    'stars': average_stars, 'stars_int': range(average_stars_int), 
-                    'unstars_int': range(5 - average_stars_int)
-                    })
+    time_now = datetime.datetime.now()
+    rating_time = time_now.strftime("%H:%M:%S %d/%m/%Y")
+    return render(request, 'product-single.html',
+                  {'product': product, 'relative_products': relative_products,
+                   'ratings': allRatings, "rating_count": count,
+                   'stars': average_stars, 'stars_int': range(average_stars_int),
+                   'unstars_int': range(5 - average_stars_int),
+                   })
 
 
-#review
+# review
 @login_required
 def review_add(request):
     # if request.method == "POST":
@@ -261,13 +281,12 @@ def review_add(request):
         content = str(request.POST.get("content"))
         ratingStar = float(request.POST.get("star"))
 
-        
         if Rating.objects.filter(product=product_id).exists():
             rating = Rating.objects.filter(product=product_id).update(
                 content=content,
                 ratingStar=ratingStar,
             )
-            
+
         else:
             rating = Rating.objects.create(
                 user=user,
@@ -285,41 +304,51 @@ def cart_view(request):
     cart = Cart(request)
     return render(request, "cart.html", {"cart": cart})
 
+
 def cart_add(request):
-    cart = Cart(request)
-    if request.POST.get("action") == "post":
-        product_id = int(request.POST.get("productid"))
-        product_qty = int(request.POST.get("productqty"))
-        product = get_object_or_404(Product, id=product_id)
-        cart.add(product=product, qty=product_qty)
-        cartqty = cart.__len__()
-        response = JsonResponse({"qty": cartqty})
-        return response
+    if int(request.POST.get("productqty")):
+        if int(request.POST.get("productqty")) > 0:
+            cart = Cart(request)
+            if request.POST.get("action") == "post":
+                product_id = int(request.POST.get("productid"))
+                product_qty = int(request.POST.get("productqty"))
+                product = get_object_or_404(Product, id=product_id)
+                cart.add(product=product, qty=product_qty)
+                cartqty = cart.__len__()
+                response = JsonResponse({"qty": cartqty})
+                return response
+    else:
+        print(type(request.POST.get("productqty")))
+
 
 def cart_delete(request):
     cart = Cart(request)
     if request.POST.get("action") == "post":
         product_id = int(request.POST.get("productid"))
         cart.delete(product=product_id)
-
         cartqty = cart.__len__()
         carttotal = cart.get_total_price()
         response = JsonResponse({"qty": cartqty, "subtotal": carttotal})
         return response
 
-def cart_update(request):
-    cart = Cart(request)
-    if request.POST.get("action") == "post":
-        product_id = int(request.POST.get("productid"))
-        product_qty = int(request.POST.get("productqty"))
-        cart.update(product=product_id, qty=product_qty)
 
-        cartqty = cart.__len__()
-        cartsubtotal = cart.get_subtotal_price()
-        response = JsonResponse({"qty": cartqty, "subtotal": cartsubtotal})
-        return response
+def cart_update(request):
+    if int(request.POST.get("productqty")):
+        if int(request.POST.get("productqty")) > 0:
+            cart = Cart(request)
+            if request.POST.get("action") == "post":
+                product_id = int(request.POST.get("productid"))
+                product_qty = int(request.POST.get("productqty"))
+                cart.update(product=product_id, qty=product_qty)
+                cartqty = cart.__len__()
+                cartsubtotal = cart.get_subtotal_price()
+                response = JsonResponse(
+                    {"qty": cartqty, "subtotal": cartsubtotal})
+                return response
 
 # address(có nhiều địa chỉ có thể được tạo)
+
+
 @ login_required
 def add_address(request):
     if request.method == "POST":
@@ -332,6 +361,7 @@ def add_address(request):
     else:
         address_form = AddressForm()
     return render(request, "edit_address.html", {"form": address_form})
+
 
 @ login_required
 def edit_address(request, id):
@@ -346,10 +376,12 @@ def edit_address(request, id):
         address_form = AddressForm(instance=address)
     return render(request, "edit_address.html", {"form": address_form})
 
+
 @ login_required
 def delete_address(request, id):
     address = Address.objects.filter(pk=id, user=request.user).delete()
     return redirect("profile")
+
 
 @ login_required
 def set_address_default(request, id):
@@ -364,6 +396,8 @@ def set_address_default(request, id):
     return redirect("profile")
 
 # search
+
+
 def search_views(request):
     query_item = request.GET.get("search").lower()
     products = Product.objects.filter(title__icontains=query_item)
@@ -372,3 +406,7 @@ def search_views(request):
 
 def page_not_found(request):
     return render(request, '404.html')
+
+
+def locked_out(request):
+    return render(request, 'lockedout.html')

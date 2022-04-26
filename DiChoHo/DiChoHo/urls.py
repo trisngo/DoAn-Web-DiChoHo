@@ -20,9 +20,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('shop.urls')), # url các chức năng chính
-    path("checkout/", include("checkout.urls", namespace="checkout")), # url checkout
-] 
+    path('', include('shop.urls')),  # url các chức năng chính
+    path("checkout/", include("checkout.urls",
+         namespace="checkout")),  # url checkout
+]
 
 if settings.DEBUG:
-    urlpatterns+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns + static(settings.STATIC_URL,
+                         document_root=settings.STATIC_ROOT)

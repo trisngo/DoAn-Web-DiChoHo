@@ -4,7 +4,7 @@ $(function () {
         $("#jqueryCatchClick").on("click", function (e) {
             e.preventDefault();
             var clickElementId = e.target.id;
-            var csrf_token = document.getElementById('csrf_token_id').value;
+            var csrf_token = document.getElementById('ctk').value;
             if (clickElementId.includes("delete-")) {
                 var prodid = clickElementId.replace("delete-button", "");
                 prodid = prodid.replace("delete-span", "");

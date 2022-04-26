@@ -22,7 +22,7 @@ services:
 
   web:
     build: .
-    command: bash -c "python DiChoHo/manage.py migrate && python DiChoHo/manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python DiChoHo/manage.py migrate && python DiChoHo/manage.py runserver 0.0.0.0:8000 --insecure"
     volumes:
       - .:/code
     ports:

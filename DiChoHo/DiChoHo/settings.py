@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=$3=r_!k(1_%nzxs_7^ip4ar(mn+^#a32m8rlo1)8v7ntkyznc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.20']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
 
     'shop',
     'orders',
-    'checkout'
+    'checkout',
+    'axes'
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware'
+]
+
+AUTHENTICATION_BACKENDS = [
+    # AxesBackend should be the first backend in the AUTHENTICATION_BACKENDS list.
+    'axes.backends.AxesBackend',
+
+    # Django ModelBackend is the default authentication backend.
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 ROOT_URLCONF = 'DiChoHo.urls'
@@ -83,7 +93,7 @@ WSGI_APPLICATION = 'DiChoHo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': os.environ.get('MYSQL_NAME'),
         'USER': os.environ.get('MYSQL_USER'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
@@ -137,15 +147,28 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#Cart session ID
+# Cart session ID
 CART_SESSION_ID = "cart"
 
-LOGIN_URL='/login'
-LOGIN_REDIRECT_URL='/login'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/login'
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER ='' # Email sử dung để gửi mail tới khách hàng
-EMAIL_HOST_PASSWORD = '' # Mật khẩu email
+EMAIL_HOST_USER = ''  # Email sử dung để gửi mail tới khách hàng
+EMAIL_HOST_PASSWORD = ''  # Mật khẩu email
 EMAI_PORT = 587
 EMAIL_USE_TLS = True
+
+# Configure on django_axes, prevent login bruteforce
+# After 5 times login failed, user will be banned
+AXES_FAILURE_LIMIT = 5
+# Reset time is 1 hour
+AXES_COOLOFF_TIME = 1
+AXES_RESET_ON_SUCCESS = True
+AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True
+AXES_LOCKOUT_URL = '/lockedout'
+
+# Set HTTPOnly
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
