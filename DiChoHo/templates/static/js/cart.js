@@ -8,7 +8,7 @@ $(function () {
                 var td_id = "price_" + e.target.id;
                 var productprice = document.getElementById(td_id).innerText;
                 productprice = productprice.replace("đ", "");
-                var csrf_token = document.getElementById('csrf_token_id').value;
+                var csrf_token = document.getElementById('ctk').value;
                 document.getElementById("total" + td_id).innerText =
                     productprice * productqty + "đ";
                 $.ajax({
@@ -31,7 +31,7 @@ $(function () {
         $("#jqueryCatchClick").on("click", function (e) {
             e.preventDefault();
             var clickElementId = e.target.id;
-            var csrf_token = document.getElementById('csrf_token_id').value;
+            var csrf_token = document.getElementById('ctk').value;
             if (clickElementId.includes("delete-")) {
                 var prodid = clickElementId.replace("delete-button", "");
                 prodid = prodid.replace("delete-span", "");

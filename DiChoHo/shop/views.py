@@ -20,6 +20,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .forms import AddressForm, UserForm, ProfileForm
 from django.core.mail import EmailMessage
 from django.conf import settings
+import datetime
 
 
 def handler404(request):
@@ -256,16 +257,15 @@ def product_detail(request, slug):
         count_stars += rating.ratingStar
     average_stars = 0
     if count > 0:
-        average_stars = count_stars/count
-
-    print(average_stars)
+        average_stars = round(count_stars/count, 1)
     average_stars_int = int(average_stars)
-    print(average_stars_int)
+    time_now = datetime.datetime.now()
+    rating_time = time_now.strftime("%H:%M:%S %d/%m/%Y")
     return render(request, 'product-single.html',
                   {'product': product, 'relative_products': relative_products,
                    'ratings': allRatings, "rating_count": count,
                    'stars': average_stars, 'stars_int': range(average_stars_int),
-                   'unstars_int': range(5 - average_stars_int)
+                   'unstars_int': range(5 - average_stars_int),
                    })
 
 
@@ -306,7 +306,7 @@ def cart_view(request):
 
 
 def cart_add(request):
-    if type(int(request.POST.get("productqty"))) is int:
+    if int(request.POST.get("productqty")):
         if int(request.POST.get("productqty")) > 0:
             cart = Cart(request)
             if request.POST.get("action") == "post":
@@ -333,7 +333,7 @@ def cart_delete(request):
 
 
 def cart_update(request):
-    if type(int(request.POST.get("productqty"))) is int:
+    if int(request.POST.get("productqty")):
         if int(request.POST.get("productqty")) > 0:
             cart = Cart(request)
             if request.POST.get("action") == "post":
@@ -407,5 +407,6 @@ def search_views(request):
 def page_not_found(request):
     return render(request, '404.html')
 
+
 def locked_out(request):
-    return render(request,'lockedout.html')
+    return render(request, 'lockedout.html')

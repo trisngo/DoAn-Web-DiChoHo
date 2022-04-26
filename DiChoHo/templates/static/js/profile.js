@@ -35,7 +35,7 @@ $(function () {
 
     $(document).ready(function () {
         var prodid = "";
-        var csrf_token = document.getElementById('csrf_token_id').value;
+        var csrf_token = document.getElementById('ctk').value;
         $(".jQueryEvaluate").on("click", function (e) {
             if (e.target !== e.currentTarget) return;
             e.preventDefault();
