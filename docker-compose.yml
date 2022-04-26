@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  db:
+    container_name: db
+    image: mysql
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: dichoho
+      MYSQL_DATABASE: dichoho
+      MYSQL_USER: dichoho
+      MYSQL_PASSWORD: dichoho
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/init:/docker-entrypoint-initdb.d/:ro
+    healthcheck:
+      test: "/usr/bin/mysql --user=dichoho --password=dichoho --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 2s
+      retries: 10
+
+  web:
+    build: .
+    command: bash -c "python DiChoHo/manage.py migrate && python DiChoHo/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - MYSQL_NAME=dichoho
+      - MYSQL_DATABASE=dichoho
+      - MYSQL_PASSWORD=dichoho
+    depends_on: 
+      db:
+        condition: service_healthy

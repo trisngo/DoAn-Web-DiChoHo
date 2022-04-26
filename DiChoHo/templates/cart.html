@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}Giỏ hàng{% endblock %}
+{% block menu_shop_class %}active{% endblock %}
+{% block content %}
+{% load static %}
+
+<div
+  class="hero-wrap hero-bread"
+  style="background-image: url('/static/images/bg_4.jpg')"
+>
+  <div class="container">
+    <div
+      class="
+        row
+        no-gutters
+        slider-text
+        align-items-center
+        justify-content-center
+      "
+    >
+      <div class="col-md-9 ftco-animate text-center">
+        <h1 class="mb-0 bread">Giỏ hàng</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="ftco-section ftco-cart">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 ftco-animate">
+        <h5>Vì tình hình dịch bệnh nên chúng tôi chỉ nhận đơn hàng trên 200.000 VNĐ, hạn chế giao hàng nhiều lần . 
+          Xin quý khách thông cảm.</h5>
+        <div class="cart-list">
+          <table class="table" id="jqueryCatchClick">
+            <thead class="thead-primary">
+              <tr class="text-center">
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>Sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Tổng cộng</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if cart|length > 0 %}
+                {% for item in cart %}
+                {% with product=item.product %}
+
+              <tr class="text-center">
+                <td class="product-remove">
+                  <a
+                    type="button"
+                    id="delete-button{{product.id}}"
+                    ><span class="ion-ios-close" id="delete-span{{product.id}}"></span
+                  ></a>
+                </td>
+                <td class="image-prod">
+                  <div class="img" style="margin-top: 30px">
+                    <img class="img-fluid" src="{{ product.image.url | slice:"10:" }}" alt="..." />
+                  </div>
+                </td>
+                <td class="product-name">
+                  <h3 style="margin-top: 15px">{{product.title}}</h3>
+                </td>
+
+                <td
+                  class="price"
+                  id="price_input{{product.id}}"
+                  style="padding-top: 47px"
+                >
+                  {{product.price}}đ
+                </td>
+
+                <td class="quantity">
+                  <div class="input-group mb-3" style="margin-top: 25px">
+                    <input
+                      type="text"
+                      id="input{{product.id}}"
+                      name="{{product.title}}"
+                      class="quantity form-control input-number update_value"
+                      value="{{item.qty}}"
+                      min="1"
+                      max="100"
+                    />
+                  </div>
+                </td>
+
+                <td
+                  class="total"
+                  id="totalprice_input{{product.id}}"
+                  style="margin-top: 25px"
+                >
+                  {{item.total_price}}đ
+                </td>
+              </tr>
+              {% endwith %}
+              {% endfor %}
+            {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
+        <div class="cart-total mb-3">
+          <h3>Tính tiền</h3>
+          <hr />
+          <p class="d-flex total-price">
+            <span>Tổng số tiền sản phẩm</span>
+            <span id="totalPrice" style="text-transform: lowercase;">{{cart.get_subtotal_price}}đ</span>
+          </p>
+          {% for message in messages %}
+          <div class="msg">{{message}}</div>
+          {% endfor %}
+        </div>
+        <p class="row justify-content-center">
+          <a role="button" href="{% url 'checkout:delivery' %}" class="btn btn-primary py-3 px-4">Thanh toán</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<input type="hidden" value="{{csrf_token}}" id="csrf_token_id" />
+
+<script src="{% static 'js/cart.js' %}"></script>
+
+{% endblock %}

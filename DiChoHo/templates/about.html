@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Về Chúng Tôi{% endblock %}
+
+{% block menu_about_class %}active{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class="hero-wrap hero-bread" style="background-image: url('/static/images/bg_2.jpg');">
+  <div class="container">
+    <div class="row no-gutters slider-text align-items-center justify-content-center">
+      <div class="col-md-9 ftco-animate text-center">
+        <p class="breadcrumbs"><span class="mr-2"></span></p>
+        <h1 class="mb-0 bread">Về chúng tôi</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="ftco-section ftco-no-pb ftco-no-pt bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-5 p-md-5 img img-2 d-flex justify-content-center align-items-center mt-5"
+        style="background-image:  url('/static/images/about.jpg'); width: 450px; height:450px;">
+        <a href="https://vimeo.com/45830194" class="icon popup-vimeo d-flex justify-content-center align-items-center">
+          <span class="icon-play"></span>
+        </a>
+      </div>
+      <div class="col-md-7 py-5 wrap-about pb-md-5 ftco-animate">
+        <div class="heading-section-bold mb-4 mt-md-5">
+          <div class="ml-md-0">
+            <h2 class="mb-4">Chào mừng bạn đến với cửa hàng thực phẩm của chúng tôi</h2>
+          </div>
+        </div>
+        <div class="pb-md-5">
+          <p>Chúng tôi hỗ trợ bạn các dịch vụ về mua hàng trực tuyến với chất lượng và giá trị tốt nhất trên Website của
+            chúng tôi</p>
+          <p><a href="{% url 'shop' %}" class="btn btn-primary" style="background-color: #02be6e;">Shop</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ftco-section testimony-section">
+  <div class="container">
+    <div class="row justify-content-center mb-5 pb-3">
+      <div class="col-md-7 heading-section ftco-animate text-center">
+        <span class="subheading">Testimony</span>
+        <h2 class="mb-4">Những vị khách của chúng tôi đã nhận xét</h2>
+      </div>
+    </div>
+    <div class="row ftco-animate">
+      <div class="col-md-12">
+        <div class="carousel-testimony owl-carousel">
+          <div class="item">
+            <div class="testimony-wrap p-4 pb-5">
+              <div class="user-img mb-5" style="background-image: url(/static/images/person_1.jpg)">
+                <span class="quote d-flex align-items-center justify-content-center">
+                  <i class="icon-quote-left"></i>
+                </span>
+              </div>
+              <div class="text text-center">
+                <p class="mb-5 pl-4 line"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;">Sản phẩm chất lượng rất tốt, giao hàng lại đúng hạn, tôi rất hài lòng</p>
+                <p class="name">Garreth Smith</p>
+                <span class="position">Marketing Manager</span>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="testimony-wrap p-4 pb-5">
+              <div class="user-img mb-5" style="background-image: url(/static/images/person_2.jpg)">
+                <span class="quote d-flex align-items-center justify-content-center">
+                  <i class="icon-quote-left"></i>
+                </span>
+              </div>
+              <div class="text text-center">
+                <p class="mb-5 pl-4 line"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;">Cửa hàng luôn có những chương trình giảm giá, đồng thời lại miễn phí giao hàng. Cho cửa hàng 5 sao luôn.</p>
+                <p class="name">Garreth Smith</p>
+                <span class="position">Interface Designer</span>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="testimony-wrap p-4 pb-5">
+              <div class="user-img mb-5" style="background-image: url(/static/images/person_3.jpg)">
+                <span class="quote d-flex align-items-center justify-content-center">
+                  <i class="icon-quote-left"></i>
+                </span>
+              </div>
+              <div class="text text-center">
+                <p class="mb-5 pl-4 line"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;">Trong thời buổi dịch bệnh như thế này, việc kiếm được một nguồn nông sản tốt không phải là chuyện dễ dàng, tuy nhiên DICHOHO đã không làm tôi thất vọng.</p>
+                <p class="name">Garreth Smith</p>
+                <span class="position">UI Designer</span>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="testimony-wrap p-4 pb-5">
+              <div class="user-img mb-5" style="background-image: url(/static/images/person_1.jpg)">
+                <span class="quote d-flex align-items-center justify-content-center">
+                  <i class="icon-quote-left"></i>
+                </span>
+              </div>
+              <div class="text text-center">
+                <p class="mb-5 pl-4 line"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;">Giao hàng luôn luôn đúng hạn. Không nói nhiều, cho cửa hàng 5 sao.</p>
+                <p class="name">Garreth Smith</p>
+                <span class="position">Web Developer</span>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="testimony-wrap p-4 pb-5">
+              <div class="user-img mb-5" style="background-image: url(/static/images/person_1.jpg)">
+                <span class="quote d-flex align-items-center justify-content-center">
+                  <i class="icon-quote-left"></i>
+                </span>
+              </div>
+              <div class="text text-center">
+                <p class="mb-5 pl-4 line"
+                style="overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;">Giao hàng luôn luôn đúng hạn, nhân viên thì nhiệt tình. Cửa hàng này rất tốt.</p>
+                <p class="name">Garreth Smith</p>
+                <span class="position">System Analyst</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ftco-section bg-light">
+  <div class="container">
+    <div class="row no-gutters ftco-services">
+      <div class="col-lg-3 text-center d-flex align-self-stretch ftco-animate">
+        <div class="media block-6 services mb-md-0 mb-4">
+          <div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
+            <span class="flaticon-shipped"></span>
+          </div>
+          <div class="media-body">
+            <h3 class="heading">MIỄN PHÍ GIAO HÀNG</h3>
+            <span>CHO NỘI THÀNH TPHCM</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 text-center d-flex align-self-stretch ftco-animate">
+        <div class="media block-6 services mb-md-0 mb-4">
+          <div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
+            <span class="flaticon-diet"></span>
+          </div>
+          <div class="media-body">
+            <h3 class="heading">LUÔN LUÔN TƯƠI</h3>
+            <span>SẢN PHẨM ĐƯỢC ĐÓNG GÓI TỐT</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 text-center d-flex align-self-stretch ftco-animate">
+        <div class="media block-6 services mb-md-0 mb-4">
+          <div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
+            <span class="flaticon-award"></span>
+          </div>
+          <div class="media-body">
+            <h3 class="heading">CHẤT LƯỢNG TUYỆT VỜI</h3>
+            <span>SẢN PHẨM CHẤT LƯỢNG CAO</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 text-center d-flex align-self-stretch ftco-animate">
+        <div class="media block-6 services mb-md-0 mb-4">
+          <div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
+            <span class="flaticon-customer-service"></span>
+          </div>
+          <div class="media-body">
+            <h3 class="heading">HỖ TRỢ</h3>
+            <span>HỖ TRỢ 24/7</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
