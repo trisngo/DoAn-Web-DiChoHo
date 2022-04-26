@@ -6,6 +6,7 @@ $(function () {
             e.preventDefault();
             var clickElementId = e.target.id;
             var csrf_token = document.getElementById('ctk').value;
+            var count = document.getElementById("cart_qty").innerHTML;
             if (clickElementId.includes("productAdd")) {
                 var prodid = clickElementId.replace("productAdd1", "");
                 prodid = prodid.replace("productAdd2", "");
