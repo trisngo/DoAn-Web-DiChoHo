@@ -96,7 +96,8 @@ class Rating(models.Model):
     content = models.TextField(blank=True)
     ratingStar = models.DecimalField(max_digits=6, decimal_places=1, validators=[
         MinValueValidator(0), MaxValueValidator(5)])
-
+    created = models.DateTimeField(auto_now_add=True)
+    
     class Meta:
         verbose_name = "Rating"
         verbose_name_plural = "Rating"

@@ -94,10 +94,13 @@ WSGI_APPLICATION = 'DiChoHo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_NAME'),
-        'USER': os.environ.get('MYSQL_USER'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': 'db',
+        # 'NAME': os.environ.get('MYSQL_NAME'),
+        # 'USER': os.environ.get('MYSQL_USER'),
+        # 'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+        'NAME': 'dichoho',
+        'USER': 'dichoho',
+        'PASSWORD': 'dichoho',
+        'HOST': '192.168.1.20',
         'PORT': '3306',
     }
 }
