@@ -4,15 +4,15 @@ hoangne: AdminAdmin123
 huy123: AdminAdmin123
 anhbd: AdminAdmin123
 
-paypal sandbox test account:
+paypal sandbox test accounts, to get accounts please use paypal developer portal (https://developer.paypal.com/):
 Email ID:
-sb-wtipl8697620@personal.example.com
+...@personal.example.com
 System Generated Password:
-v;L1$z?Q
+...
 
 
 Email ID:
-sb-07o468697619@business.example.com
+...@business.example.com
 System Generated Password:
-GCQ>S0g"
+...
 
