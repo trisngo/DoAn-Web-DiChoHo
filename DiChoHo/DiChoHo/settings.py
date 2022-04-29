@@ -53,7 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'axes.middleware.AxesMiddleware'
+    'axes.middleware.AxesMiddleware',
+    'admin_ip_restrictor.middleware.AdminIPRestrictorMiddleware'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -172,3 +173,10 @@ AXES_LOCKOUT_URL = '/lockedout'
 # Set HTTPOnly
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
+
+# Preven access from outside
+RESTRICT_ADMIN = True
+ALLOWED_ADMIN_IPS = ['127.0.0.1', '::1']
+ALLOWED_ADMIN_IP_RANGES = ['127.0.0.0/24', '::/1']
+RESTRICTED_APP_NAMES = ['admin']
+TRUST_PRIVATE_IP = True
