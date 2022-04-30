@@ -34,6 +34,8 @@ $(function () {
     });
 
     $(document).ready(function () {
+        var id = "";
+        var ordid = "";
         var prodid = "";
         var csrf_token = document.getElementById('ctk').value;
         $(".jQueryEvaluate").on("click", function (e) {
@@ -41,7 +43,10 @@ $(function () {
             e.preventDefault();
             var clickElementId = e.target.id;
             if (clickElementId.includes("evaluate")) {
-                prodid = clickElementId.replace("evaluate", "");
+                id = clickElementId.replace("evaluate", "");
+                var idArray = id.split("-");
+                prodid = idArray[0];
+                ordid = idArray[1];
             }
         });
 
@@ -54,6 +59,7 @@ $(function () {
                 url: '/profile/review',
                 data: {
                     productid: prodid,
+                    orderid: ordid,
                     star: starRating,
                     content: contentRating,
                     csrfmiddlewaretoken: csrf_token,
@@ -62,10 +68,19 @@ $(function () {
                 success: function (json) {
                     document.getElementById("form3").value = "";
                     document.getElementById("form2").value = "";
-                    $("#success-alert").show();
-                    $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
-                        $("#success-alert").slideUp(500);
-                    });
+                    var obj = JSON.stringify(json);
+                    if(obj.includes("OK")){
+                        $("#success-alert").show();
+                        $("#success-alert").fadeTo(2000, 500).slideUp(500, function () {
+                            $("#success-alert").slideUp(500);
+                        });
+                    }
+                    else{
+                        $("#error").show();
+                        $("#error").fadeTo(2000, 500).slideUp(500, function () {
+                            $("#error").slideUp(500);
+                        });
+                    }
                 },
                 error: function (xhr, errmsg, err) { }
             });

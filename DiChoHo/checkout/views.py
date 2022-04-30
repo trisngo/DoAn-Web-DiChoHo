@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from .paypal import PayPalClient
 from decimal import Decimal
+from smtplib import SMTPException
 
 from .models import DeliveryOptions, PaymentOptions
 from shop.cart import Cart
@@ -118,23 +119,20 @@ def payment(request):
     else:
         # tự động gọi complete để lưu vào hóa đơn
         payment_complete(request)
-        return render(request, "checkout/payment_successful.html", {})
+        payment_successful(request)
     
    
 
 @login_required
 def payment_complete(request):
     user_id = request.user.id
-
     session = request.session
     user = get_object_or_404(User, id=user_id)
     address = get_object_or_404(Address, user=user, default=True)
     cart = Cart(request)
-
     payment_id = session["payment"]["payment_option"]
     payment_type = PaymentOptions.objects.get(id=payment_id)
     payment_name = payment_type.name
-
     if "Paypal" in payment_type.name:
         PPClient = PayPalClient()
 
@@ -143,7 +141,6 @@ def payment_complete(request):
 
         requestorder = OrdersGetRequest(data)
         response = PPClient.client.execute(requestorder)
-
         order = Order.objects.create(
             user_id=user_id,
             full_name=address.full_name,
@@ -155,7 +152,6 @@ def payment_complete(request):
             payment_option=payment_name,
             billing_status=True,
         )
-
 
     else:
         order = Order.objects.create(
@@ -169,16 +165,13 @@ def payment_complete(request):
             payment_option=payment_name,
             billing_status=False,
         )
-
     order_id = order.pk
 
     for item in cart:
         OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
         sold_qty = get_object_or_404(Product, id=item["product"].id).sold + item["qty"]
         Product.objects.filter(id=item["product"].id).update(sold=sold_qty)
-
     send_mail(request.user, cart, order)
-
     return JsonResponse("Thanh toán thành công", safe=False)
 
 
@@ -201,5 +194,8 @@ def send_mail(uid, cart, order):
 
     email.fail_silently = False
     email.content_subtype = 'html'
-    email.send()
+    try:
+        email.send()
+    except SMTPException as e:
+        print('There was an error sending an email: ', e) 
     return JsonResponse("Gửi gmail thành công",safe=False)

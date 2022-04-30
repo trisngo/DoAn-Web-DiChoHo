@@ -188,7 +188,7 @@ def profile_view(request):
 
     form = PasswordChangeForm(request.user)
     userid = request.user.id
-    orders = Order.objects.filter(user_id=userid).filter(billing_status=True)
+    orders = Order.objects.filter(user_id=userid)
     user1 = get_object_or_404(User, id=userid)
     profile = get_object_or_404(Profile, id=userid)
     addresses = Address.objects.filter(user=request.user)
@@ -273,29 +273,34 @@ def product_detail(request, slug):
 @login_required
 def review_add(request):
     # if request.method == "POST":
+    response = JsonResponse({"status": "ERROR"})
     if request.POST.get("action") == "post":
-        user_id = request.user.id
-        product_id = int(request.POST.get("productid"))
-        product = get_object_or_404(Product, id=product_id)
-        user = get_object_or_404(User, id=user_id)
-        content = str(request.POST.get("content"))
-        ratingStar = float(request.POST.get("star"))
+        order_id = int(request.POST.get("orderid"))
+        order = get_object_or_404(Order, id=order_id)
+        if(order.billing_status):
+            user_id = request.user.id
+            product_id = int(request.POST.get("productid"))
+            product = get_object_or_404(Product, id=product_id)
+            user = get_object_or_404(User, id=user_id)
+            content = str(request.POST.get("content"))
+            ratingStar = float(request.POST.get("star"))
 
-        if Rating.objects.filter(product=product_id).exists():
-            rating = Rating.objects.filter(product=product_id).update(
-                content=content,
-                ratingStar=ratingStar,
-            )
+            if Rating.objects.filter(product=product_id).exists():
+                rating = Rating.objects.filter(product=product_id).update(
+                    content=content,
+                    ratingStar=ratingStar,
+                )
 
-        else:
-            rating = Rating.objects.create(
-                user=user,
-                product=product,
-                content=content,
-                ratingStar=ratingStar,
-            )
-        response = JsonResponse({"status": "OK"})
-        return response
+            else:
+                rating = Rating.objects.create(
+                    user=user,
+                    product=product,
+                    content=content,
+                    ratingStar=ratingStar,
+                )
+            response = JsonResponse({"status": "OK"})
+    print(response.content)
+    return response
 
 
 #  cart
