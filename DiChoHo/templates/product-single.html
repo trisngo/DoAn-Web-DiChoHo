@@ -37,10 +37,6 @@
 						<a href="#" class="mr-2">{{stars}}</a>
 						{% for star in stars_int%}
 						<a href="#"><span class="ion-ios-star"></span></a>
-						{% comment %} <a href="#"><span class="ion-ios-star-outline"></span></a>
-						<a href="#"><span class="ion-ios-star-outline"></span></a>
-						<a href="#"><span class="ion-ios-star-outline"></span></a>
-						<a href="#"><span class="ion-ios-star-outline"></span></a> {% endcomment %}
 						{% endfor %}
 						{% for star in unstars_int%}
 						<a href="#"><span class="ion-ios-star-outline"></span></a>
@@ -136,7 +132,10 @@
 	{% for rating in ratings %}
 	{% comment %} {% with user=item.product %} {% endcomment %}
 		<hr>
-		<h4>{{rating.user.username}} <span style="border-radius: 50%; background-color: #3cde67; padding: 10px; font-size: 10px; color:white;">{{rating.ratingStar|floatformat:"1"}}</span></h4>
+		<h4>{{rating.user.username}} 
+			<span style="border-radius: 50%; background-color: #3cde67; padding: 10px; font-size: 10px; color:white;">{{rating.ratingStar|floatformat:"1"}}</span>
+		</h4>
+		<span style="color: #bbb; font-size: 13px;">{{rating.created}}</span>
 		<p>{{rating.content}}</p>
 	{% endfor %}
 	</div>

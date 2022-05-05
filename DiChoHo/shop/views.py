@@ -259,8 +259,8 @@ def product_detail(request, slug):
     if count > 0:
         average_stars = round(count_stars/count, 1)
     average_stars_int = int(average_stars)
-    time_now = datetime.datetime.now()
-    rating_time = time_now.strftime("%H:%M:%S %d/%m/%Y")
+    # time_now = datetime.datetime.now()
+    # rating_time = time_now.strftime("%H:%M:%S %d/%m/%Y")
     return render(request, 'product-single.html',
                   {'product': product, 'relative_products': relative_products,
                    'ratings': allRatings, "rating_count": count,
@@ -284,11 +284,12 @@ def review_add(request):
             user = get_object_or_404(User, id=user_id)
             content = str(request.POST.get("content"))
             ratingStar = float(request.POST.get("star"))
-
+            time_now = datetime.datetime.now()
             if Rating.objects.filter(product=product_id).exists():
                 rating = Rating.objects.filter(product=product_id).update(
                     content=content,
                     ratingStar=ratingStar,
+                    created=time_now
                 )
 
             else:
@@ -297,6 +298,7 @@ def review_add(request):
                     product=product,
                     content=content,
                     ratingStar=ratingStar,
+                    created=time_now
                 )
             response = JsonResponse({"status": "OK"})
     print(response.content)
