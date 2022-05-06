@@ -123,11 +123,11 @@
             {% if products.number == n %}
             <li class="active"><span>{{n}}</span></li>
             {% else %}
-            <li><a href="{% url 'shop' %}{{category}}/?page={{n}}">{{n}}</a></li>
+            <li><a href="{% url 'shop' %}{{category.slug}}/?page={{n}}">{{n}}</a></li>
             {% endif %}
             {% endfor %}
             {% if products.has_next %}
-            <li><a href="{% url 'shop' %}{{category}}/?page={{products.next_page_number}}">&gt;</a></li>
+            <li><a href="{% url 'shop' %}{{category.slug}}/?page={{products.next_page_number}}">&gt;</a></li>
             {% endif %}
           </ul>
         </div>

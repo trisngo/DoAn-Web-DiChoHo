@@ -124,7 +124,6 @@ def send_mail(uid):
     email.fail_silently = False
     email.content_subtype = 'html'
     email.send()
-    print(email)
     return redirect('login')
 
 
@@ -210,8 +209,6 @@ def edit_profile(request, id):
         profile_form = ProfileForm(
             request.POST, request.FILES, instance=profile)
         if user_form.is_valid() and profile_form.is_valid():
-            print(profile_form)
-            print(profile)
             user_form.save()
 
             if Profile.objects.filter(user=request.user).exists() == False:
@@ -259,8 +256,6 @@ def product_detail(request, slug):
     if count > 0:
         average_stars = round(count_stars/count, 1)
     average_stars_int = int(average_stars)
-    # time_now = datetime.datetime.now()
-    # rating_time = time_now.strftime("%H:%M:%S %d/%m/%Y")
     return render(request, 'product-single.html',
                   {'product': product, 'relative_products': relative_products,
                    'ratings': allRatings, "rating_count": count,
@@ -301,7 +296,6 @@ def review_add(request):
                     created=time_now
                 )
             response = JsonResponse({"status": "OK"})
-    print(response.content)
     return response
 
 
@@ -314,7 +308,7 @@ def cart_view(request):
 
 def cart_add(request):
     if int(request.POST.get("productqty")):
-        if int(request.POST.get("productqty")) > 0:
+        if (int(request.POST.get("productqty")) > 0) and (int(request.POST.get("productqty")) < 100):
             cart = Cart(request)
             if request.POST.get("action") == "post":
                 product_id = int(request.POST.get("productid"))
@@ -324,8 +318,6 @@ def cart_add(request):
                 cartqty = cart.__len__()
                 response = JsonResponse({"qty": cartqty})
                 return response
-    else:
-        print(type(request.POST.get("productqty")))
 
 
 def cart_delete(request):
@@ -341,7 +333,7 @@ def cart_delete(request):
 
 def cart_update(request):
     if int(request.POST.get("productqty")):
-        if int(request.POST.get("productqty")) > 0:
+        if (int(request.POST.get("productqty")) > 0) and (int(request.POST.get("productqty")) < 100):
             cart = Cart(request)
             if request.POST.get("action") == "post":
                 product_id = int(request.POST.get("productid"))
