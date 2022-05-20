@@ -22,11 +22,12 @@ services:
 
   web:
     build: .
-    command: bash -c "python DiChoHo/manage.py migrate && python DiChoHo/manage.py runserver 0.0.0.0:8000 --insecure"
+    command: bash -c "python DiChoHo/manage.py migrate && cd DiChoHo/ && gunicorn DiChoHo.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/code
-    ports:
-      - "80:8000"
+      - static_volume:/code/DiChoHo/templates/static
+    expose:
+        - 8000
     environment:
       - MYSQL_NAME=dichoho
       - MYSQL_DATABASE=dichoho
@@ -34,3 +35,15 @@ services:
     depends_on: 
       db:
         condition: service_healthy
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/code/DiChoHo/templates/static
+    ports:
+      - 80:80
+    depends_on:
+      - web
+
+volumes:
+  static_volume:
