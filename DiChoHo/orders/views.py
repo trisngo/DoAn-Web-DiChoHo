@@ -5,4 +5,3 @@ from shop import cart
 
 from .models import Order, OrderItem
 
-# Không xử lí đơn hàng tại đây nữa, xử lí tại module checkout

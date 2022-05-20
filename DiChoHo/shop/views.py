@@ -29,8 +29,6 @@ def handler404(request):
     response.status_code = 404
     return response
 
-# get index page
-
 
 def index_view(request):
     products = Product.objects.all().order_by('-sold')
@@ -38,8 +36,6 @@ def index_view(request):
     products3 = Product.objects.all().order_by('price')
     return render(request, 'index.html', {'products': products, 'products2': products2, 'products3': products3},)
 
-
-# get shop page
 def shop_view(request):
     allProducts = Product.objects.all()
     p = Paginator(allProducts, 12)
@@ -51,9 +47,6 @@ def shop_view(request):
     except EmptyPage:
         return redirect('404')
     return render(request, 'shop.html', {'products': products})
-
-# get login page
-
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -70,8 +63,6 @@ def login_view(request):
             messages.error(request, 'Sai tài khoản hoặc mật khẩu')
             return redirect(reverse('login'))
     return render(request, 'login.html')
-
-# get register page
 
 
 def register_view(request):
@@ -108,8 +99,6 @@ def register_view(request):
             return redirect('register')
     return render(request, 'register.html')
 
-# send mail
-
 
 @csrf_exempt
 def send_mail(uid):
@@ -132,8 +121,6 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-# get about page
-
 
 def about_view(request):
     return render(
@@ -141,7 +128,6 @@ def about_view(request):
         'about.html',
     )
 
-# get wishlist page
 
 
 @login_required
@@ -227,9 +213,6 @@ def edit_profile(request, id):
         profile_form = ProfileForm(instance=user)
     return render(request, "edit_profile.html", {"user_form": user_form, "profile_form": profile_form})
 
-# view category, product
-
-
 def category_list(request, category_slug=None):
     category = get_object_or_404(Category, slug=category_slug)
     allFilterProducts = Product.objects.filter(category=category)
@@ -259,8 +242,6 @@ def product_detail(request, slug):
     if count > 0:
         average_stars = round(count_stars/count, 1)
     average_stars_int = int(average_stars)
-    # time_now = datetime.datetime.now()
-    # rating_time = time_now.strftime("%H:%M:%S %d/%m/%Y")
     return render(request, 'product-single.html',
                   {'product': product, 'relative_products': relative_products,
                    'ratings': allRatings, "rating_count": count,
@@ -268,11 +249,8 @@ def product_detail(request, slug):
                    'unstars_int': range(5 - average_stars_int),
                    })
 
-
-# review
 @login_required
 def review_add(request):
-    # if request.method == "POST":
     response = JsonResponse({"status": "ERROR"})
     if request.POST.get("action") == "post":
         order_id = int(request.POST.get("orderid"))
@@ -303,9 +281,6 @@ def review_add(request):
             response = JsonResponse({"status": "OK"})
     print(response.content)
     return response
-
-
-#  cart
 
 def cart_view(request):
     cart = Cart(request)
@@ -353,9 +328,6 @@ def cart_update(request):
                     {"qty": cartqty, "subtotal": cartsubtotal})
                 return response
 
-# address(có nhiều địa chỉ có thể được tạo)
-
-
 @ login_required
 def add_address(request):
     if request.method == "POST":
@@ -401,8 +373,6 @@ def set_address_default(request, id):
         return redirect("checkout:delivery_address")
 
     return redirect("profile")
-
-# search
 
 
 def search_views(request):

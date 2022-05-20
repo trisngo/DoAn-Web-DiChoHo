@@ -38,11 +38,7 @@ def delivery(request):
         messages.warning(request, "Vui lòng thêm hàng vào giỏ trước khi thanh toán")
         return redirect('cart')
 
-    if (total_product_price < 200000):
-        messages.warning(request, "Vì tình hình dịch bệnh hệ thống chỉ nhận đơn hàng trên 200.000 VNĐ. Xin quý khách thông cảm")
-        return redirect('cart')
-
-    deliveryoptions = DeliveryOptions.objects.filter(is_active=True) # lấy danh sách các dịch vụ vận chuyển nào đang hoạt động
+    deliveryoptions = DeliveryOptions.objects.filter(is_active=True)
     paymentoptions = PaymentOptions.objects.filter(is_active=True)
     addresses = Address.objects.filter(user=request.user).order_by("-default")
 
@@ -113,11 +109,9 @@ def payment(request):
     payment_id = session["payment"]["payment_option"]
     payment_type = PaymentOptions.objects.get(id=payment_id)
 
-    # nếu khách hàng lựa chọn paypal thì hướng người ta đến điền form paypal, không thì báo thành công và lấy tiền khi nhận
     if "Paypal" in payment_type.name:
         return render(request, "checkout/payment_paypal.html", {})
     else:
-        # tự động gọi complete để lưu vào hóa đơn
         payment_complete(request)
         payment_successful(request)
     
@@ -147,7 +141,7 @@ def payment_complete(request):
             email=user.email,
             address=address.address_line,
             phone=address.phone,
-            total_paid=response.result.purchase_units[0].amount.value, #lấy thông tin tiền được trả từ paypal
+            total_paid=response.result.purchase_units[0].amount.value,
             order_key=response.result.id,
             payment_option=payment_name,
             billing_status=True,

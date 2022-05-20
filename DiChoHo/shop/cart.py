@@ -14,8 +14,6 @@ class Cart:
         self.cart = cart
 
     def __iter__(self):
-        # Lấy product_id trong session để query dữ liệu trong database
-
         product_ids = self.cart.keys()
         products = Product.objects.filter(id__in=product_ids)
         cart = self.cart.copy()
@@ -29,11 +27,9 @@ class Cart:
             yield item
 
     def __len__(self):
-        # Lấy dữ liệu giỏ hàng và đếm số lượng sản phẩm ở trong đó
         return sum(item["qty"] for item in self.cart.values())
 
     def add(self, product, qty):
-        # Thêm hoặc cập nhật session của giỏ hàng
         product_id = str(product.id)
 
         if product_id in self.cart:
@@ -52,7 +48,6 @@ class Cart:
         return count
     
     def update(self, product, qty):
-        # Cập nhật giá trị session giỏ hàng
 
         product_id = str(product)
         if product_id in self.cart:
@@ -60,8 +55,6 @@ class Cart:
         self.save()
 
     def delete(self, product):
-        # Xóa sản phẩm trong session 
-
         product_id = str(product)
 
         if product_id in self.cart:
@@ -69,7 +62,6 @@ class Cart:
             self.save()
 
     def clear(self):
-        # Xóa luôn giỏ hàng
         del self.session[settings.CART_SESSION_ID]
         del self.session["address"]
         del self.session["purchase"]
@@ -83,7 +75,6 @@ class Cart:
         total = subtotal + Decimal(deliveryprice)
         return total
     
-    # Hàm này để tính trước giá trước khi có giao hàng, nhưng chưa có giao hàng nên để qua 1 bên
     def get_subtotal_price(self):
         return sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
 

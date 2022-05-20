@@ -11,7 +11,7 @@ import uuid
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
-    phone = phone = models.CharField(_("Số điện thoại"), max_length=11, default="0") #sđt tài khoảng, khác sđt nhận hàng
+    phone = phone = models.CharField(_("Số điện thoại"), max_length=11, default="0")
     profile_pic = models.ImageField(
         default='/templates/static/images/defaultavatar.png', upload_to='templates/static/images')
 
