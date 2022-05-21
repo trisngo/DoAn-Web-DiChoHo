@@ -7,15 +7,15 @@ services:
     ports:
       - '3306:3306'
     environment:
-      MYSQL_ROOT_PASSWORD: dichoho
+      MYSQL_ROOT_PASSWORD: kCHvh%C#Uo2@Nq#3
       MYSQL_DATABASE: dichoho
       MYSQL_USER: dichoho
-      MYSQL_PASSWORD: dichoho
+      MYSQL_PASSWORD: x9U4%qkY2tv3Snr#
     volumes:
       - ./mysql/data:/var/lib/mysql
       - ./mysql/init:/docker-entrypoint-initdb.d/:ro
     healthcheck:
-      test: "/usr/bin/mysql --user=dichoho --password=dichoho --execute \"SHOW DATABASES;\""
+      test: "/usr/bin/mysql --user=dichoho --password=x9U4%qkY2tv3Snr# --execute \"SHOW DATABASES;\""
       interval: 10s
       timeout: 2s
       retries: 10
@@ -31,7 +31,7 @@ services:
     environment:
       - MYSQL_NAME=dichoho
       - MYSQL_DATABASE=dichoho
-      - MYSQL_PASSWORD=dichoho
+      - MYSQL_PASSWORD=x9U4%qkY2tv3Snr#
     depends_on: 
       db:
         condition: service_healthy
