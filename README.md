@@ -1,5 +1,5 @@
-# Đồ án Đi chợ hộ
-Đây là đồ án của nhóm 12 môn Lập trình web, sử dụng Python phiên bản 3.9, django framework version 3.2.7 và MySQL
+# Đồ án web Đi chợ hộ
+Đây là đồ án Bảo mật web và Ứng dụng, trang web sử dụng Python phiên bản 3.9, django framework version 3.2.13 và MySQL
 
 
 ## Tác giả
@@ -12,7 +12,7 @@
 Để tiến hành cài đặt, hãy clone project này về local với câu lệnh:
 
 ```bash
-  git clone https://github.com/trisngo/project-web-dichoho.git
+  git clone https://github.com/trisngo/django-ecommerce-webapp.git
 ```
 
 Sau đó tiến hành cài đặt môi trường cần thiết cho project sử dụng câu lệnh sau:
@@ -21,33 +21,26 @@ Sau đó tiến hành cài đặt môi trường cần thiết cho project sử 
   pip install -r requirements.txt
 ```
 
-Ta vào file ``DiChoHo/settings.py`` để cấu hình các tùy chọn sau:
+Ta copy file ``.env.dist`` ra thành 1 file ``.env``, sau đó tiến hành chỉnh sửa file ``.env`` này để cấu hình các tùy chọn sau:
 
 - Cấu hình để kết nối được với MySQL
 
 ```bash
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': "", # Tên database sử dụng
-        'USER': "", # Tên tài khoản sử dụng
-        'PASSWORD': "", # Mật khẩu sử dụng
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-```
-- Cấu hình thiết lập host email gửi email cho người dùng
-```bash
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER ='' # Email sử dung để gửi mail tới khách hàng
-EMAIL_HOST_PASSWORD = '' # Mật khẩu email
-EMAI_PORT = 587
-EMAIL_USE_TLS = True
+DEBUG=True
+ALLOWED_HOSTS=127.0.0.1,localhost
+SECRET_KEY=your-django-secret-key
+DATABASE_NAME=dichoho
+DATABASE_USER=dichoho
+DATABASE_PASSWORD=dichoho
+DATABASE_HOST=db
+DATABASE_PORT=3306
+EMAIL_USER=your-email
+EMAIL_PASSWORD=your-email-password
+PAYPAL_CLIENT_ID=your-paypal-client-id
+PAYPAL_CLIENT_SECRET=your-paypal-client-secret
 ```
 
-Sau khi đã cài đặt và cấu hình xong nếu bạn muốn sử dụng database có sẵn thì tiến hành Import database được đính kèm nằm ở thư mục ``DiChoHo/database_export/`` vào MySQL Workbench
+Sau khi đã cài đặt và cấu hình xong nếu bạn muốn sử dụng database có sẵn thì tiến hành Import database được đính kèm nằm ở thư mục ``DiChoHo/mysql/init` vào MySQL Workbench
 
 Tiếp theo di chuyển đến thư mục có chứa file manage.py và apply dữ liệu cho database bằng 2 câu lệnh sau:
 
@@ -72,12 +65,13 @@ python3 manage.py runserver --insecure
 ```
 
 ## Chạy với Docker
+Trước đó bạn nhớ cấu hình file ``.env`` trước nhé.
 
 Tại thư mục gốc có chứa docker-compose.yml chạy lệnh sau:
 ```bash
-docker-compose up
+docker-compose up -d --build
 ```
-Bạn đợi 1 lúc để database hoàn thành khởi tạo và được import dữ liệu vào. Sau đó web đã chạy thành công. Sau đó truy cập tại đường dẫn ``http://127.0.0.1:8000/``
+Bạn đợi 1 lúc để database hoàn thành khởi tạo và được import dữ liệu vào. Sau đó web đã chạy thành công. Sau đó truy cập tại đường dẫn ``http://127.0.0.1/``
 
 ## Phụ Lục
 
